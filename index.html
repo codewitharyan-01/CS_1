@@ -3,1014 +3,1762 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personalized Career and Skills Advisor</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <title>IPDC Online Exam Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #4a6cf7;
+            --secondary-color: #6c63ff;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --gray-color: #6c757d;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
-        :root {
-            --primary-color: #19376d;
-            --secondary-color: #576CBC;
-            --accent-color: #A5D7E8;
-            --light-color: #EEF5FF;
-            --text-color: #333;
-            --success-color: #4CAF50;
-            --warning-color: #FF9800;
-        }
-        
+
         body {
-            background-color: #f8f9fa;
-            color: var(--text-color);
-            line-height: 1.6;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: var(--dark-color);
         }
-        
+
         .container {
-            width: 100%;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 20px;
         }
-        
+
         /* Header Styles */
         header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 1rem 0;
+            background: white;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
             position: sticky;
             top: 0;
             z-index: 100;
         }
-        
+
         .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .timer {
             display: flex;
             align-items: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-        
-        .logo .material-symbols-rounded {
-            font-size: 2rem;
-            margin-right: 0.5rem;
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
-        
-        nav ul li {
-            margin-left: 1.5rem;
-        }
-        
-        nav ul li a {
-            color: white;
-            text-decoration: none;
+            font-size: 18px;
             font-weight: 500;
-            transition: color 0.3s;
-        }
-        
-        nav ul li a:hover {
-            color: var(--accent-color);
-        }
-        
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(rgba(25, 55, 109, 0.8), rgba(25, 55, 109, 0.8)), url('https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1169&q=80');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            padding: 5rem 0;
-            text-align: center;
-        }
-        
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-        
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 700px;
-            margin: 0 auto 2rem;
-        }
-        
-        .btn {
-            display: inline-block;
-            background-color: var(--accent-color);
-            color: var(--primary-color);
-            padding: 0.8rem 1.5rem;
+            color: var(--dark-color);
+            background: var(--light-color);
+            padding: 8px 15px;
             border-radius: 30px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
         }
-        
-        .btn:hover {
-            background-color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+
+        .timer i {
+            margin-right: 8px;
+            color: var(--danger-color);
         }
-        
-        /* Section Styles */
-        section {
-            padding: 4rem 0;
-        }
-        
-        .section-title {
+
+        /* Welcome Page Styles */
+        .welcome-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 80px);
             text-align: center;
-            margin-bottom: 3rem;
         }
-        
-        .section-title h2 {
-            font-size: 2.5rem;
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-        }
-        
-        .section-title p {
-            font-size: 1.1rem;
-            max-width: 700px;
-            margin: 0 auto;
-            color: #666;
-        }
-        
-        /* Profile Section */
-        .profile-form {
-            background-color: white;
-            border-radius: 10px;
-            padding: 2rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: var(--primary-color);
-        }
-        
-        .form-control {
+
+        .welcome-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 600px;
             width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
         }
-        
-        .form-control:focus {
-            outline: none;
-            border-color: var(--secondary-color);
-            box-shadow: 0 0 0 2px rgba(87, 108, 188, 0.2);
-        }
-        
-        .skills-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-        }
-        
-        .skill-tag {
-            background-color: var(--light-color);
-            color: var(--primary-color);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-        }
-        
-        .skill-tag .material-symbols-rounded {
-            font-size: 1rem;
-            margin-left: 0.5rem;
-            cursor: pointer;
-        }
-        
-        /* Career Recommendations */
-        .career-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-        
-        .career-card {
-            background-color: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .career-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-        
-        .career-card-header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 1.5rem;
-        }
-        
-        .career-card-header h3 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .career-card-body {
-            padding: 1.5rem;
-        }
-        
-        .career-card-body p {
-            margin-bottom: 1rem;
-            color: #666;
-        }
-        
-        .match-percentage {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .match-percentage .material-symbols-rounded {
-            color: var(--success-color);
-            margin-right: 0.5rem;
-        }
-        
-        .match-percentage span {
-            font-weight: 600;
-            color: var(--success-color);
-        }
-        
-        .skills-required {
-            margin-bottom: 1rem;
-        }
-        
-        .skills-required h4 {
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
+
+        .welcome-title {
+            font-size: 32px;
+            margin-bottom: 20px;
             color: var(--primary-color);
         }
-        
-        .skills-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
+
+        .welcome-description {
+            font-size: 16px;
+            margin-bottom: 30px;
+            color: var(--gray-color);
+            line-height: 1.6;
         }
-        
-        .skill-badge {
-            background-color: var(--light-color);
-            color: var(--text-color);
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
-        }
-        
-        /* Skill Gap Analysis */
-        .skill-gap-container {
-            background-color: white;
-            border-radius: 10px;
-            padding: 2rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .skill-gap-item {
-            margin-bottom: 1.5rem;
-        }
-        
-        .skill-gap-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-        }
-        
-        .skill-gap-header h4 {
-            color: var(--primary-color);
-        }
-        
-        .skill-gap-header .proficiency {
-            color: var(--warning-color);
-            font-weight: 600;
-        }
-        
-        .progress-bar {
-            height: 10px;
-            background-color: #eee;
-            border-radius: 5px;
-            overflow: hidden;
-            margin-bottom: 0.5rem;
-        }
-        
-        .progress {
-            height: 100%;
-            background-color: var(--secondary-color);
-            border-radius: 5px;
-        }
-        
-        .learning-resources {
-            margin-top: 0.5rem;
-        }
-        
-        .learning-resources h4 {
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-            color: var(--primary-color);
-        }
-        
-        .resource-link {
-            display: inline-block;
-            background-color: var(--light-color);
-            color: var(--primary-color);
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            text-decoration: none;
-            margin-right: 0.5rem;
-            margin-bottom: 0.5rem;
-            transition: background-color 0.3s;
-        }
-        
-        .resource-link:hover {
-            background-color: var(--accent-color);
-        }
-        
-        /* Footer */
-        footer {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 3rem 0 1rem;
-        }
-        
-        .footer-content {
+
+        .exam-options {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
+            gap: 20px;
+            margin-top: 30px;
         }
-        
-        .footer-column h3 {
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-            position: relative;
-            padding-bottom: 0.5rem;
+
+        .exam-card {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 10px;
+            padding: 25px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
-        
-        .footer-column h3::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 50px;
-            height: 2px;
-            background-color: var(--accent-color);
+
+        .exam-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
-        
-        .footer-column ul {
-            list-style: none;
+
+        .exam-card h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
         }
-        
-        .footer-column ul li {
-            margin-bottom: 0.5rem;
+
+        .exam-card p {
+            font-size: 14px;
+            opacity: 0.9;
         }
-        
-        .footer-column ul li a {
-            color: #ddd;
-            text-decoration: none;
-            transition: color 0.3s;
+
+        /* Instructions Page Styles */
+        .instructions-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            margin-top: 30px;
         }
-        
-        .footer-column ul li a:hover {
-            color: var(--accent-color);
-        }
-        
-        .copyright {
+
+        .instructions-title {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
             text-align: center;
-            padding-top: 1.5rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 0.9rem;
-            color: #ddd;
         }
-        
-        /* Responsive Styles */
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            nav ul {
-                margin-top: 1rem;
-            }
-            
-            nav ul li {
-                margin: 0 0.5rem;
-            }
-            
-            .hero h1 {
-                font-size: 2rem;
-            }
-            
-            .section-title h2 {
-                font-size: 2rem;
-            }
+
+        .instructions-list {
+            list-style-type: none;
+            margin-bottom: 30px;
         }
-        
-        /* Notification */
-        .notification {
-            position: fixed;
-            top: 100px;
-            right: 20px;
-            background-color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 5px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            transform: translateX(150%);
-            transition: transform 0.3s ease;
+
+        .instructions-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
             display: flex;
-            align-items: center;
-            max-width: 300px;
+            align-items: flex-start;
         }
-        
-        .notification.show {
-            transform: translateX(0);
+
+        .instructions-list li i {
+            color: var(--primary-color);
+            margin-right: 10px;
+            margin-top: 3px;
         }
-        
-        .notification .material-symbols-rounded {
-            margin-right: 0.5rem;
+
+        .btn {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background 0.3s;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--secondary-color);
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+
+        .btn-success {
+            background: var(--success-color);
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+        }
+
+        /* Exam Page Styles */
+        .exam-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .question-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .question-counter {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .section-indicator {
+            background: var(--primary-color);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .question-container {
+            margin-bottom: 30px;
+        }
+
+        .question-text {
+            font-size: 18px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .options-container {
+            display: grid;
+            gap: 15px;
+        }
+
+        .option {
+            display: flex;
+            align-items: flex-start;
+            padding: 15px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option:hover {
+            border-color: var(--primary-color);
+            background: rgba(74, 108, 247, 0.05);
+        }
+
+        .option.selected {
+            border-color: var(--primary-color);
+            background: rgba(74, 108, 247, 0.1);
+        }
+
+        .option input[type="radio"] {
+            margin-right: 15px;
+            margin-top: 3px;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        /* Results Page Styles */
+        .results-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            margin-top: 30px;
+        }
+
+        .results-title {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            text-align: center;
+        }
+
+        .score-card {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .score-display {
+            font-size: 48px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .score-message {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        .results-details {
+            margin-top: 30px;
+        }
+
+        .section-results {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .question-result {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .question-result.correct {
+            background: rgba(40, 167, 69, 0.1);
+            border-left: 4px solid var(--success-color);
+        }
+
+        .question-result.incorrect {
+            background: rgba(220, 53, 69, 0.1);
+            border-left: 4px solid var(--danger-color);
+        }
+
+        .question-number {
+            font-weight: 700;
+            margin-right: 15px;
+            min-width: 30px;
+        }
+
+        .question-text-result {
+            flex: 1;
+        }
+
+        .answer-status {
+            margin-left: 15px;
+            font-weight: 500;
+        }
+
+        .correct-answer {
             color: var(--success-color);
         }
-        
-        .notification.error .material-symbols-rounded {
-            color: #f44336;
+
+        .incorrect-answer {
+            color: var(--danger-color);
         }
-        
+
+        /* Footer Styles */
+        footer {
+            background: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .creator {
+            margin-right: 15px;
+        }
+
+        .social-link {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .social-link i {
+            margin-right: 5px;
+        }
+
+        .social-link:hover {
+            color: var(--primary-color);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .welcome-card, .instructions-container, .exam-container, .results-container {
+                padding: 20px;
+            }
+
+            .welcome-title, .instructions-title, .results-title {
+                font-size: 24px;
+            }
+
+            .score-display {
+                font-size: 36px;
+            }
+
+            .navigation-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
         /* Loading Spinner */
         .spinner {
             border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            border-top: 4px solid var(--primary-color);
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
+            border-left-color: var(--primary-color);
+            animation: spin 1s ease infinite;
             margin: 0 auto;
-            display: none;
         }
-        
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
-        .loading {
-            display: block;
+
+        /* Hidden class */
+        .hidden {
+            display: none;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: #eee;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 5px;
+            font-size: 14px;
+            color: var(--gray-color);
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header>
-        <div class="container header-content">
-            <div class="logo">
-                <span class="material-symbols-rounded">psychology</span>
-                CareerPath AI
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i> IPDC Exam Portal
+                </div>
+                <div class="timer hidden" id="timer">
+                    <i class="fas fa-clock"></i>
+                    <span id="timer-display">02:30:00</span>
+                </div>
             </div>
-            <nav>
-                <ul>
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#profile">Profile</a></li>
-                    <li><a href="#careers">Careers</a></li>
-                    <li><a href="#skills">Skills</a></li>
-                </ul>
-            </nav>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="container">
-            <h1>Personalized Career and Skills Advisor</h1>
-            <p>AI-powered guidance to map your skills, recommend career paths, and prepare you for the evolving job market</p>
-            <a href="#profile" class="btn">Get Started</a>
-        </div>
-    </section>
+    <main class="container">
+        <!-- Welcome Page -->
+        <section id="welcome-page" class="welcome-container">
+            <div class="welcome-card">
+                <h1 class="welcome-title">Welcome to IPDC Online Exam Portal</h1>
+                <p class="welcome-description">
+                    Select an exam paper below to begin your assessment. Each exam consists of 40 questions divided into 3 sections. You will have 2.5 hours to complete the exam.
+                </p>
+                <div class="exam-options">
+                    <div class="exam-card" onclick="selectExam('summer2024')">
+                        <h3>Summer 2024</h3>
+                        <p>Date: 14-05-2024</p>
+                        <p>Total Questions: 40</p>
+                        <p>Time: 2.5 Hours</p>
+                    </div>
+                    <div class="exam-card" onclick="selectExam('winter2024')">
+                        <h3>Winter 2024</h3>
+                        <p>Date: 20-11-2024</p>
+                        <p>Total Questions: 40</p>
+                        <p>Time: 2.5 Hours</p>
+                    </div>
+                    <div class="exam-card" onclick="selectExam('summer2025')">
+                        <h3>Summer 2025</h3>
+                        <p>Date: 09-05-2025</p>
+                        <p>Total Questions: 40</p>
+                        <p>Time: 2.5 Hours</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    <!-- Profile Section -->
-    <section id="profile" class="container">
-        <div class="section-title">
-            <h2>Create Your Profile</h2>
-            <p>Tell us about yourself to receive personalized career recommendations</p>
-        </div>
-        
-        <form class="profile-form" id="profileForm">
-            <div class="form-group">
-                <label for="name">Full Name</label>
-                <input type="text" id="name" class="form-control" placeholder="Enter your full name" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="education">Education Level</label>
-                <select id="education" class="form-control" required>
-                    <option value="">Select your education level</option>
-                    <option value="high-school">High School</option>
-                    <option value="undergraduate">Undergraduate</option>
-                    <option value="graduate">Graduate</option>
-                    <option value="postgraduate">Postgraduate</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="field">Field of Study</label>
-                <input type="text" id="field" class="form-control" placeholder="e.g., Computer Science, Business, Engineering" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="interests">Career Interests</label>
-                <input type="text" id="interests" class="form-control" placeholder="e.g., Technology, Marketing, Healthcare">
-            </div>
-            
-            <div class="form-group">
-                <label for="skill-input">Your Skills</label>
-                <input type="text" id="skill-input" class="form-control" placeholder="Type a skill and press Enter">
-                <div class="skills-container" id="skills-container"></div>
-            </div>
-            
-            <button type="submit" class="btn">Save Profile</button>
-            <div class="spinner" id="profile-spinner"></div>
-        </form>
-    </section>
+        <!-- Instructions Page -->
+        <section id="instructions-page" class="instructions-container hidden">
+            <h2 class="instructions-title">Exam Instructions</h2>
+            <ul class="instructions-list">
+                <li><i class="fas fa-check-circle"></i> All questions are compulsory</li>
+                <li><i class="fas fa-check-circle"></i> Make suitable assumptions wherever necessary</li>
+                <li><i class="fas fa-check-circle"></i> Figures to the right indicate full marks</li>
+                <li><i class="fas fa-check-circle"></i> There are 40 questions (in 3 sections) in this question paper</li>
+                <li><i class="fas fa-check-circle"></i> Section A has 10 questions (True/False)</li>
+                <li><i class="fas fa-check-circle"></i> Section B has 15 questions (Multiple Choice)</li>
+                <li><i class="fas fa-check-circle"></i> Section C has 15 questions (Multiple Choice)</li>
+                <li><i class="fas fa-check-circle"></i> Total Marks: 70</li>
+                <li><i class="fas fa-check-circle"></i> Time: 2.5 Hours</li>
+                <li><i class="fas fa-check-circle"></i> Once you start the exam, the timer will begin and cannot be paused</li>
+                <li><i class="fas fa-check-circle"></i> Make sure you have a stable internet connection before starting</li>
+            </ul>
+            <button class="btn btn-block" onclick="startExam()">Start Exam</button>
+        </section>
 
-    <!-- Career Recommendations Section -->
-    <section id="careers" class="container">
-        <div class="section-title">
-            <h2>Career Recommendations</h2>
-            <p>Based on your profile, here are some career paths that might suit you</p>
-        </div>
-        
-        <div class="career-cards" id="career-cards">
-            <!-- Career cards will be dynamically generated here -->
-        </div>
-    </section>
+        <!-- Exam Page -->
+        <section id="exam-page" class="exam-container hidden">
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress" id="progress"></div>
+                </div>
+                <div class="progress-text" id="progress-text">Question 1 of 40</div>
+            </div>
 
-    <!-- Skill Gap Analysis Section -->
-    <section id="skills" class="container">
-        <div class="section-title">
-            <h2>Skill Gap Analysis</h2>
-            <p>Identify the skills you need to develop for your chosen career path</p>
-        </div>
-        
-        <div class="skill-gap-container" id="skill-gap-container">
-            <p style="text-align: center; color: #666;">Select a career from the recommendations above to see skill gap analysis</p>
-        </div>
-    </section>
+            <div class="question-nav">
+                <div class="question-counter">Question <span id="current-question">1</span> of <span id="total-questions">40</span></div>
+                <div class="section-indicator" id="section-indicator">Section A</div>
+            </div>
 
-    <!-- Footer -->
+            <div class="question-container">
+                <div class="question-text" id="question-text"></div>
+                <div class="options-container" id="options-container"></div>
+            </div>
+
+            <div class="navigation-buttons">
+                <button class="btn" id="prev-btn" onclick="previousQuestion()" disabled>Previous</button>
+                <button class="btn" id="next-btn" onclick="nextQuestion()">Next</button>
+                <button class="btn btn-success hidden" id="submit-btn" onclick="submitExam()">Submit Exam</button>
+            </div>
+        </section>
+
+        <!-- Results Page -->
+        <section id="results-page" class="results-container hidden">
+            <h2 class="results-title">Exam Results</h2>
+            
+            <div class="score-card">
+                <div>Your Score</div>
+                <div class="score-display" id="score-display">0/70</div>
+                <div class="score-message" id="score-message"></div>
+            </div>
+
+            <div class="results-details">
+                <div class="section-results">
+                    <h3 class="section-title">Section A (10 Marks)</h3>
+                    <div id="section-a-results"></div>
+                </div>
+                
+                <div class="section-results">
+                    <h3 class="section-title">Section B (30 Marks)</h3>
+                    <div id="section-b-results"></div>
+                </div>
+                
+                <div class="section-results">
+                    <h3 class="section-title">Section C (30 Marks)</h3>
+                    <div id="section-c-results"></div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn" onclick="resetExam()">Take Another Exam</button>
+            </div>
+        </section>
+    </main>
+
     <footer>
         <div class="container">
             <div class="footer-content">
-                <div class="footer-column">
-                    <h3>About Us</h3>
-                    <p>CareerPath AI is an innovative platform that leverages artificial intelligence to provide personalized career guidance for students.</p>
-                </div>
-                
-                <div class="footer-column">
-                    <h3>Quick Links</h3>
-                    <ul>
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#profile">Profile</a></li>
-                        <li><a href="#careers">Careers</a></li>
-                        <li><a href="#skills">Skills</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-column">
-                    <h3>Contact Us</h3>
-                    <ul>
-                        <li>Email: info@careerpathai.com</li>
-                        <li>Phone: +91 98765 43210</li>
-                        <li>Address: Bangalore, India</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="copyright">
-                <p>&copy; 2025 CareerPath AI. All rights reserved. Desin By THE CHEMP TEAM</p>
+                <div class="creator">Created by Aryan Patel</div>
+                <a href="https://www.instagram.com/aaryan_6.8/" target="_blank" class="social-link">
+                    <i class="fab fa-instagram"></i> aaryan_6.8
+                </a>
             </div>
         </div>
     </footer>
 
-    <!-- Notification -->
-    <div class="notification" id="notification">
-        <span class="material-symbols-rounded">check_circle</span>
-        <span id="notification-message">Profile saved successfully!</span>
-    </div>
-
     <script>
-        // Sample data for career recommendations
-        const careerData = [
-            {
-                title: "Software Developer",
-                description: "Design, develop and test software applications and systems.",
-                match: 85,
-                skills: ["Programming", "Problem Solving", "Algorithms", "Data Structures"]
+        // Exam Data
+        const examData = {
+            summer2024: {
+                title: "Summer 2024",
+                date: "14-05-2024",
+                questions: [
+                    // Section A (10 questions)
+                    {
+                        id: 1,
+                        section: "A",
+                        text: "Having a meal together does not contribute to bonding within the family.",
+                        options: ["True", "False"],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 2,
+                        section: "A",
+                        text: "Excessive social media usage has been critically linked to loneliness and depression within youth.",
+                        options: ["True", "False"],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 3,
+                        section: "A",
+                        text: "To avoid conflicts, we should avoid people with whom we have disagreements.",
+                        options: ["True", "False"],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 4,
+                        section: "A",
+                        text: "A good listener will be able to understand how the speaker is feeling.",
+                        options: ["True", "False"],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 5,
+                        section: "A",
+                        text: "Within the circle of influence, there are things that you can control.",
+                        options: ["True", "False"],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 6,
+                        section: "A",
+                        text: "The Vedic text, Baudhāyana Shulba Sutra, contains surgical techniques like the heart bypass surgery.",
+                        options: ["True", "False"],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 7,
+                        section: "A",
+                        text: "At the workplace, soft skills complement hard skills, which refer to a person's knowledge and occupational skills.",
+                        options: ["True", "False"],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 8,
+                        section: "A",
+                        text: "Dr Abdul Kalam's academic intelligence was the only reason for his success.",
+                        options: ["True", "False"],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 9,
+                        section: "A",
+                        text: "Great leaders like Satya Nadella have achieved great success by mastering art of active listener.",
+                        options: ["True", "False"],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 10,
+                        section: "A",
+                        text: "Balkrishna Ganpatrao Matapurkar developed world's first organ generation technique.",
+                        options: ["True", "False"],
+                        correctAnswer: 0
+                    },
+                    // Section B (15 questions)
+                    {
+                        id: 11,
+                        section: "B",
+                        text: "What is the one of the reasons for more of the fights and tensions at home?",
+                        options: ["Misunderstanding", "Lacking of love", "Lacking of trust", "Less education"],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 12,
+                        section: "B",
+                        text: "Which proofs are available which reveals that the Indian civilization is the oldest one on this earth?",
+                        options: ["Archiological evidences", "Literary evidences", "Religious practices", "All three"],
+                        correctAnswer: 3
+                    },
+                    {
+                        id: 13,
+                        section: "B",
+                        text: "During the 1999 ICC World Cup, Sachin Tendulkar's father passed away, at that time he ______.",
+                        options: ["Become emotionally unstable.", "Was unable to continue playing in the world cup.", "Refused to attend his father's final rites and continued to play cricket.", "Maintained balance of mind."],
+                        correctAnswer: 3
+                    },
+                    {
+                        id: 14,
+                        section: "B",
+                        text: "What should a person do while listening to someone?",
+                        options: ["Think about what to do after the conversation", "Make it look like they are listening", "Brainstorm on homework", "Give full attention to the speaker"],
+                        correctAnswer: 3
+                    },
+                    {
+                        id: 15,
+                        section: "B",
+                        text: "Under Ratan Tata's leadership, which car did Tata Motors launch, gaining international attention?",
+                        options: ["Nano", "Indica", "Safari", "Tiago"],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 16,
+                        section: "B",
+                        text: "Julius Opperheimer, a creater of atom bomb learnt Sanskrit to study which Indian text?",
+                        options: ["Ramayan", "Shri Bhagvad Gita", "Shrimad Bhagvat", "Rigved"],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 17,
+                        section: "B",
+                        text: "What kind of person is NOT effective at networking?",
+                        options: ["Someone who is good at listening", "Someone who is good at asking the right questions", "Someone who stays in touch only when they need something", "Someone who is sincere"],
+                        correctAnswer: 2
+                    },
+                    {
+                        id: 18,
+                        section: "B",
+                        text: "Management, in any field, brings forth which of the following?",
+                        options: ["Optimal results with minimal effort", "Minimal results with optimal efforts.", "Hard work with no results", "No work with no results"],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 19,
+                        section: "B",
+                        text: "Which one of the following activities is harmful?",
+                        options: ["Avoidance of phone usage in the middle of the night", "Spending more than 5 hours a day on the phone", "Prevention of the misuse of social media", "Turning your phone on airplane mode while studying"],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 20,
+                        section: "B",
+                        text: "What should you prioritize when you receive a message from your mother about a fire at home, while you are away?",
+                        options: ["Rush home immediately, ignoring other responsibilities.", "Remain calm and assess the situation before taking action.", "Panic and call emergency services without gathering information.", "Continue with your current activities as it may be a false alarm."],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 21,
+                        section: "B",
+                        text: "Fill in the blanks with the correct words from the following quote: \"Having someone to love is ____, having somewhere to go to is____, having both is ____.\"",
+                        options: ["family, home, a blessing", "lovely, friendly, comfort", "good, great, fantastic", "rare, lucky, a wish fulfilled"],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 22,
+                        section: "B",
+                        text: "Dr. Abdul Kalam leaned the value of the Equality from the ______________.",
+                        options: ["Abraham Lincon", "Buddha", "Nelson Mandella", "Pramukh Swami Maharaj"],
+                        correctAnswer: 3
+                    },
+                    {
+                        id: 23,
+                        section: "B",
+                        text: "Which Indian medical researcher developed the world's first organ regeneration technique?",
+                        options: ["Balkrishna Matapurkar", "Ashima Anand", "Subrata Adak", "Srinivasa Ramanujan"],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 24,
+                        section: "B",
+                        text: "According to the workbook, which of these does NOT lead us to failure?",
+                        options: ["Self-doubts", "Fear of failure", "Finding support", "Making excuses"],
+                        correctAnswer: 2
+                    },
+                    {
+                        id: 25,
+                        section: "B",
+                        text: "As per Swami Vivekanand, the greatest source of strength for any society is where?",
+                        options: ["in education", "in development", "in democracy", "In faith in God"],
+                        correctAnswer: 3
+                    },
+                    // Section C (15 questions)
+                    {
+                        id: 26,
+                        section: "C",
+                        text: "'First they break you and then they remake you'. What can we learn from this method that the USA Army use to train their recruits?",
+                        options: ["We should be ready to come out of our own comfort zone to further our personal growth.", "We should break all limits and make new innovations."],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 27,
+                        section: "C",
+                        text: "Two weeks ago, Abdul submitted his scientific research paper for his first review. Due to the lack of support from his appointed research partner, Abdul had to rush the result analysis. Today, when he went to collect feedback, his Professor responded only with harsh criticism for his work. How do you think Abdul should handle the situation, going forward?",
+                        options: ["He should ignore the Professor's harsh tone and keep trying amidst the difficult circumstances.", "He should try and use that criticism to improve his research paper"],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 28,
+                        section: "C",
+                        text: "Dhaval has been visiting the cricket nets every day to practice for the upcoming regional trials in a few days. He feels confident in his ability and expects to gain a spot in the regional cricket team. Upon his regular visits, he gets familiar with another youth called Raj. Upon talking, Dhaval finds out that Raj is also applying for the trials. Raj requests Dhaval to give him some guidance on his batting style. Dhaval is not sure whether to help him or not, because competition is already high and Raj seems naturally talented. What do you think Dhaval should do?",
+                        options: ["Dhaval should try his hardest to assist Raj to improve his batting technique.", "Dhaval should give Raj a few general tips before leaving to focus on his own technique."],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 29,
+                        section: "C",
+                        text: "Shilpa has had a difficult day at school and wants to talk to her cousin, Kinjal, about it. They have sat down in the sitting room and Kinjal is listening to Shilpa. During the conversation. Kinjal sees that her friend, Meena, is calling her phone, probably to discuss next week's shopping trip. What should Kinjal do now?",
+                        options: ["Kinjal should tell Shilpa to wait so she can answer her phone and talk to Meena. Shilpa is going to be at the house for the whole day so they can talk after the phone call.", "Kinjal should ask Meena to call her later during the day and then give Shilpa her full attention."],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 30,
+                        section: "C",
+                        text: "Mac coaches his local soccer team. During the regional tournament, his team lost 3 matches in a row. What do you think Mac should do to help his team?",
+                        options: ["Mac will explain to his team that, \"Those 3 teams were the toughest in the region. So, it was surely going to be a challenge to play them. But in the next game, it will be easy for us to win. So do not worry about our losses.\"", "Mac will review the mistakes that his team members made while playing. He will have both one-to-one and group meetings with his team members, to convey the tactics they need to use to improve."],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 31,
+                        section: "C",
+                        text: "As a result of his good exam performance, Kirtan recently gained admission to a prestigious college. But upon exploring the college environment, he sees that most of the students are intelligent, wealthy and speak fluent English. Kirtan, coming from a lesser advantaged background, feels that he does not belong in this environment. What do you think Kirtan should do?",
+                        options: ["Kirtan should remember that he has earned the right to admission through his academic ability. He should focus on working hard and not on his background.", "Kirtan needs to be more like the other students. If he starts wearing fancy clothes and copies the speaking style of the other students, then he will feel more comfortable."],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 32,
+                        section: "C",
+                        text: "Riya has been invited to this year's National Youth Summit. As a medical student, she has been asked to prepare her view on the future of India and its medical practitioners. She is trying to decide which message she should convey. What do you think is the best option:",
+                        options: ["Youths should contribute to India by becoming doctors. Being a doctor means you can become wealthy and reputable.", "Youths should contribute to India by becoming doctors. Being a doctor means you can serve your country by helping its citizens."],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 33,
+                        section: "C",
+                        text: "Jenish works as a computer engineer for an upcoming technology company. His manager has set him the task to update an important function for a developing product. From the requirements given by the manager, Jenish predicts that it will take him at least 10 days to finish it. But his manager has challenged him to complete it in 4 days. How should Jenish react to such a request?",
+                        options: ["Jenish should tell the manager that 4 days is impossible, but he will deliver it in 10 days.", "Jenish should meet his manager's challenge and try his hardest to try and complete it in 4 days."],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 34,
+                        section: "C",
+                        text: "You have planned a cultural event at your college. You have planned to set a wonderful stage for the inauguration. Your institute has allocated a dedicated fund for the stage decoration. During the final selection, you find that your team will need more human resources to set the stage, in addition to the current labourers. What will you do?",
+                        options: ["Train students for stage building and decoration", "Request your institute to increase the allocated budget to hire more labourers"],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 35,
+                        section: "C",
+                        text: "Satya is currently studying at 9th standard. His schoolwork has moved online and he now studies at home all the time. He spends hours on his phone every day to keep himself entertained and to escape his boredom. He feels bad about it. What advice would you give him?",
+                        options: ["It is a tough time right now, spending more time on social media will allow you to pass time quicker. Search for posts that are positive and useful.", "It is a tough time right now, so it is important to make sure we do not slip into harmful habits and lose control of our attention. So, limit the time in which you use social media."],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 36,
+                        section: "C",
+                        text: "Suraj is having a discussion with his friend Minesh about a recent argument they had at college. This incident has made Minesh feel disappointed. He believes that Suraj is to blame for the whole incident. But Suraj tries to calmly explain why he reacted in the way he did. What is the best way for Minesh to approach this conversation?",
+                        options: ["Minesh should get up and leave the conversation. Then try to forget about the incident.", "Minesh should carefully listen and try to understand Suraj's perspective with an open mindset."],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 37,
+                        section: "C",
+                        text: "Mira and Bira are both medical students who have decided to volunteer for the college blood drive. They were both scheduled to spend one-hour taking blood from the donors, before leaving for their summer vacation. But the organiser has requested them to stay two hours longer to help deal with the unexpected increase of donors. Mira and Bira both have different responses, which one from the following do you think is more appropriate?",
+                        options: ["Mira agrees to continue her seva as long as necessary.", "Bira decides to leave as she has completed the time that was originally agreed upon."],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 38,
+                        section: "C",
+                        text: "You have organised an online quiz. Students across your state have registered for this quiz in huge numbers. You and the participants are excited to take part. But just before the quiz, the server crashes due to a technical fault. What would you do?",
+                        options: ["You will immediately report this error to the principal and ask a technical person to provide a solution. Till then you will postpone the quiz.", "You will cancel the quiz because you doubt the capacity of the server. In the future, you will conduct the quiz with limited capacity."],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 39,
+                        section: "C",
+                        text: "As a student, you want to excel not just in your academics but your personal life too, should you….",
+                        options: ["Seek to build a strong network with your teachers and classmates.", "Seek to build a strong network with classmates only, as teachers do not work in the industry, meaning that their knowledge is theoretically limited."],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 40,
+                        section: "C",
+                        text: "After graduating, Shivani started working as a data scientist for the last 4 years. She has been earning ₹7 lakh rupees every year. Now that her 25th birthday is approaching, she is wondering about the best time to start a retirement fund. What financial plan will allow her to benefit the most?",
+                        options: ["Start investing into a retirement fund straight away to earn more money through compound interest.", "For the next 5-7 years, she should keep her money free so she can spend it. She can then start a retirement fund afterwards."],
+                        correctAnswer: 0
+                    }
+                ]
             },
-            {
-                title: "Data Scientist",
-                description: "Analyze complex data to help organizations make better decisions.",
-                match: 75,
-                skills: ["Statistics", "Machine Learning", "Data Visualization", "Python"]
+            winter2024: {
+                title: "Winter 2024",
+                date: "20-11-2024",
+                questions: [
+                    // Section A (10 questions)
+                    {
+                        id: 1,
+                        section: "A",
+                        text: "The good health of the Rosetens was attributed to their family-based culture.",
+                        options: ["True", "False"],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 2,
+                        section: "A",
+                        text: "Consuming unfiltered media is a leading cause of conflict within the family.",
+                        options: ["True", "False"],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 3,
+                        section: "A",
+                        text: "Learning from legends is only about replicating their actions, and personal adaptation is not necessary.",
+                        options: ["True", "False"],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 4,
+                        section: "A",
+                        text: "A good listener will be able to understand how the speaker is feeling.",
+                        options: ["True", "False"],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 5,
+                        section: "A",
+                        text: "In ancient India, Indians were capable of using smallest unit of time equal to 1/34000 second.",
+                        options: ["True", "False"],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 6,
+                        section: "A",
+                        text: "The Vedic text, Baudhāyana Shulba Sutra, contains surgical techniques like the heart bypass surgery.",
+                        options: ["True", "False"],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 7,
+                        section: "A",
+                        text: "Julius Caesar learnt Sanskrit so he could study the Bhagavad Gita and ancient Indian texts.",
+                        options: ["True", "False"],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 8,
+                        section: "A",
+                        text: "Balkrishna Ganpatrao Matapurkar developed world's first organ generation technique.",
+                        options: ["True", "False"],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 9,
+                        section: "A",
+                        text: "Principles of project management make it harder to plan in advance.",
+                        options: ["True", "False"],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 10,
+                        section: "A",
+                        text: "Only Indian students used to come to study in Takshshila and Nalanda Universities.",
+                        options: ["True", "False"],
+                        correctAnswer: 1
+                    },
+                    // Section B (15 questions)
+                    {
+                        id: 11,
+                        section: "B",
+                        text: "According to the IPDC workbook, Tendulkar and Tate are what type of people?",
+                        options: ["Extraordinary", "Emotional", "Legendary", "Ordinary"],
+                        correctAnswer: 2
+                    },
+                    {
+                        id: 12,
+                        section: "B",
+                        text: "Complete the following quotation of Sachin Tendulkar, \"Don't stop ______ your dreams, because dreams do come true.\"",
+                        options: ["Chasing", "Forgetting", "Sharing", "Caring"],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 13,
+                        section: "B",
+                        text: "Which of the following is NOT a key factor of Active Listening?",
+                        options: ["Listening with our ears", "Listening with our eyes and body", "Listening with our mind and heart", "Listening with our opinion"],
+                        correctAnswer: 3
+                    },
+                    {
+                        id: 14,
+                        section: "B",
+                        text: "Which of the following methods should we NOT adopt during difficult challenges?",
+                        options: ["Find a positive attitude", "Find someone to blame", "Find workable solutions", "Find assistance"],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 15,
+                        section: "B",
+                        text: "Which of the following is the one causes of disconnection among the family members?",
+                        options: ["Fun time", "Transportation time", "Sad Time", "Screen time"],
+                        correctAnswer: 3
+                    },
+                    {
+                        id: 16,
+                        section: "B",
+                        text: "Which of the following was NOT achieved by Dr Abdul Kalam?",
+                        options: ["Bharat Ratna Award", "Padma Shri Award", "The name: 'The People's President'", "48 Honorary Doctorates"],
+                        correctAnswer: 3
+                    },
+                    {
+                        id: 17,
+                        section: "B",
+                        text: "\"We owe a lot to the Indians, who taught us how to count, without which no worthwhile scientific discovery could have been made.\" Who said this statement?",
+                        options: ["Ernest Rutherford", "Guillaume Le Gentil", "Albert Einstein", "K. V. Sharma"],
+                        correctAnswer: 2
+                    },
+                    {
+                        id: 18,
+                        section: "B",
+                        text: "Management, in any field, brings forth which of the following?",
+                        options: ["Optimal results with minimal effort", "Minimal results with optimal efforts.", "Hard work with no results", "No work with no results"],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 19,
+                        section: "B",
+                        text: "What research does Zero Project Foundation do?",
+                        options: ["The development of motor engines with zero carbon emissions", "The effect of zero-tolerance laws", "The origins of the digit zero", "The benefits of meditation"],
+                        correctAnswer: 2
+                    },
+                    {
+                        id: 20,
+                        section: "B",
+                        text: "Sant Tukaram was publicly insulted by being paraded around on a donkey .What was his reaction to incident?",
+                        options: ["He felt insulted", "He left the village", "He committed suicide", "He had taken the incident positively as he got food worth of one week"],
+                        correctAnswer: 3
+                    },
+                    {
+                        id: 21,
+                        section: "B",
+                        text: "Around how many people studied at Takshashilā University for their post-graduation, at any one time?",
+                        options: ["100", "1000", "10,000", "1,00,000"],
+                        correctAnswer: 2
+                    },
+                    {
+                        id: 22,
+                        section: "B",
+                        text: "Before we go and change the world, we must first restructure ____________.",
+                        options: ["Our family", "Our community", "Our society", "Ourselves"],
+                        correctAnswer: 3
+                    },
+                    {
+                        id: 23,
+                        section: "B",
+                        text: "Which Indian medical researcher developed the world's first organ regeneration technique?",
+                        options: ["Balkrishna Matapurkar", "Ashima Anand", "Subrata Adak", "Srinivasa Ramanujan"],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 24,
+                        section: "B",
+                        text: "What we can learn from Tata's response for Taj attack?",
+                        options: ["Maintain relation on the cost of money", "We must do our social duties", "Our family first wants our time, then our money", "All of the above"],
+                        correctAnswer: 3
+                    },
+                    {
+                        id: 25,
+                        section: "B",
+                        text: "Which of these is NOT one of the principles of the Project Management Triangle?",
+                        options: ["Environmental Impact", "Quality of Project", "Time Efficiency", "Resources"],
+                        correctAnswer: 0
+                    },
+                    // Section C (15 questions)
+                    {
+                        id: 26,
+                        section: "C",
+                        text: "Megha has recently been feeling unhappy and lonely. For the last 2 weeks, she has been longing to share her emotions with someone. What should she do?",
+                        options: ["She should reach out to people using social media and create new friendships.", "She should express her feelings to family members with who she feels comfortable."],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 27,
+                        section: "C",
+                        text: "Chris Anderson (Chief Executive of 3D Robotics) once stated that \"We have seen the dangers of technology first-hand. I've seen it in myself, I don't want to see that happen to my kids.\" Which statement best describes the important lesson to be learnt from this quote?",
+                        options: ["Children under the age of 12 should be banned from using social media.", "The use of technology can be harmful, especially for youths. It should be limited and used cautiously."],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 28,
+                        section: "C",
+                        text: "Meenal recently presented her business proposal to a potential investor. Despite thorough preparation, the investor expressed disappointment and raised concerns about the financial projections. Meenal had worked hard on the proposal but felt demoralized by the negative feedback. How should Samantha handle the situation going forward?",
+                        options: ["She should take some time to reflect on the investor's feedback, identify specific areas of improvement, and revise her business proposal accordingly.", "She should disregard the investor's comments, assuming they don't understand her business well, and continue with her original proposal."],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 29,
+                        section: "C",
+                        text: "Shilpa has had a difficult day at school and wants to talk to her cousin, Kinjal, about it. They have sat down in the sitting room and Kinjal is listening to Shilpa. During the conversation. Kinjal sees that her friend, Meena, is calling her phone, probably to discuss next week's shopping trip. What should Kinjal do now?",
+                        options: ["Kinjal should tell Shilpa to wait so she can answer her phone and talk to Meena. Shilpa is going to be at the house for the whole day so they can talk after the phone call.", "Kinjal should ask Meena to call her later during the day and then give Shilpa her full attention."],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 30,
+                        section: "C",
+                        text: "Bhavya has just completed her master's degree in Biophysics. She is now applying to take a PhD at five of the top 20 universities in America. She has received admission to two universities and is now deciding which admission to accept. After weighing up both options, she has seen two deciding factors. Which of the below factors do you think she should prioritize as the most important?",
+                        options: ["The expertise and suitability of the PhD supervisor.", "The reputation and prestige of the university."],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 31,
+                        section: "C",
+                        text: "Jenish works as a computer engineer for an upcoming technology company. His manager has set him the task to update an important function for a developing product. From the requirements given by the manager, Jenish predicts that it will take him at least 10 days to finish it. But his manager has challenged him to complete it in 4 days. How should Jenish react to such a request?",
+                        options: ["Jenish should tell the manager that 4 days is impossible, but he will deliver it in 10 days.", "Jenish should meet his manager's challenge and try his hardest to try and complete it in 4 days."],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 32,
+                        section: "C",
+                        text: "Anamika has been invited to this year's National Youth Summit. As a medical student, she has been asked to prepare her view on the future of India and its medical practitioners. She is trying to decide which message she should convey. What do you think is the best option:",
+                        options: ["Youths should contribute to India by becoming doctors. Being a doctor means you can become wealthy and reputable.", "Youths should contribute to India by becoming doctors. Being a doctor means you can serve your country by helping its citizens."],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 33,
+                        section: "C",
+                        text: "Kirti and her colleague Ayush had a disagreement at work regarding a project they were collaborating on. Kirti feels upset about the incident and believes that Ayush is solely responsible for the conflict. When they decide to have a conversation about it, what is the best way for Kirti to approach this discussion?",
+                        options: ["Kirti should immediately express her anger and frustration, pointing out all the perceived faults in Ayush's actions.", "Kirti should calmly listen to Ayush's perspective, allowing them to explain their point of view, and try to understand the factors that led to the disagreement."],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 34,
+                        section: "C",
+                        text: "Mac coaches his local soccer team. During the regional tournament, his team loses 3 matches in a row. What do you think Max should do to help his team?",
+                        options: ["Mac will explain to his team that, \"Those 3 teams were the toughest in the region. So, it was surely going to be a challenge to play them. But in the next game, it will be easy for us to win. So do not worry about our losses.\"", "Mac will review the mistakes that his team members made while playing. He will have both one-to-one and group meetings with his team members, to convey the tactics they need to use to improve."],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 35,
+                        section: "C",
+                        text: "Satya is currently studying at 9th standard. His schoolwork has moved online and he now studies at home all the time. He spends hours on his phone every day to keep himself entertained and to escape his boredom. He feels bad about it. What advice would you give him?",
+                        options: ["It is a tough time right now, spending more time on social media will allow you to pass time quicker. Search for posts that are positive and useful.", "It is a tough time right now, so it is important to make sure we do not slip into harmful habits and lose control of our attention. So, limit the time in which you use social media."],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 36,
+                        section: "C",
+                        text: "Shrusti, a budding women entrepreneur, producing handmade jewelry has received a huge order to be delivered before the festival season. Her all-women employees are working for 18 hours daily to complete the order. A night before the deadline, as she is about to leave, she sees it is 9 pm and her employees must still pack the last 250 jewelry sets before they can leave. As their leader, what should Shrusti do?",
+                        options: ["Shrusti should give a speech and order her employees to work faster and harder to complete the order.", "Shrusti should stay with her employees to help them finish packing the products."],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 37,
+                        section: "C",
+                        text: "Suraj is having a discussion with his friend Minesh about a recent argument they had at college. This incident has made Minesh feel disappointed. He believes that Suraj is to blame for the whole incident. But Suraj tries to calmly explain why he reacted in the way he did. What is the best way for Minesh to approach this conversation?",
+                        options: ["Minesh should get up and leave the conversation. Then try to forget about the incident.", "Minesh should carefully listen and try to understand Suraj's perspective with an open mindset."],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 38,
+                        section: "C",
+                        text: "You have organised an online quiz. Students across your state have registered for this quiz in huge numbers. You and the participants are excited to take part. But just before the quiz, the server crashes due to a technical fault. What would you do?",
+                        options: ["You will immediately report this error to the principal and ask a technical person to provide a solution. Till then you will postpone the quiz.", "You will cancel the quiz because you doubt the capacity of the server. In the future, you will conduct the quiz with limited capacity."],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 39,
+                        section: "C",
+                        text: "As a student, you want to excel not just in your academics but your personal life too, should you….",
+                        options: ["Seek to build a strong network with your teachers and classmates.", "Seek to build a strong network with classmates only, as teachers do not work in the industry, meaning that their knowledge is theoretically limited."],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 40,
+                        section: "C",
+                        text: "Radha wants to start a new habit of running 10km daily. She downloaded a fitness app and even bought new trainers. But she struggles to stay motivated to continue every day, especially when her legs feel a bit sore. What can she do to make this habit more regular in her daily routine?",
+                        options: ["Run an extra 5km on the next day as a punishment for skipping a day.", "Allow herself a small reward every time she reaches her target."],
+                        correctAnswer: 1
+                    }
+                ]
             },
-            {
-                title: "UX Designer",
-                description: "Create intuitive and engaging user experiences for digital products.",
-                match: 70,
-                skills: ["User Research", "Wireframing", "Prototyping", "Visual Design"]
-            },
-            {
-                title: "Product Manager",
-                description: "Guide the success of a product and lead the team responsible for it.",
-                match: 65,
-                skills: ["Strategy", "Leadership", "Communication", "Market Research"]
-            },
-            {
-                title: "Digital Marketing Specialist",
-                description: "Develop and implement marketing strategies to promote products or services online.",
-                match: 60,
-                skills: ["SEO", "Content Marketing", "Analytics", "Social Media"]
-            },
-            {
-                title: "Business Analyst",
-                description: "Bridge the gap between IT and business by analyzing processes and requirements.",
-                match: 55,
-                skills: ["Requirements Analysis", "Process Modeling", "Data Analysis", "Communication"]
+            summer2025: {
+                title: "Summer 2025",
+                date: "09-05-2025",
+                questions: [
+                    // Section A (10 questions)
+                    {
+                        id: 1,
+                        section: "A",
+                        text: "Vijay Bhatkar became the chancellor of Nalanda University.",
+                        options: ["True", "False"],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 2,
+                        section: "A",
+                        text: "The origin of Takshashilā goes back at least to 1000 BCE",
+                        options: ["True", "False"],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 3,
+                        section: "A",
+                        text: "Julius Caesar learnt Sanskrit so he could study the Bhagavad Gita and ancient Indian texts.",
+                        options: ["True", "False"],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 4,
+                        section: "A",
+                        text: "It is our duty to share India's glorious past.",
+                        options: ["True", "False"],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 5,
+                        section: "A",
+                        text: "We should not allow any difficulties that arise in our lives to stop us from pursuing our dream.",
+                        options: ["True", "False"],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 6,
+                        section: "A",
+                        text: "Dr Abdul Kalam lived an extraordinary life but only during his time as the President.",
+                        options: ["True", "False"],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 7,
+                        section: "A",
+                        text: "As a young adult, it is important to dream, to visualize a goal, and then contemplate on how to achieve it.",
+                        options: ["True", "False"],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 8,
+                        section: "A",
+                        text: "Dr Abdul Kalam's academic intelligence was the only reason for his success.",
+                        options: ["True", "False"],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 9,
+                        section: "A",
+                        text: "Networking involves building and maintaining relationships over time.",
+                        options: ["True", "False"],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 10,
+                        section: "A",
+                        text: "Staying in contact is key when building your network.",
+                        options: ["True", "False"],
+                        correctAnswer: 0
+                    },
+                    // Section B (15 questions)
+                    {
+                        id: 11,
+                        section: "B",
+                        text: "Which of the following are NOT one of IPDC's four quotients?",
+                        options: ["Intelligence Quotient", "Emotional Quotient", "Adaptability Quotient", "Physical Quotient"],
+                        correctAnswer: 2
+                    },
+                    {
+                        id: 12,
+                        section: "B",
+                        text: "Which of the following points is NOT one of the habits that Tom Corley, author of \"Change Your Habits, Change Your Life\" discussed in his study of 233 self-made millionaires over a period of 5 years?",
+                        options: ["They get up early", "They sleep 4 hours or less", "They read a lot", "They make exercise a priority"],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 13,
+                        section: "B",
+                        text: "What did Tata do for the people of India?",
+                        options: ["Tate created a free telephone service with unlimited data.", "Tate created an affordable car for every family.", "Tata created the largest hospital in Mumbai.", "Tata created a new submarine for the military."],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 14,
+                        section: "B",
+                        text: "What are the proven ways to show the other person that you are completely engaged in the conversation?",
+                        options: ["Summarizing the main points", "Asking appropriate questions", "a & b both", "None of the above"],
+                        correctAnswer: 2
+                    },
+                    {
+                        id: 15,
+                        section: "B",
+                        text: "Which of the following methods should we NOT adopt during difficult challenges?",
+                        options: ["Find a positive attitude", "Find someone to blame", "Find workable solutions", "Find assistance"],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 16,
+                        section: "B",
+                        text: "Around how many people studied at Takshashilā University for their post-graduation, at any one time?",
+                        options: ["100", "1000", "10,000", "1,00,000"],
+                        correctAnswer: 2
+                    },
+                    {
+                        id: 17,
+                        section: "B",
+                        text: "Which Professor told Kalam, \"This is not good enough Kalam, I expected much better from you.\"",
+                        options: ["Prof. B.V. Buddhe", "Prof. Satish Dhawan", "Prof. Srinivasan", "Dr Brahma Prakash."],
+                        correctAnswer: 2
+                    },
+                    {
+                        id: 18,
+                        section: "B",
+                        text: "Which of the following is NOT mentioned as a flip-side (drawback) of Social Media in the IPDC workbook?",
+                        options: ["FOMO", "Negative body image", "Healthy sleep patterns", "Poor concentration"],
+                        correctAnswer: 2
+                    },
+                    {
+                        id: 19,
+                        section: "B",
+                        text: "Who told journalists that, his children have not used the iPad and he put a limit on how much technology his kids use at home?",
+                        options: ["Mark Zuckerberg", "Steve Jobs", "Bill Gates", "Tim Cook"],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 20,
+                        section: "B",
+                        text: "The IPDC lesson taught us to keep faith in three things. Which of the below was NOT one of them?",
+                        options: ["Faith in ourselves", "Faith in the system", "Faith in others", "Faith in God"],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 21,
+                        section: "B",
+                        text: "What intention should we keep when performing seva?",
+                        options: ["To help others", "To gain rewards", "To get money", "To be appreciated"],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 22,
+                        section: "B",
+                        text: "According to the IPDC workbook, family get-togethers should take place at least:",
+                        options: ["Once every week", "Once every month", "Once every year", "Once every 2 years"],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 23,
+                        section: "B",
+                        text: "Which of the following methods should we NOT use when performing seva?",
+                        options: ["Serve with love", "Be thankful", "Be prepared to sacrifice", "Serve to get praised"],
+                        correctAnswer: 3
+                    },
+                    {
+                        id: 24,
+                        section: "B",
+                        text: "As per Pramukh Swami Maharaj, is technology a blessing or a curse?",
+                        options: ["Blessing", "Curse", "It is a blessing with its discreet usage and is a curse without", "It is a curse with its discreet usage and is a blessing without"],
+                        correctAnswer: 2
+                    },
+                    {
+                        id: 25,
+                        section: "B",
+                        text: "Which of these is NOT one of the 6 powerful thoughts?",
+                        options: ["Whatever happens, happens for the best", "What am I grateful for?", "How can I get people to like me?", "Am I giving my 100%?"],
+                        correctAnswer: 2
+                    },
+                    // Section C (15 questions)
+                    {
+                        id: 26,
+                        section: "C",
+                        text: "Anil is upset because all his classmates have brand-name clothes and the latest mobile phones. Whereas his family's difficult financial situation means that Anil has no choice but to accept whatever used accessories his elder brother gives him. What advice do you think is the best advice for Anil right now?",
+                        options: ["Avoid focusing on what you do not have but learn to appreciate what you do have. This will bring positivity into your daily life.", "This is life, just accept it. But if you work hard now, then you will earn enough money to buy whatever you want in the future. Then you will always be happy."],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 27,
+                        section: "C",
+                        text: "'First they break you and then they remake you'. What can we learn from this method that the USA Army use to train their recruits?",
+                        options: ["We should be ready to come out of our own comfort zone to further our personal growth.", "We should break all limits and make new innovations."],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 28,
+                        section: "C",
+                        text: "\"The rule of 21\" - What did we learn from this rule in the context of new habits, as mentioned by Robin Sharma in his book named - \"Who will cry when you die?\"",
+                        options: ["You should develop a habit, by practising it for 21 days without a break. Initially, it is normal to feel uncomfortable for the first few days. But if you break them in for about three weeks, they will fit like a second skin.", "If you find it uncomfortable while developing a new habit then take a break and continue when it feels more natural to you. Continue this until you reach the 21 days target to develop a beneficial habit."],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 29,
+                        section: "C",
+                        text: "Sneha wants to start a new habit of running 10km daily. She downloaded a fitness app and even bought new trainers. But she struggles to stay motivated to continue every day, especially when her legs feel a bit sore. What can she do to make this habit more regular in her daily routine?",
+                        options: ["Run an extra 8km on the next day as a punishment for skipping a day.", "Allow herself a small reward every time she reaches her target."],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 30,
+                        section: "C",
+                        text: "Kiran spends time on social media until late at night. Because of this, he is sometimes unable to wake up on time in the morning. On such occasions, he sometimes skips his scheduled workout session, so that he can catch the bus to work, to arrive on time. What do you think Kiran should do to become more consistent?",
+                        options: ["He needs to break the habit of staying up late so that he can wake up on time and complete his morning workout as planned.", "Social media is also an important part of his nightly routine. So, he should buy a personal vehicle and use that to reduce travel time. That way he can exercise and reach his office on time"],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 31,
+                        section: "C",
+                        text: "Mr. Jindal is the CEO of a clothing manufacturing company. Over the last two years, Mr Jindal has successfully opened 25 new factories around India. Today, he has a review meeting with his clients in Chennai. Just as he was about to board his flight, he receives news of an accident in one of his nearby factories. One of the machines temporary malfunctioned, injuring 15-20 of his workers. What should Mr Jindal do?",
+                        options: ["Mr. Jindal should reschedule his meeting and visit the factory to personally provide emotional and financial support to his workers according to their needs.", "Mr. Jindal should inform the manager to give the workers a financial package for their troubles and then continue to his meeting."],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 32,
+                        section: "C",
+                        text: "Ram has just received his mid-term exam back from his teacher. He has scored the highest score in the class with an amazing 91%. After being praised by his teacher, Ram looks through his classmate's paper. His classmate, Shyam, has also scored very highly. Upon further inspection, Ram notices that one of Shyam's questions was marked incorrectly. If Ram informs the teacher then Shyam will gain 3 more marks. However, this will put Shyam as the highest scorer and Ram as second. What do you think Ram should do?",
+                        options: ["Ram should not inform the teacher. The fault belongs to the teacher. So, Ram should just enjoy his well-earned first place.", "Ram should inform the teacher about the mistake and take pleasure in helping Shyam get a better grade."],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 33,
+                        section: "C",
+                        text: "Keval is having a discussion with his friend Bharat about a recent argument they had at college. This incident has made Bharat feel disappointed. He believes that Keval is to blame for the whole incident. But Keval tries to calmly explain why he reacted in the way he did. What is the best way for Bharat to approach this conversation?",
+                        options: ["Bharat should get up and leave the conversation. Then try to forget about the incident.", "Bharat should carefully listen and try to understand Keval's perspective with an open mindset."],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 34,
+                        section: "C",
+                        text: "Anjali has prepared for a cultural festival dance performance at her college. She has been practicing for many weeks. It is now the day before the event and Anjali is feeling quite confident. But that was until she saw the other participants practicing. Seeing their dance routines, she felt that they were far superior to her. What would you recommend her to do?",
+                        options: ["She should remember her efforts and give her best performance possible.", "She should give an excuse to the organizer and avoid her performance to prevent any potential embarrassment."],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 35,
+                        section: "C",
+                        text: "Kinjal just completed her master's degree in Biophysics. She is now applying to take a PhD at five of the top 20 universities in America. She has received admission to two universities and is now deciding which admission to accept. After weighing up both options, she has seen two deciding factors. Which of the below factors do you think she should prioritize as the most important?",
+                        options: ["The expertise and suitability of the PhD supervisor.", "The reputation and prestige of the university."],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 36,
+                        section: "C",
+                        text: "Ravi has recently developed a new start-up company providing an online delivery service. His company has been gaining many orders from his customers. His six employees have been working non-stop for the last 18 hours to meet the increased demands. As he is about to leave the office, he sees it is 10 PM, and his employees must still package 300 more products before they can rest tonight. As their leader, how should Ravi engage with his employees?",
+                        options: ["Ravi should take out a few minutes to order his employees to work harder and faster.", "Ravi should stay with his employees to help them finish packaging the products."],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 37,
+                        section: "C",
+                        text: "Mohan has been using his phone at night before bedtime and now experiences sleeplessness. How would you suggest he solves this problem?",
+                        options: ["He should only use limited applications at night and avoid playing any games on his phone.", "He should set a fixed time at night where he stops using social media. And he should not sleep with his phone within reach."],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 38,
+                        section: "C",
+                        text: "Anjali has recently been feeling unhappy and lonely. For the last 2 weeks, she has been longing to share her emotions with someone. What should she do?",
+                        options: ["She should reach out to people using social media and create new friendships.", "She should express her feelings to family members with whom she feels comfortable"],
+                        correctAnswer: 1
+                    },
+                    {
+                        id: 39,
+                        section: "C",
+                        text: "Nehal spent her school vacation volunteering for a disaster relief project. This required her to spend two weeks packing and distributing food packets for flood victims. This seva was tiring and time-consuming. Despite her efforts she found the residents of one village to be very ungrateful. The residents took the food packets, but they did not say thanks, smile, or give any response. This made Nehal feel sad and unappreciated. What advice best suits Nehal's difficulty during this seva?",
+                        options: ["We should not expect everyone to be thankful. Instead, we should be thankful that we have been given the opportunity to perform this important seva.", "Only a few residents were ungrateful. But some people from the other villages praised us, so we should remember those praises instead."],
+                        correctAnswer: 0
+                    },
+                    {
+                        id: 40,
+                        section: "C",
+                        text: "Two weeks ago, Abdul submitted his scientific research paper for his first review Due to the lack of support from his appointed research partner, Abdul had to rush the result analysis. Today, when he went to collect feedback, his Professor responded only with harsh criticism for his work. How do you think Abdul should handle the situation, going forward?",
+                        options: ["He should ignore the Professor's harsh tone and keep trying amidst the difficult circumstances.", "He should try and use that criticism to improve his research paper"],
+                        correctAnswer: 1
+                    }
+                ]
             }
-        ];
-
-        // Sample data for skill gap analysis
-        const skillGapData = {
-            "Software Developer": [
-                {
-                    skill: "Programming",
-                    proficiency: 70,
-                    resources: ["Codecademy", "freeCodeCamp", "LeetCode"]
-                },
-                {
-                    skill: "Problem Solving",
-                    proficiency: 65,
-                    resources: ["HackerRank", "Codewars", "Project Euler"]
-                },
-                {
-                    skill: "Algorithms",
-                    proficiency: 60,
-                    resources: ["Coursera Algorithms", "GeeksforGeeks", "Khan Academy"]
-                },
-                {
-                    skill: "Data Structures",
-                    proficiency: 55,
-                    resources: ["Udemy Data Structures", "MIT OpenCourseWare", "YouTube Tutorials"]
-                }
-            ],
-            "Data Scientist": [
-                {
-                    skill: "Statistics",
-                    proficiency: 75,
-                    resources: ["Khan Academy Statistics", "Coursera Statistics", "edX Statistics"]
-                },
-                {
-                    skill: "Machine Learning",
-                    proficiency: 65,
-                    resources: ["Coursera ML", "Udacity ML", "fast.ai"]
-                },
-                {
-                    skill: "Data Visualization",
-                    proficiency: 60,
-                    resources: ["Tableau Public", "DataCamp Visualization", "Kaggle Learn"]
-                },
-                {
-                    skill: "Python",
-                    proficiency: 70,
-                    resources: ["Python.org", "Codecademy Python", "Real Python"]
-                }
-            ],
-            "UX Designer": [
-                {
-                    skill: "User Research",
-                    proficiency: 65,
-                    resources: ["Nielsen Norman Group", "UX Collective", "Interaction Design Foundation"]
-                },
-                {
-                    skill: "Wireframing",
-                    proficiency: 70,
-                    resources: ["Figma Learn", "Balsamiq", "Sketch"]
-                },
-                {
-                    skill: "Prototyping",
-                    proficiency: 60,
-                    resources: ["InVision", "Adobe XD", "Proto.io"]
-                },
-                {
-                    skill: "Visual Design",
-                    proficiency: 55,
-                    resources: ["Canva Design School", "Dribbble", "Behance"]
-                }
-            ],
-            "Product Manager": [
-                {
-                    skill: "Strategy",
-                    proficiency: 60,
-                    resources: ["Product School", "Reforge", "Mind the Product"]
-                },
-                {
-                    skill: "Leadership",
-                    proficiency: 65,
-                    resources: ["Coursera Leadership", "LinkedIn Learning", "Harvard ManageMentor"]
-                },
-                {
-                    skill: "Communication",
-                    proficiency: 70,
-                    resources: ["Toastmasters", "Coursera Communication", "TED Talks"]
-                },
-                {
-                    skill: "Market Research",
-                    proficiency: 55,
-                    resources: ["Coursera Market Research", "Udemy Research", "Market Research Society"]
-                }
-            ],
-            "Digital Marketing Specialist": [
-                {
-                    skill: "SEO",
-                    proficiency: 65,
-                    resources: ["Moz Academy", "SEMrush Academy", "HubSpot SEO"]
-                },
-                {
-                    skill: "Content Marketing",
-                    proficiency: 70,
-                    resources: ["Content Marketing Institute", "HubSpot Content", "Copyblogger"]
-                },
-                {
-                    skill: "Analytics",
-                    proficiency: 60,
-                    resources: ["Google Analytics Academy", "Coursera Analytics", "DataCamp"]
-                },
-                {
-                    skill: "Social Media",
-                    proficiency: 75,
-                    resources: ["Hootsuite Academy", "Facebook Blueprint", "Twitter Flight School"]
-                }
-            ],
-            "Business Analyst": [
-                {
-                    skill: "Requirements Analysis",
-                    proficiency: 65,
-                    resources: ["BA Times", "IIBA", "Modern Analyst"]
-                },
-                {
-                    skill: "Process Modeling",
-                    proficiency: 60,
-                    resources: ["BPM Institute", "Lucidchart", "Visio Tutorials"]
-                },
-                {
-                    skill: "Data Analysis",
-                    proficiency: 55,
-                    resources: ["DataCamp", "Coursera Data Analysis", "Udemy Business Analysis"]
-                },
-                {
-                    skill: "Communication",
-                    proficiency: 70,
-                    resources: ["Toastmasters", "Coursera Communication", "TED Talks"]
-                }
-            ]
         };
 
-        // DOM elements
-        const profileForm = document.getElementById('profileForm');
-        const skillInput = document.getElementById('skill-input');
-        const skillsContainer = document.getElementById('skills-container');
-        const careerCards = document.getElementById('career-cards');
-        const skillGapContainer = document.getElementById('skill-gap-container');
-        const notification = document.getElementById('notification');
-        const notificationMessage = document.getElementById('notification-message');
-        const profileSpinner = document.getElementById('profile-spinner');
+        // Global Variables
+        let currentExam = null;
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let timerInterval = null;
+        let timeRemaining = 150 * 60; // 2.5 hours in seconds
 
-        // User data
-        let userProfile = {
-            name: '',
-            education: '',
-            field: '',
-            interests: '',
-            skills: []
-        };
+        // DOM Elements
+        const welcomePage = document.getElementById('welcome-page');
+        const instructionsPage = document.getElementById('instructions-page');
+        const examPage = document.getElementById('exam-page');
+        const resultsPage = document.getElementById('results-page');
+        const timerElement = document.getElementById('timer');
+        const timerDisplay = document.getElementById('timer-display');
 
-        // Initialize the app
-        function init() {
-            // Load user profile from localStorage if exists
-            const savedProfile = localStorage.getItem('userProfile');
-            if (savedProfile) {
-                userProfile = JSON.parse(savedProfile);
-                populateForm();
-                generateCareerCards();
-            } else {
-                // Generate default career cards
-                generateCareerCards();
-            }
-
-            // Add event listeners
-            profileForm.addEventListener('submit', saveProfile);
-            skillInput.addEventListener('keypress', addSkill);
+        // Select Exam
+        function selectExam(examKey) {
+            currentExam = examKey;
+            welcomePage.classList.add('hidden');
+            instructionsPage.classList.remove('hidden');
         }
 
-        // Populate form with saved profile data
-        function populateForm() {
-            document.getElementById('name').value = userProfile.name;
-            document.getElementById('education').value = userProfile.education;
-            document.getElementById('field').value = userProfile.field;
-            document.getElementById('interests').value = userProfile.interests;
+        // Start Exam
+        function startExam() {
+            instructionsPage.classList.add('hidden');
+            examPage.classList.remove('hidden');
+            timerElement.classList.remove('hidden');
             
-            // Display skills
-            userProfile.skills.forEach(skill => {
-                addSkillTag(skill);
-            });
+            // Initialize user answers array
+            userAnswers = new Array(examData[currentExam].questions.length).fill(null);
+            
+            // Start timer
+            startTimer();
+            
+            // Display first question
+            displayQuestion();
         }
 
-        // Add skill when Enter key is pressed
-        function addSkill(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                const skill = skillInput.value.trim();
-                if (skill && !userProfile.skills.includes(skill)) {
-                    userProfile.skills.push(skill);
-                    addSkillTag(skill);
-                    skillInput.value = '';
+        // Timer Functions
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    submitExam();
                 }
-            }
-        }
-
-        // Add skill tag to the UI
-        function addSkillTag(skill) {
-            const skillTag = document.createElement('div');
-            skillTag.className = 'skill-tag';
-            skillTag.innerHTML = `
-                ${skill}
-                <span class="material-symbols-rounded" data-skill="${skill}">close</span>
-            `;
-            skillsContainer.appendChild(skillTag);
-            
-            // Add event listener to remove skill
-            skillTag.querySelector('.material-symbols-rounded').addEventListener('click', removeSkill);
-        }
-
-        // Remove skill from profile and UI
-        function removeSkill(e) {
-            const skill = e.target.dataset.skill;
-            userProfile.skills = userProfile.skills.filter(s => s !== skill);
-            e.target.parentElement.remove();
-        }
-
-        // Save profile to localStorage
-        function saveProfile(e) {
-            e.preventDefault();
-            
-            // Show loading spinner
-            profileSpinner.classList.add('loading');
-            
-            // Get form values
-            userProfile.name = document.getElementById('name').value;
-            userProfile.education = document.getElementById('education').value;
-            userProfile.field = document.getElementById('field').value;
-            userProfile.interests = document.getElementById('interests').value;
-            
-            // Save to localStorage
-            localStorage.setItem('userProfile', JSON.stringify(userProfile));
-            
-            // Simulate API call delay
-            setTimeout(() => {
-                // Hide loading spinner
-                profileSpinner.classList.remove('loading');
-                
-                // Show notification
-                showNotification('Profile saved successfully!');
-                
-                // Generate career cards based on updated profile
-                generateCareerCards();
             }, 1000);
         }
 
-        // Generate career cards based on user profile
-        function generateCareerCards() {
-            careerCards.innerHTML = '';
+        function updateTimerDisplay() {
+            const hours = Math.floor(timeRemaining / 3600);
+            const minutes = Math.floor((timeRemaining % 3600) / 60);
+            const seconds = timeRemaining % 60;
             
-            // Sort careers by match percentage
-            const sortedCareers = [...careerData].sort((a, b) => b.match - a.match);
+            timerDisplay.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Question Display Functions
+        function displayQuestion() {
+            const question = examData[currentExam].questions[currentQuestionIndex];
             
-            // Create career cards
-            sortedCareers.forEach(career => {
-                const card = document.createElement('div');
-                card.className = 'career-card';
-                card.innerHTML = `
-                    <div class="career-card-header">
-                        <h3>${career.title}</h3>
-                    </div>
-                    <div class="career-card-body">
-                        <p>${career.description}</p>
-                        <div class="match-percentage">
-                            <span class="material-symbols-rounded">trending_up</span>
-                            <span>${career.match}% match</span>
-                        </div>
-                        <div class="skills-required">
-                            <h4>Key Skills Required:</h4>
-                            <div class="skills-list">
-                                ${career.skills.map(skill => `<span class="skill-badge">${skill}</span>`).join('')}
-                            </div>
-                        </div>
-                        <button class="btn" data-career="${career.title}">Analyze Skill Gap</button>
-                    </div>
-                `;
-                careerCards.appendChild(card);
+            // Update question counter and progress
+            document.getElementById('current-question').textContent = currentQuestionIndex + 1;
+            document.getElementById('total-questions').textContent = examData[currentExam].questions.length;
+            document.getElementById('progress-text').textContent = `Question ${currentQuestionIndex + 1} of ${examData[currentExam].questions.length}`;
+            
+            // Update progress bar
+            const progress = ((currentQuestionIndex + 1) / examData[currentExam].questions.length) * 100;
+            document.getElementById('progress').style.width = `${progress}%`;
+            
+            // Update section indicator
+            document.getElementById('section-indicator').textContent = `Section ${question.section}`;
+            
+            // Display question text
+            document.getElementById('question-text').textContent = question.text;
+            
+            // Display options
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                if (userAnswers[currentQuestionIndex] === index) {
+                    optionElement.classList.add('selected');
+                }
                 
-                // Add event listener to analyze skill gap button
-                card.querySelector('.btn').addEventListener('click', analyzeSkillGap);
-            });
-        }
-
-        // Analyze skill gap for selected career
-        function analyzeSkillGap(e) {
-            const career = e.target.dataset.career;
-            const skills = skillGapData[career];
-            
-            // Scroll to skill gap section
-            document.getElementById('skills').scrollIntoView({ behavior: 'smooth' });
-            
-            // Generate skill gap analysis
-            skillGapContainer.innerHTML = `
-                <h3 style="text-align: center; color: var(--primary-color); margin-bottom: 2rem;">Skill Gap Analysis for ${career}</h3>
-            `;
-            
-            skills.forEach(skill => {
-                const skillGapItem = document.createElement('div');
-                skillGapItem.className = 'skill-gap-item';
-                skillGapItem.innerHTML = `
-                    <div class="skill-gap-header">
-                        <h4>${skill.skill}</h4>
-                        <span class="proficiency">${skill.proficiency}%</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress" style="width: ${skill.proficiency}%"></div>
-                    </div>
-                    <div class="learning-resources">
-                        <h4>Learning Resources:</h4>
-                        ${skill.resources.map(resource => `<a href="#" class="resource-link">${resource}</a>`).join('')}
-                    </div>
+                optionElement.innerHTML = `
+                    <input type="radio" id="option-${index}" name="answer" value="${index}" ${userAnswers[currentQuestionIndex] === index ? 'checked' : ''}>
+                    <label for="option-${index}">${option}</label>
                 `;
-                skillGapContainer.appendChild(skillGapItem);
+                
+                optionElement.addEventListener('click', () => selectOption(index));
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Update navigation buttons
+            document.getElementById('prev-btn').disabled = currentQuestionIndex === 0;
+            
+            if (currentQuestionIndex === examData[currentExam].questions.length - 1) {
+                document.getElementById('next-btn').classList.add('hidden');
+                document.getElementById('submit-btn').classList.remove('hidden');
+            } else {
+                document.getElementById('next-btn').classList.remove('hidden');
+                document.getElementById('submit-btn').classList.add('hidden');
+            }
+        }
+
+        function selectOption(optionIndex) {
+            userAnswers[currentQuestionIndex] = optionIndex;
+            
+            // Update UI
+            const options = document.querySelectorAll('.option');
+            options.forEach((option, index) => {
+                if (index === optionIndex) {
+                    option.classList.add('selected');
+                    option.querySelector('input').checked = true;
+                } else {
+                    option.classList.remove('selected');
+                    option.querySelector('input').checked = false;
+                }
             });
         }
 
-        // Show notification
-        function showNotification(message, isError = false) {
-            notificationMessage.textContent = message;
+        function nextQuestion() {
+            if (currentQuestionIndex < examData[currentExam].questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            }
+        }
+
+        // Submit Exam
+        function submitExam() {
+            clearInterval(timerInterval);
             
-            if (isError) {
-                notification.classList.add('error');
-                notification.querySelector('.material-symbols-rounded').textContent = 'error';
+            // Calculate results
+            const results = calculateResults();
+            
+            // Display results
+            displayResults(results);
+            
+            // Show results page
+            examPage.classList.add('hidden');
+            resultsPage.classList.remove('hidden');
+        }
+
+        function calculateResults() {
+            const questions = examData[currentExam].questions;
+            let sectionAScore = 0;
+            let sectionBScore = 0;
+            let sectionCScore = 0;
+            let totalScore = 0;
+            
+            const sectionAResults = [];
+            const sectionBResults = [];
+            const sectionCResults = [];
+            
+            questions.forEach((question, index) => {
+                const isCorrect = userAnswers[index] === question.correctAnswer;
+                let marks = 0;
+                
+                if (question.section === 'A') {
+                    marks = isCorrect ? 1 : 0;
+                    sectionAScore += marks;
+                    sectionAResults.push({
+                        question: question,
+                        userAnswer: userAnswers[index],
+                        isCorrect: isCorrect
+                    });
+                } else if (question.section === 'B') {
+                    marks = isCorrect ? 2 : 0;
+                    sectionBScore += marks;
+                    sectionBResults.push({
+                        question: question,
+                        userAnswer: userAnswers[index],
+                        isCorrect: isCorrect
+                    });
+                } else if (question.section === 'C') {
+                    marks = isCorrect ? 2 : 0;
+                    sectionCScore += marks;
+                    sectionCResults.push({
+                        question: question,
+                        userAnswer: userAnswers[index],
+                        isCorrect: isCorrect
+                    });
+                }
+                
+                totalScore += marks;
+            });
+            
+            return {
+                totalScore: totalScore,
+                sectionAScore: sectionAScore,
+                sectionBScore: sectionBScore,
+                sectionCScore: sectionCScore,
+                sectionAResults: sectionAResults,
+                sectionBResults: sectionBResults,
+                sectionCResults: sectionCResults
+            };
+        }
+
+        function displayResults(results) {
+            // Display score
+            document.getElementById('score-display').textContent = `${results.totalScore}/70`;
+            
+            // Display score message
+            let message = '';
+            const percentage = (results.totalScore / 70) * 100;
+            
+            if (percentage >= 80) {
+                message = 'Excellent! You have performed outstandingly well!';
+            } else if (percentage >= 60) {
+                message = 'Good job! You have a good understanding of the subject.';
+            } else if (percentage >= 40) {
+                message = 'Fair performance. There is room for improvement.';
             } else {
-                notification.classList.remove('error');
-                notification.querySelector('.material-symbols-rounded').textContent = 'check_circle';
+                message = 'You need to work harder to improve your understanding.';
             }
             
-            notification.classList.add('show');
+            document.getElementById('score-message').textContent = message;
             
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
+            // Display section results
+            displaySectionResults('section-a-results', results.sectionAResults);
+            displaySectionResults('section-b-results', results.sectionBResults);
+            displaySectionResults('section-c-results', results.sectionCResults);
         }
 
-        // Initialize the app when DOM is loaded
-        document.addEventListener('DOMContentLoaded', init);
+        function displaySectionResults(containerId, sectionResults) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            sectionResults.forEach(result => {
+                const resultElement = document.createElement('div');
+                resultElement.className = `question-result ${result.isCorrect ? 'correct' : 'incorrect'}`;
+                
+                const userAnswerText = result.userAnswer !== null ? 
+                    result.question.options[result.userAnswer] : 'Not answered';
+                
+                const correctAnswerText = result.question.options[result.question.correctAnswer];
+                
+                resultElement.innerHTML = `
+                    <div class="question-number">Q${result.question.id}</div>
+                    <div class="question-text-result">${result.question.text}</div>
+                    <div class="answer-status ${result.isCorrect ? 'correct-answer' : 'incorrect-answer'}">
+                        ${result.isCorrect ? 'Correct' : `Incorrect. Correct answer: ${correctAnswerText}`}
+                    </div>
+                `;
+                
+                container.appendChild(resultElement);
+            });
+        }
+
+        // Reset Exam
+        function resetExam() {
+            currentExam = null;
+            currentQuestionIndex = 0;
+            userAnswers = [];
+            timeRemaining = 150 * 60;
+            
+            resultsPage.classList.add('hidden');
+            welcomePage.classList.remove('hidden');
+            timerElement.classList.add('hidden');
+        }
     </script>
 </body>
-
 </html>
