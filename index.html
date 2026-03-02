@@ -1,575 +1,701 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GTU Cyber Security - Complete Q&A Guide</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            line-height: 1.6;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        .header {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-        
-        .header h1 {
-            color: #2c3e50;
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-        
-        .header .subtitle {
-            color: #7f8c8d;
-            font-size: 1.2em;
-            margin-bottom: 15px;
-        }
-        
-        .exam-info {
-            background: #3498db;
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            display: inline-block;
-            font-weight: bold;
-        }
-        
-        .question-section {
-            background: rgba(255, 255, 255, 0.95);
-            margin: 20px 0;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-        
-        .question-section:hover {
-            transform: translateY(-5px);
-        }
-        
-        .question-header {
-            background: linear-gradient(135deg, #2c3e50, #34495e);
-            color: white;
-            padding: 20px;
-            font-size: 1.3em;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .question-content {
-            padding: 25px;
-        }
-        
-        .question-item {
-            margin-bottom: 25px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-left: 5px solid #3498db;
-            border-radius: 8px;
-        }
-        
-        .question-text {
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 10px;
-            font-size: 1.1em;
-        }
-        
-        .marks {
-            background: #e74c3c;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            float: right;
-            font-weight: bold;
-        }
-        
-        .answer {
-            color: #34495e;
-            line-height: 1.8;
-            margin-top: 15px;
-            padding: 15px;
-            background: white;
-            border-radius: 8px;
-            border: 1px solid #e9ecef;
-        }
-        
-        .answer strong {
-            color: #2c3e50;
-        }
-        
-        .answer ul {
-            margin-left: 20px;
-            margin-top: 10px;
-        }
-        
-        .answer li {
-            margin-bottom: 8px;
-        }
-        
-        .or-section {
-            background: #f39c12;
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 1.2em;
-            margin: 20px 0;
-            border-radius: 8px;
-        }
-        
-        .footer {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 20px;
-            border-radius: 15px;
-            margin-top: 30px;
-            color: #7f8c8d;
-        }
-        
-        .download-btn {
-            background: #27ae60;
-            color: white;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 25px;
-            font-size: 1.1em;
-            cursor: pointer;
-            transition: background 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            margin: 10px;
-        }
-        
-        .download-btn:hover {
-            background: #229954;
-            transform: translateY(-2px);
-        }
-        
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-            
-            .header h1 {
-                font-size: 2em;
-            }
-            
-            .question-header {
-                font-size: 1.1em;
-            }
-        }
-    </style>
-<base target="_blank">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chef's Hearth | Premium Cloud Kitchen</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0F0F0F;
+      --bg-elevated: #1A1A1A;
+      --text: #EDEDED;
+      --text-muted: #888888;
+      --accent: #C6A87C; /* Antique Gold */
+      --accent-bright: #E5C99B;
+      --card: #161616;
+      --border: #2A2A2A;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Manrope', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .font-serif { font-family: 'Cormorant Garamond', serif; }
+
+    /* Noise Texture Overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.5;
+    }
+
+    /* Custom Cursor */
+    .cursor-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.1s ease;
+      mix-blend-mode: difference;
+    }
+    .cursor-outline {
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--accent);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9998;
+      transition: transform 0.15s ease, width 0.3s, height 0.3s, border-color 0.3s;
+      transform: translate(-50%, -50%);
+    }
+    body:hover .cursor-outline {
+      opacity: 1;
+    }
+    .hover-trigger:hover ~ .cursor-outline,
+    a:hover ~ .cursor-outline {
+      width: 60px;
+      height: 60px;
+      border-color: var(--accent-bright);
+    }
+
+    /* Typography */
+    .headline-xl {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3rem, 10vw, 8rem);
+      line-height: 0.95;
+      font-weight: 300;
+      letter-spacing: -0.02em;
+    }
+
+    .headline-lg {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      line-height: 1.1;
+      font-weight: 400;
+    }
+
+    .label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    /* Animation Keyframes */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(-100%); }
+      to { transform: translateX(0); }
+    }
+
+    @keyframes revealHorizontal {
+      from { clip-path: inset(0 100% 0 0); }
+      to { clip-path: inset(0 0 0 0); }
+    }
+
+    @keyframes scaleIn {
+      from { transform: scale(1.2); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes panOverlay {
+      0% { transform: translateY(100%); }
+      100% { transform: translateY(-100%); }
+    }
+
+    .reveal-trigger {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal-trigger.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Hero Specifics */
+    .hero-vid-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.6;
+    }
+    .hero-vid-container::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(15,15,15,0.2) 0%, rgba(15,15,15,1) 100%);
+    }
+    .hero-vid-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Marquee */
+    .marquee-track {
+      display: flex;
+      white-space: nowrap;
+      animation: marquee 30s linear infinite;
+    }
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* Menu Item Hover */
+    .menu-item-img {
+      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .menu-item:hover .menu-item-img {
+      transform: scale(1.05);
+    }
+    .menu-item-content {
+      background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
+    }
+
+    /* Button Styles */
+    .btn-luxury {
+      position: relative;
+      padding: 16px 40px;
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-family: 'Manrope', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      overflow: hidden;
+      transition: color 0.3s ease;
+      cursor: pointer;
+    }
+    .btn-luxury::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--accent);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: -1;
+    }
+    .btn-luxury:hover {
+      color: #000;
+    }
+    .btn-luxury:hover::before {
+      transform: scaleY(1);
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); }
+
+    /* Glass Panel */
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* Custom Animations for specific elements */
+    .char-reveal span {
+      opacity: 0;
+      display: inline-block;
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1><i class="fas fa-shield-alt"></i> GTU Cyber Security</h1>
-            <div class="subtitle">Complete Question & Answer Guide</div>
-            <div class="exam-info">
-                <i class="fas fa-calendar-alt"></i> Summer 2025 | BE - Semester V | Subject Code: 3150714
-            </div>
-        </div>
 
-        <!-- Q.1 -->
-        <div class="question-section">
-            <div class="question-header">
-                <i class="fas fa-search"></i>
-                Q.1 - Vulnerability Assessment & Network Tools
-            </div>
-            <div class="question-content">
-                <div class="question-item">
-                    <div class="question-text">
-                        (a) List three vulnerability scanning tools commonly used in penetration testing.
-                        <span class="marks">03 Marks</span>
-                    </div>
-                    <div class="answer">
-                        <strong>Answer:</strong> Three commonly used vulnerability scanning tools in penetration testing are:<br><br>
-                        <strong>1. Nessus:</strong> A comprehensive vulnerability scanner that identifies security weaknesses in networks, operating systems, and applications. It's user-friendly and provides detailed reports with remediation suggestions.<br><br>
-                        <strong>2. OpenVAS (Open Vulnerability Assessment System):</strong> A free and open-source vulnerability scanner that performs comprehensive security tests against target systems. It's regularly updated with the latest vulnerability tests.<br><br>
-                        <strong>3. Nmap (Network Mapper):</strong> While primarily a network discovery tool, Nmap includes scripting capabilities (NSE scripts) that can detect vulnerabilities, open ports, services, and potential security issues in network systems.
-                    </div>
-                </div>
-                
-                <div class="question-item">
-                    <div class="question-text">
-                        (b) Differentiate between Netcat and Socat in the context of network communication.
-                        <span class="marks">04 Marks</span>
-                    </div>
-                    <div class="answer">
-                        <strong>Answer:</strong> Key differences between Netcat and Socat:<br><br>
-                        <strong>Netcat:</strong><br>
-                        • Simple, lightweight tool for basic network operations<br>
-                        • Limited protocol support (mainly TCP/UDP)<br>
-                        • Basic port scanning and file transfer capabilities<br>
-                        • Single-purpose tool with straightforward syntax<br>
-                        • Good for quick testing and simple network tasks<br><br>
-                        <strong>Socat:</strong><br>
-                        • More powerful and versatile than Netcat<br>
-                        • Supports multiple protocols (TCP, UDP, SSL, IPv6, etc.)<br>
-                        • Advanced features like SSL encryption, IPv6 support<br>
-                        • Can handle multiple simultaneous connections<br>
-                        • More complex syntax but greater functionality<br>
-                        • Better suited for enterprise-level network operations
-                    </div>
-                </div>
-                
-                <div class="question-item">
-                    <div class="question-text">
-                        (c) Evaluate the effectiveness of Metasploit in vulnerability scanning and exploitation.
-                        <span class="marks">07 Marks</span>
-                    </div>
-                    <div class="answer">
-                        <strong>Answer:</strong> Metasploit is highly effective in vulnerability scanning and exploitation due to several key features:<br><br>
-                        <strong>1. Comprehensive Exploit Database:</strong> Contains over 2000+ exploits for various systems and applications, regularly updated by the security community.<br><br>
-                        <strong>2. Automated Exploitation:</strong> Can automatically identify and exploit vulnerabilities, reducing manual effort and increasing efficiency.<br><br>
-                        <strong>3. Post-Exploitation Capabilities:</strong> Provides extensive post-exploitation tools for privilege escalation, persistence, data extraction, and system control.<br><br>
-                        <strong>4. Payload Generation:</strong> Creates various types of payloads (reverse shells, bind shells, meterpreter) for different attack scenarios.<br><br>
-                        <strong>5. Integration Features:</strong> Works seamlessly with other tools like Nmap for scanning and provides detailed reporting capabilities.<br><br>
-                        <strong>6. Professional Framework:</strong> Offers both free and commercial versions with enterprise features, making it suitable for both learning and professional penetration testing.<br><br>
-                        <strong>Limitations:</strong> While powerful, it requires proper authorization for use and should only be used in controlled environments or with explicit permission.
-                    </div>
-                </div>
-            </div>
-        </div>
+  <!-- Custom Cursor -->
+  <div class="cursor-dot hidden md:block" id="cursor-dot"></div>
+  <div class="cursor-outline hidden md:block" id="cursor-outline"></div>
 
-        <!-- Q.2 -->
-        <div class="question-section">
-            <div class="question-header">
-                <i class="fas fa-fire"></i>
-                Q.2 - Network Security & Firewalls
-            </div>
-            <div class="question-content">
-                <div class="question-item">
-                    <div class="question-text">
-                        (a) What is the difference between stateless and stateful firewalls?
-                        <span class="marks">03 Marks</span>
-                    </div>
-                    <div class="answer">
-                        <strong>Answer:</strong> Key differences between stateless and stateful firewalls:<br><br>
-                        <strong>Stateless Firewall:</strong><br>
-                        • Examines each packet independently without considering previous packets<br>
-                        • Makes decisions based only on header information (source/destination IP, ports)<br>
-                        • Faster but less secure<br>
-                        • Cannot detect complex attacks that span multiple packets<br>
-                        • Simple rule-based filtering<br><br>
-                        <strong>Stateful Firewall:</strong><br>
-                        • Maintains connection state information<br>
-                        • Tracks the state of network connections (TCP, UDP)<br>
-                        • More secure as it understands context of traffic<br>
-                        • Can detect and prevent sophisticated attacks<br>
-                        • Slightly slower due to state tracking overhead
-                    </div>
-                </div>
-                
-                <div class="question-item">
-                    <div class="question-text">
-                        (b) How does Snort function as an intrusion detection system?
-                        <span class="marks">04 Marks</span>
-                    </div>
-                    <div class="answer">
-                        <strong>Answer:</strong> Snort functions as an IDS through the following mechanisms:<br><br>
-                        <strong>1. Packet Capture:</strong> Snort captures network packets in real-time from network interfaces.<br><br>
-                        <strong>2. Packet Analysis:</strong> It analyzes packet headers and payloads against predefined rules and patterns.<br><br>
-                        <strong>3. Rule-Based Detection:</strong> Uses signature-based detection to identify known attack patterns, suspicious activities, and policy violations.<br><br>
-                        <strong>4. Alert Generation:</strong> When malicious activity is detected, Snort generates alerts with detailed information about the threat.<br><br>
-                        <strong>5. Multiple Detection Modes:</strong> Can operate in three modes - sniffer (packet display), packet logger, and network intrusion detection.<br><br>
-                        <strong>6. Real-time Response:</strong> Can be configured to take automated actions like blocking traffic or sending notifications when threats are detected.
-                    </div>
-                </div>
-                
-                <div class="question-item">
-                    <div class="question-text">
-                        (c) Evaluate the role of Network Address Translation (NAT) in enhancing network security.
-                        <span class="marks">07 Marks</span>
-                    </div>
-                    <div class="answer">
-                        <strong>Answer:</strong> NAT plays a crucial role in network security enhancement:<br><br>
-                        <strong>1. IP Address Hiding:</strong> NAT hides internal IP addresses from external networks, making it difficult for attackers to directly target internal systems.<br><br>
-                        <strong>2. Network Segmentation:</strong> Creates a natural separation between internal and external networks, adding an extra layer of protection.<br><br>
-                        <strong>3. Reduced Attack Surface:</strong> External attackers cannot directly access internal systems as they only see the NAT router's public IP address.<br><br>
-                        <strong>4. IP Conservation:</strong> Allows multiple internal devices to share a single public IP address, reducing the need for public IP allocation.<br><br>
-                        <strong>5. Traffic Control:</strong> NAT routers can be configured to allow only specific types of traffic, providing basic firewall functionality.<br><br>
-                        <strong>6. Protection Against Scanning:</strong> Makes network scanning and reconnaissance more difficult for potential attackers.<br><br>
-                        <strong>7. Cost-Effective Security:</strong> Provides security benefits without requiring expensive dedicated security appliances.<br><br>
-                        <strong>Limitations:</strong> NAT should not be considered a complete security solution and should be used in conjunction with proper firewalls and other security measures.
-                    </div>
-                </div>
-            </div>
-        </div>
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 w-full z-50 mix-blend-difference">
+    <div class="max-w-7xl mx-auto px-8 py-6 flex justify-between items-center">
+      <a href="#" class="font-serif text-2xl font-light text-white tracking-wider">Chef's Hearth</a>
+      
+      <div class="hidden md:flex items-center gap-12">
+        <a href="#story" class="text-sm text-white/80 hover:text-white transition-colors tracking-widest uppercase">Story</a>
+        <a href="#menu" class="text-sm text-white/80 hover:text-white transition-colors tracking-widest uppercase">Menu</a>
+        <a href="#experience" class="text-sm text-white/80 hover:text-white transition-colors tracking-widest uppercase">Experience</a>
+      </div>
 
-        <!-- Q.3 -->
-        <div class="question-section">
-            <div class="question-header">
-                <i class="fas fa-key"></i>
-                Q.3 - Web Application Security
-            </div>
-            <div class="question-content">
-                <div class="question-item">
-                    <div class="question-text">
-                        (a) List any three password cracking tools and their uses.
-                        <span class="marks">03 Marks</span>
-                    </div>
-                    <div class="answer">
-                        <strong>Answer:</strong> Three password cracking tools and their uses:<br><br>
-                        <strong>1. John the Ripper:</strong> A fast password cracker that supports multiple hash types. Used for detecting weak Unix passwords and testing password strength across various systems.<br><br>
-                        <strong>2. Hashcat:</strong> World's fastest password recovery tool supporting multiple algorithms. Used for GPU-accelerated password cracking and supports distributed cracking across multiple systems.<br><br>
-                        <strong>3. Hydra:</strong> A parallelized login cracker that supports numerous protocols. Used for testing weak authentication on network services like SSH, FTP, HTTP, and databases.
-                    </div>
-                </div>
-                
-                <div class="question-item">
-                    <div class="question-text">
-                        (b) How does the Zed Attack Proxy (ZAP) help in web application testing?
-                        <span class="marks">04 Marks</span>
-                    </div>
-                    <div class="answer">
-                        <strong>Answer:</strong> ZAP helps in web application testing through:<br><br>
-                        <strong>1. Automated Scanning:</strong> Automatically crawls and scans web applications to identify security vulnerabilities like XSS, SQL injection, and insecure configurations.<br><br>
-                        <strong>2. Proxy Functionality:</strong> Acts as a proxy between the browser and web application, allowing testers to intercept, inspect, and modify requests and responses.<br><br>
-                        <strong>3. Active and Passive Scanning:</strong> Performs both active scanning (sending malicious payloads) and passive scanning (analyzing traffic without modification).<br><br>
-                        <strong>4. Comprehensive Reporting:</strong> Generates detailed reports with vulnerability descriptions, risk levels, and remediation suggestions.<br><br>
-                        <strong>5. Authentication Testing:</strong> Supports various authentication methods to test authenticated areas of web applications.<br><br>
-                        <strong>6. API Testing:</strong> Can test REST and SOAP APIs for security vulnerabilities.
-                    </div>
-                </div>
-                
-                <div class="question-item">
-                    <div class="question-text">
-                        (c) Evaluate the use of Curl and OpenSSL in testing web application security.
-                        <span class="marks">07 Marks</span>
-                    </div>
-                    <div class="answer">
-                        <strong>Answer:</strong> Curl and OpenSSL are valuable tools for web application security testing:<br><br>
-                        <strong>Curl Benefits:</strong><br>
-                        • <strong>HTTP Request Testing:</strong> Can send custom HTTP requests to test for vulnerabilities like SQL injection, XSS, and parameter tampering<br>
-                        • <strong>Header Manipulation:</strong> Allows modification of HTTP headers to test for security misconfigurations<br>
-                        • <strong>Authentication Testing:</strong> Supports various authentication methods (Basic, Digest, NTLM, OAuth)<br>
-                        • <strong>Cookie Testing:</strong> Can manipulate cookies to test session management vulnerabilities<br>
-                        • <strong>Automated Testing:</strong> Scriptable for automated security testing workflows<br><br>
-                        <strong>OpenSSL Benefits:</strong><br>
-                        • <strong>SSL/TLS Testing:</strong> Tests SSL/TLS configurations, certificate validation, and encryption strength<br>
-                        • <strong>Certificate Analysis:</strong> Verifies SSL certificate validity, expiration, and chain of trust<br>
-                        • <strong>Cipher Suite Testing:</strong> Identifies supported cipher suites and weak encryption algorithms<br>
-                        • <strong>Vulnerability Detection:</strong> Tests for SSL/TLS vulnerabilities like Heartbleed, POODLE, and BEAST<br>
-                        • <strong>Connection Security:</strong> Validates proper implementation of HTTPS and secure protocols<br><br>
-                        <strong>Combined Usage:</strong> Together, they provide comprehensive testing capabilities for both application-layer and transport-layer security.
-                    </div>
-                </div>
-            </div>
-        </div>
+      <a href="#contact" class="btn-luxury py-3 px-6 text-xs">Reserve</a>
+    </div>
+  </nav>
 
-        <!-- Q.4 -->
-        <div class="question-section">
-            <div class="question-header">
-                <i class="fas fa-gavel"></i>
-                Q.4 - Cyber Law & Digital Forensics
-            </div>
-            <div class="question-content">
-                <div class="question-item">
-                    <div class="question-text">
-                        (a) What does the Indian IT Act, 2000 focus on?
-                        <span class="marks">03 Marks</span>
-                    </div>
-                    <div class="answer">
-                        <strong>Answer:</strong> The Indian IT Act, 2000 focuses on:<br><br>
-                        <strong>1. Legal Recognition of Electronic Transactions:</strong> Provides legal framework for electronic commerce and digital signatures, making electronic records legally valid.<br><br>
-                        <strong>2. Cybercrime Prevention:</strong> Defines and penalizes various cybercrimes including hacking, data theft, identity theft, and cyber terrorism.<br><br>
-                        <strong>3. Data Protection:</strong> Establishes provisions for protecting sensitive personal data and information from unauthorized access and misuse.<br><br>
-                        <strong>4. Digital Signatures:</strong> Regulates the use of digital signatures and certifying authorities to ensure authenticity and integrity of electronic documents.<br><br>
-                        <strong>5. E-Governance:</strong> Facilitates electronic governance by recognizing electronic filing of documents with government agencies.<br><br>
-                        <strong>6. International Cooperation:</strong> Provides framework for international cooperation in investigating and prosecuting cybercrimes.
-                    </div>
-                </div>
-                
-                <div class="question-item">
-                    <div class="question-text">
-                        (b) Explain the concept of cyberspace and its connection to criminal behavior.
-                        <span class="marks">04 Marks</span>
-                    </div>
-                    <div class="answer">
-                        <strong>Answer:</strong> Cyberspace and criminal behavior connection:<br><br>
-                        <strong>Cyberspace Definition:</strong> Cyberspace is the virtual environment created by interconnected computer systems, networks, and digital communications where people interact, share information, and conduct activities.<br><br>
-                        <strong>Connection to Criminal Behavior:</strong><br>
-                        <strong>1. Anonymity:</strong> Cyberspace provides anonymity, making it easier for criminals to hide their identity and location.<br><br>
-                        <strong>2. Global Reach:</strong> Criminals can target victims across geographical boundaries without physical presence.<br><br>
-                        <strong>3. Low Cost and High Impact:</strong> Cybercrimes can be committed with minimal resources but cause significant damage to individuals and organizations.<br><br>
-                        <strong>4. Technical Complexity:</strong> The technical nature of cyberspace creates opportunities for sophisticated crimes that are difficult to detect and investigate.<br><br>
-                        <strong>5. New Crime Types:</strong> Cyberspace has enabled new forms of criminal activities like malware distribution, phishing, ransomware, and identity theft that didn't exist in traditional environments.
-                    </div>
-                </div>
-                
-                <div class="question-item">
-                    <div class="question-text">
-                        (c) Evaluate the role of digital forensics in cybercrime investigations.
-                        <span class="marks">07 Marks</span>
-                    </div>
-                    <div class="answer">
-                        <strong>Answer:</strong> Digital forensics plays a critical role in cybercrime investigations:<br><br>
-                        <strong>1. Evidence Collection:</strong> Systematically collects digital evidence from computers, mobile devices, networks, and cloud storage while maintaining chain of custody.<br><br>
-                        <strong>2. Data Recovery:</strong> Recovers deleted, encrypted, or damaged data that may contain crucial evidence of criminal activities.<br><br>
-                        <strong>3. Timeline Reconstruction:</strong> Creates chronological sequences of digital events to understand how crimes were committed.<br><br>
-                        <strong>4. Attribution:</strong> Links digital activities to specific individuals through IP addresses, user accounts, device fingerprints, and behavioral patterns.<br><br>
-                        <strong>5. Legal Admissibility:</strong> Ensures that digital evidence is collected and analyzed using scientifically accepted methods that meet legal standards for court presentation.<br><br>
-                        <strong>6. Technical Analysis:</strong> Analyzes malware, network traffic, system logs, and file systems to understand attack methods and identify perpetrators.<br><br>
-                        <strong>7. Prevention and Intelligence:</strong> Provides insights into attack methods that help organizations improve security and prevent future incidents.<br><br>
-                        <strong>8. Cross-Border Investigations:</strong> Enables investigation of crimes that span multiple jurisdictions through standardized forensic procedures.
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Q.5 -->
-        <div class="question-section">
-            <div class="question-header">
-                <i class="fas fa-bug"></i>
-                Q.5 - Malware & Network Attacks
-            </div>
-            <div class="question-content">
-                <div class="question-item">
-                    <div class="question-text">
-                        (a) Differentiate between virus, trojans, and worm in terms of their spread and behavior.
-                        <span class="marks">03 Marks</span>
-                    </div>
-                    <div class="answer">
-                        <strong>Answer:</strong> Differences between virus, trojans, and worms:<br><br>
-                        <strong>Virus:</strong><br>
-                        • <strong>Spread:</strong> Requires human action to spread (opening infected files, running programs)<br>
-                        • <strong>Behavior:</strong> Attaches to host files and spreads when infected files are shared<br>
-                        • <strong>Activation:</strong> Needs host program execution to become active<br><br>
-                        <strong>Trojan:</strong><br>
-                        • <strong>Spread:</strong> Disguised as legitimate software, spread through downloads and email attachments<br>
-                        • <strong>Behavior:</strong> Appears useful but contains malicious code<br>
-                        • <strong>Activation:</strong> User voluntarily installs thinking it's legitimate software<br><br>
-                        <strong>Worm:</strong><br>
-                        • <strong>Spread:</strong> Self-propagating, spreads automatically through network vulnerabilities<br>
-                        • <strong>Behavior:</strong> Independent program that replicates without human intervention<br>
-                        • <strong>Activation:</strong> Exploits system vulnerabilities to spread and execute automatically
-                    </div>
-                </div>
-                
-                <div class="question-item">
-                    <div class="question-text">
-                        (b) How does a SQL injection attack compromise a web application's database?
-                        <span class="marks">04 Marks</span>
-                    </div>
-                    <div class="answer">
-                        <strong>Answer:</strong> SQL injection compromises databases through:<br><br>
-                        <strong>1. Malicious Input:</strong> Attackers insert SQL commands into user input fields that are concatenated into database queries.<br><br>
-                        <strong>2. Query Manipulation:</strong> The injected SQL alters the intended query structure, allowing unauthorized database operations.<br><br>
-                        <strong>3. Data Extraction:</strong> Attackers can extract sensitive data like user credentials, personal information, or business data using UNION statements or boolean-based queries.<br><br>
-                        <strong>4. Database Manipulation:</strong> Can modify, delete, or insert data, potentially corrupting the entire database.<br><br>
-                        <strong>5. Privilege Escalation:</strong> May execute administrative commands, creating new users or granting elevated privileges.<br><br>
-                        <strong>6. System Access:</strong> In severe cases, can execute operating system commands on the database server, leading to complete system compromise.<br><br>
-                        <strong>Example:</strong> Input like <code>' OR '1'='1</code> in a login form might bypass authentication by making the query always return true.
-                    </div>
-                </div>
-                
-                <div class="question-item">
-                    <div class="question-text">
-                        (c) Discuss the methods and impacts of a DDoS attack on an organization's network infrastructure.
-                        <span class="marks">07 Marks</span>
-                    </div>
-                    <div class="answer">
-                        <strong>Answer:</strong> DDoS attack methods and impacts:<br><br>
-                        <strong>Attack Methods:</strong><br>
-                        <strong>1. Volumetric Attacks:</strong> Overwhelm network bandwidth with massive traffic volumes (UDP floods, ICMP floods)<br>
-                        <strong>2. Protocol Attacks:</strong> Exploit protocol weaknesses (SYN floods, fragmented packet attacks)<br>
-                        <strong>3. Application Layer Attacks:</strong> Target specific applications with legitimate-looking requests (HTTP floods, Slowloris)<br>
-                        <strong>4. Amplification Attacks:</strong> Use legitimate services to amplify attack traffic (DNS amplification, NTP amplification)<br>
-                        <strong>5. Botnet-Based Attacks:</strong> Coordinate thousands of compromised devices to generate attack traffic<br><br>
-                        <strong>Impacts on Organization:</strong><br>
-                        <strong>1. Service Disruption:</strong> Complete or partial loss of online services, affecting customer access and business operations<br>
-                        <strong>2. Financial Losses:</strong> Direct revenue loss from service downtime, plus costs of mitigation and recovery<br>
-                        <strong>3. Reputation Damage:</strong> Loss of customer trust and brand reputation due to service unavailability<br>
-                        <strong>4. Operational Costs:</strong> Expenses for DDoS protection services, increased bandwidth, and incident response<br>
-                        <strong>5. Productivity Loss:</strong> Employee productivity decreases when internal systems are affected<br>
-                        <strong>6. Legal Consequences:</strong> Potential SLA violations and regulatory compliance issues<br>
-                        <strong>7. Competitive Disadvantage:</strong> Customers may switch to competitors during extended outages
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="footer">
-            <h3><i class="fas fa-graduation-cap"></i> GTU Cyber Security Complete Guide</h3>
-            <p>This comprehensive Q&A guide covers all questions from the Summer 2025 examination paper.</p>
-            <p><strong>Subject Code:</strong> 3150714 | <strong>Total Marks:</strong> 70 | <strong>Duration:</strong> 2:30 PM to 5:00 PM</p>
-            <div style="margin-top: 20px;">
-                <a href="#" class="download-btn" onclick="window.print()">
-                    <i class="fas fa-download"></i> Download/Print Guide
-                </a>
-            </div>
-            <div style="margin-top: 15px; font-size: 0.9em; color: #7f8c8d;">
-                <i class="fas fa-info-circle"></i> This guide follows GTU examination pattern and marking scheme for easy understanding and better preparation.
-            </div>
-        </div>
+  <!-- Hero Section -->
+  <section class="relative h-screen flex items-center justify-center overflow-hidden">
+    <div class="hero-vid-container">
+      <video autoplay muted loop playsinline>
+        <source src="https://cdn.coverr.co/videos/coverr-chef-garnishing-food-5641/1080p.mp4" type="video/mp4">
+      </video>
     </div>
 
-    <script>
-        // Add smooth scrolling for better user experience
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add animation to question sections when they come into view
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
+    <div class="relative z-10 text-center max-w-5xl mx-auto px-6">
+      <div class="overflow-hidden mb-4">
+        <p class="label animate-fade-in" style="animation-delay: 0.5s; opacity: 0; animation-fill-mode: forwards;">Authentic Cloud Kitchen</p>
+      </div>
+      
+      <h1 class="headline-xl text-white mb-8" style="animation: fadeInUp 1s ease forwards; animation-delay: 0.7s; opacity: 0;">
+        Culinary Heritage,<br>
+        <span class="italic font-light text-[var(--accent)]">Delivered</span>
+      </h1>
 
-            const observer = new IntersectionObserver(function(entries) {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
-                    }
-                });
-            }, observerOptions);
+      <p class="text-lg text-white/60 max-w-xl mx-auto mb-12" style="animation: fadeInUp 1s ease forwards; animation-delay: 0.9s; opacity: 0;">
+        Experience the depth of traditional recipes, crafted with decades of expertise and the finest ingredients, served at your table.
+      </p>
 
-            // Initially hide sections and observe them
-            document.querySelectorAll('.question-section').forEach(section => {
-                section.style.opacity = '0';
-                section.style.transform = 'translateY(30px)';
-                section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-                observer.observe(section);
-            });
+      <div style="animation: fadeInUp 1s ease forwards; animation-delay: 1.1s; opacity: 0;">
+        <a href="#menu" class="btn-luxury inline-block">View Menu</a>
+      </div>
+    </div>
 
-            // Add click to expand functionality for better mobile experience
-            document.querySelectorAll('.question-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const answer = this.querySelector('.answer');
-                    if (answer.style.maxHeight) {
-                        answer.style.maxHeight = null;
-                    } else {
-                        answer.style.maxHeight = answer.scrollHeight + 'px';
-                    }
-                });
-            });
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-10">
+      <div class="w-px h-20 bg-gradient-to-b from-transparent via-[var(--accent)] to-transparent opacity-50"></div>
+    </div>
+  </section>
+
+  <!-- Marquee Banner -->
+  <div class="bg-[var(--accent)] py-4 overflow-hidden">
+    <div class="marquee-track">
+      <span class="text-black text-sm font-semibold tracking-widest uppercase mx-8">FSSAI Certified Kitchen</span>
+      <span class="text-black/50">&#9670;</span>
+      <span class="text-black text-sm font-semibold tracking-widest uppercase mx-8">15+ Years of Expertise</span>
+      <span class="text-black/50">&#9670;</span>
+      <span class="text-black text-sm font-semibold tracking-widest uppercase mx-8">No Preservatives</span>
+      <span class="text-black/50">&#9670;</span>
+      <span class="text-black text-sm font-semibold tracking-widest uppercase mx-8">Fresh Ingredients Daily</span>
+      <span class="text-black/50">&#9670;</span>
+      <span class="text-black text-sm font-semibold tracking-widest uppercase mx-8">FSSAI Certified Kitchen</span>
+      <span class="text-black/50">&#9670;</span>
+      <span class="text-black text-sm font-semibold tracking-widest uppercase mx-8">15+ Years of Expertise</span>
+      <span class="text-black/50">&#9670;</span>
+      <span class="text-black text-sm font-semibold tracking-widest uppercase mx-8">No Preservatives</span>
+      <span class="text-black/50">&#9670;</span>
+      <span class="text-black text-sm font-semibold tracking-widest uppercase mx-8">Fresh Ingredients Daily</span>
+      <span class="text-black/50">&#9670;</span>
+    </div>
+  </div>
+
+  <!-- Story Section -->
+  <section id="story" class="py-32 bg-[var(--bg)]">
+    <div class="max-w-7xl mx-auto px-6 md:px-12">
+      <div class="grid md:grid-cols-12 gap-12 items-center">
+        <div class="md:col-span-5 reveal-trigger">
+          <div class="relative">
+            <div class="absolute -top-6 -left-6 w-full h-full border border-[var(--accent)] opacity-20 z-0"></div>
+            <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=800&q=80" alt="Chef Plating" class="relative z-10 grayscale hover:grayscale-0 transition-all duration-700 w-full aspect-[3/4] object-cover">
+          </div>
+        </div>
+        
+        <div class="md:col-span-6 md:col-start-7">
+          <span class="label reveal-trigger">The Chef</span>
+          <h2 class="headline-lg text-white mt-4 mb-8 reveal-trigger">
+            A Lifetime of<br><span class="italic text-[var(--accent)]">Passion</span>
+          </h2>
+          <div class="space-y-6 text-[var(--text-muted)] leading-relaxed reveal-trigger">
+            <p>
+              My journey began in my grandmother's kitchen, where I learned that true cooking is an act of love. For over 15 years, I have dedicated myself to mastering the art of authentic cuisine.
+            </p>
+            <p>
+              Today, Chef's Hearth brings that heritage to your home. Every dish is a story, every spice a memory. We don't just cook food; we curate experiences that resonate with the soul.
+            </p>
+            <div class="flex items-center gap-6 pt-6 border-t border-[var(--border)]">
+              <div>
+                <span class="block text-3xl font-serif text-[var(--accent)]">100%</span>
+                <span class="text-xs text-[var(--text-muted)] uppercase tracking-widest">Fresh</span>
+              </div>
+              <div>
+                <span class="block text-3xl font-serif text-[var(--accent)]">500+</span>
+                <span class="text-xs text-[var(--text-muted)] uppercase tracking-widest">Families</span>
+              </div>
+              <div>
+                <span class="block text-3xl font-serif text-[var(--accent)]">4.9</span>
+                <span class="text-xs text-[var(--text-muted)] uppercase tracking-widest">Rating</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Menu Section -->
+  <section id="menu" class="py-32 bg-[var(--bg-elevated)]">
+    <div class="max-w-7xl mx-auto px-6 md:px-12">
+      <div class="text-center mb-20">
+        <span class="label reveal-trigger">Curated Selection</span>
+        <h2 class="headline-lg text-white mt-4 reveal-trigger">
+          The Menu
+        </h2>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="flex flex-wrap justify-center gap-4 mb-16 reveal-trigger">
+        <button class="menu-tab active" data-filter="all">All</button>
+        <button class="menu-tab" data-filter="veg">Vegetarian</button>
+        <button class="menu-tab" data-filter="nonveg">Non-Vegetarian</button>
+        <button class="menu-tab" data-filter="signature">Chef's Special</button>
+      </div>
+
+      <style>
+        .menu-tab {
+          background: transparent;
+          border: 1px solid transparent;
+          color: var(--text-muted);
+          padding: 8px 24px;
+          font-size: 12px;
+          font-weight: 600;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+        .menu-tab.active {
+          border-color: var(--accent);
+          color: var(--accent);
+        }
+        .menu-tab:hover {
+          color: var(--text);
+        }
+      </style>
+
+      <!-- Menu Grid -->
+      <div id="menu-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience Section -->
+  <section id="experience" class="py-32 bg-[var(--bg)]">
+    <div class="max-w-7xl mx-auto px-6 md:px-12">
+      <div class="grid lg:grid-cols-2 gap-20 items-center">
+        <div>
+          <span class="label reveal-trigger">The Process</span>
+          <h2 class="headline-lg text-white mt-4 mb-12 reveal-trigger">
+            From Kitchen<br><span class="italic text-[var(--accent)]">To Table</span>
+          </h2>
+
+          <div class="space-y-12">
+            <div class="flex gap-6 reveal-trigger">
+              <div class="flex-shrink-0 w-12 h-12 rounded-full border border-[var(--accent)] flex items-center justify-center text-[var(--accent)] font-serif text-xl">1</div>
+              <div>
+                <h4 class="text-lg font-semibold text-white mb-2">Curated Ingredients</h4>
+                <p class="text-[var(--text-muted)] text-sm leading-relaxed">Hand-picked produce and premium spices sourced directly from trusted local farms.</p>
+              </div>
+            </div>
+            
+            <div class="flex gap-6 reveal-trigger">
+              <div class="flex-shrink-0 w-12 h-12 rounded-full border border-[var(--accent)] flex items-center justify-center text-[var(--accent)] font-serif text-xl">2</div>
+              <div>
+                <h4 class="text-lg font-semibold text-white mb-2">Artisan Preparation</h4>
+                <p class="text-[var(--text-muted)] text-sm leading-relaxed">Slow-cooked with patience. Each dish is prepared fresh upon order, ensuring peak flavor.</p>
+              </div>
+            </div>
+
+            <div class="flex gap-6 reveal-trigger">
+              <div class="flex-shrink-0 w-12 h-12 rounded-full border border-[var(--accent)] flex items-center justify-center text-[var(--accent)] font-serif text-xl">3</div>
+              <div>
+                <h4 class="text-lg font-semibold text-white mb-2">Elegant Delivery</h4>
+                <p class="text-[var(--text-muted)] text-sm leading-relaxed">Packed in eco-friendly, temperature-controlled packaging to preserve integrity and warmth.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative reveal-trigger">
+          <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80" alt="Plated Food" class="w-full aspect-square object-cover">
+          <div class="absolute -bottom-8 -left-8 glass-panel p-8 max-w-xs">
+            <p class="font-serif text-2xl text-white italic mb-2">"Food is not just eating. It is an experience."</p>
+            <span class="text-[var(--accent)] text-sm uppercase tracking-widest">- Chef's Philosophy</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Section -->
+  <section class="py-20 bg-[var(--bg)]">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+      <div class="aspect-square overflow-hidden col-span-2 row-span-2">
+        <img src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=800&q=80" alt="Biryani" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700">
+      </div>
+      <div class="aspect-square overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=400&q=80" alt="Curry" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700">
+      </div>
+      <div class="aspect-square overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=400&q=80" alt="Paneer" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700">
+      </div>
+      <div class="aspect-square overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=400&q=80" alt="Kebab" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700">
+      </div>
+      <div class="aspect-square overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400&q=80" alt="Salad" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700">
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="py-32 bg-[var(--bg-elevated)]">
+    <div class="max-w-5xl mx-auto px-6 md:px-12 text-center">
+      <span class="label reveal-trigger">Testimonials</span>
+      <h2 class="headline-lg text-white mt-4 mb-16 reveal-trigger">
+        Words of Praise
+      </h2>
+
+      <div id="testimonial-slider" class="relative min-h-[300px] flex items-center justify-center">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact / Reservation -->
+  <section id="contact" class="py-32 bg-[var(--bg)]">
+    <div class="max-w-7xl mx-auto px-6 md:px-12">
+      <div class="grid lg:grid-cols-2 gap-16">
+        <div>
+          <span class="label reveal-trigger">Contact</span>
+          <h2 class="headline-lg text-white mt-4 mb-8 reveal-trigger">
+            Make a Reservation
+          </h2>
+          <p class="text-[var(--text-muted)] mb-12 reveal-trigger">
+            For party orders, corporate catering, or daily meals, reach out to us directly. We deliver within a 10km radius.
+          </p>
+
+          <div class="space-y-8 reveal-trigger">
+            <div class="flex items-center gap-6">
+              <div class="w-12 h-12 flex items-center justify-center border border-[var(--border)] rounded-full">
+                 <svg class="w-5 h-5 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+              </div>
+              <div>
+                <span class="block text-white text-lg">+91 98765 43210</span>
+                <span class="block text-[var(--text-muted)] text-sm">Mon - Sat, 11am - 10pm</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-6">
+              <div class="w-12 h-12 flex items-center justify-center border border-[var(--border)] rounded-full">
+                <svg class="w-5 h-5 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+              </div>
+              <div>
+                <span class="block text-white text-lg">order@chefshearth.com</span>
+                <span class="block text-[var(--text-muted)] text-sm">Email us anytime</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative reveal-trigger">
+          <div class="absolute inset-0 border border-[var(--accent)] transform translate-x-4 translate-y-4"></div>
+          <form class="relative z-10 bg-[var(--card)] p-10 border border-[var(--border)]" style="background: rgba(255,255,255,0.02);">
+            <div class="space-y-6">
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-[var(--text-muted)] mb-3">Name</label>
+                <input type="text" class="w-full bg-transparent border-b border-[var(--border)] py-3 text-white focus:outline-none focus:border-[var(--accent)] transition-colors" placeholder="Your Name">
+              </div>
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-[var(--text-muted)] mb-3">Phone</label>
+                <input type="tel" class="w-full bg-transparent border-b border-[var(--border)] py-3 text-white focus:outline-none focus:border-[var(--accent)] transition-colors" placeholder="+91 XXXXX XXXXX">
+              </div>
+              <div>
+                <label class="block text-xs uppercase tracking-widest text-[var(--text-muted)] mb-3">Message</label>
+                <textarea rows="4" class="w-full bg-transparent border-b border-[var(--border)] py-3 text-white focus:outline-none focus:border-[var(--accent)] transition-colors resize-none" placeholder="Tell us about your event..."></textarea>
+              </div>
+              <button type="submit" class="btn-luxury w-full mt-4">Send Request</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-12 bg-[var(--bg)] border-t border-[var(--border)]">
+    <div class="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-8">
+      <div>
+        <a href="#" class="font-serif text-2xl font-light text-white tracking-wider">Chef's Hearth</a>
+        <p class="text-[var(--text-muted)] text-sm mt-2">Authentic Cloud Kitchen. FSSAI Licensed.</p>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="#" class="w-10 h-10 rounded-full border border-[var(--border)] flex items-center justify-center text-[var(--text-muted)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+        <a href="#" class="w-10 h-10 rounded-full border border-[var(--border)] flex items-center justify-center text-[var(--text-muted)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Custom Cursor Logic
+    const cursorDot = document.querySelector('#cursor-dot');
+    const cursorOutline = document.querySelector('#cursor-outline');
+
+    if (cursorDot && cursorOutline) {
+      window.addEventListener('mousemove', (e) => {
+        const posX = e.clientX;
+        const posY = e.clientY;
+        
+        cursorDot.style.left = `${posX}px`;
+        cursorDot.style.top = `${posY}px`;
+        cursorDot.style.transform = 'translate(-50%, -50%)';
+
+        cursorOutline.style.left = `${posX}px`;
+        cursorOutline.style.top = `${posY}px`;
+      });
+
+      document.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          cursorOutline.style.width = '60px';
+          cursorOutline.style.height = '60px';
+          cursorOutline.style.borderColor = 'var(--accent-bright)';
         });
-    </script>
+        el.addEventListener('mouseleave', () => {
+          cursorOutline.style.width = '40px';
+          cursorOutline.style.height = '40px';
+          cursorOutline.style.borderColor = 'var(--accent)';
+        });
+      });
+    }
+
+    // Intersection Observer for Reveal Animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal-trigger').forEach(el => {
+      observer.observe(el);
+    });
+
+    // Menu Data & Rendering
+    const menuData = [
+      { id: 1, name: "Hyderabadi Dum Biryani", desc: "Slow-cooked aromatic rice with tender meat and saffron", price: 380, type: "nonveg", category: "signature", img: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600&q=80" },
+      { id: 2, name: "Butter Chicken", desc: "Creamy tomato-based curry with tender chicken pieces", price: 340, type: "nonveg", category: "signature", img: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=600&q=80" },
+      { id: 3, name: "Dal Makhani", desc: "Slow-cooked black lentils in butter and cream", price: 220, type: "veg", category: "signature", img: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=600&q=80" },
+      { id: 4, name: "Paneer Lababdar", desc: "Rich and creamy paneer in tomato cashew gravy", price: 280, type: "veg", category: "veg", img: "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=600&q=80" },
+      { id: 5, name: "Mutton Rogan Josh", desc: "Kashmiri style mutton curry with aromatic spices", price: 420, type: "nonveg", category: "nonveg", img: "https://images.unsplash.com/photo-1545247181-516773cae754?w=600&q=80" },
+      { id: 6, name: "Palak Paneer", desc: "Cottage cheese cubes in creamy spinach gravy", price: 260, type: "veg", category: "veg", img: "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&q=80" },
+    ];
+
+    const menuGrid = document.getElementById('menu-grid');
+    const filterButtons = document.querySelectorAll('.menu-tab');
+
+    function renderMenu(filter = 'all') {
+      const filteredData = filter === 'all' ? menuData : menuData.filter(item => item.type === filter || item.category === filter);
+      
+      menuGrid.innerHTML = filteredData.map((item, index) => `
+        <div class="menu-item relative overflow-hidden group cursor-pointer" style="animation: fadeInUp 0.8s ease forwards; animation-delay: ${index * 0.1}s; opacity: 0;">
+          <div class="aspect-[4/5] overflow-hidden">
+            <img src="${item.img}" alt="${item.name}" class="menu-item-img w-full h-full object-cover">
+          </div>
+          <div class="menu-item-content absolute inset-0 flex flex-col justify-end p-6">
+            <span class="text-[var(--accent)] text-xs uppercase tracking-widest mb-2">${item.type === 'veg' ? 'Vegetarian' : 'Non-Vegetarian'}</span>
+            <h3 class="font-serif text-3xl text-white mb-2">${item.name}</h3>
+            <p class="text-white/60 text-sm mb-4 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500">${item.desc}</p>
+            <div class="flex justify-between items-center">
+              <span class="text-white font-semibold text-lg">₹${item.price}</span>
+              <button class="px-4 py-2 bg-white text-black text-xs uppercase tracking-widest hover:bg-[var(--accent)] hover:text-white transition-colors">Add</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderMenu(btn.dataset.filter);
+      });
+    });
+
+    renderMenu();
+
+    // Testimonial Slider
+    const testimonials = [
+      { text: "The Biryani transported me back to the streets of Hyderabad. Absolutely authentic.", author: "Rahul S., Food Critic" },
+      { text: "Finally, a cloud kitchen that cares about quality as much as a fine dining restaurant.", author: "Priya M., Regular Customer" },
+      { text: "Their Dal Makhani is a masterclass in patience and flavor. The best I've ever had.", author: "Amit K., Chef" }
+    ];
+
+    let currentTestimonial = 0;
+    const testimonialSlider = document.getElementById('testimonial-slider');
+
+    function renderTestimonial() {
+      const t = testimonials[currentTestimonial];
+      testimonialSlider.innerHTML = `
+        <div class="text-center px-8" style="animation: fadeInUp 0.8s ease forwards;">
+          <svg class="w-12 h-12 mx-auto mb-8 text-[var(--accent)] opacity-30" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+          <p class="text-2xl md:text-3xl font-serif text-white italic mb-6 leading-relaxed max-w-3xl mx-auto">${t.text}</p>
+          <span class="text-[var(--text-muted)] text-sm uppercase tracking-widest">${t.author}</span>
+        </div>
+      `;
+    }
+
+    renderTestimonial();
+    setInterval(() => {
+      currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+      renderTestimonial();
+    }, 5000);
+
+    // Form Submission
+    document.querySelector('form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Thank you for your request! We will contact you shortly.');
+    });
+  </script>
 </body>
 </html>
