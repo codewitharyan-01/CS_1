@@ -3,698 +3,1769 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chef's Hearth | Premium Cloud Kitchen</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Bunty Kaka Bhavnagari - Bateka Bhungla</title>
+  
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Rozha+One&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cart: {
+              red: '#C41E3A',
+              dark: '#8B0000',
+              cream: '#FFF8F0',
+              gold: '#FFB800',
+              fire: '#FF6B35',
+              charcoal: '#1A0F0A',
+              brown: '#3D2317'
+            }
+          },
+          fontFamily: {
+            display: ['Rozha One', 'serif'],
+            sans: ['DM Sans', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  
   <style>
     :root {
-      --bg: #0F0F0F;
-      --bg-elevated: #1A1A1A;
-      --text: #EDEDED;
-      --text-muted: #888888;
-      --accent: #C6A87C; /* Antique Gold */
-      --accent-bright: #E5C99B;
-      --card: #161616;
-      --border: #2A2A2A;
+      --bg: #1A0F0A;
+      --bg-light: #2D1810;
+      --fg: #FFF8F0;
+      --muted: #B8A898;
+      --accent: #FF6B35;
+      --gold: #FFB800;
+      --cart-red: #C41E3A;
+      --cart-dark: #8B0000;
+      --card: #3D2317;
+      --border: #5D3A2A;
     }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
     
     html {
       scroll-behavior: smooth;
     }
-
+    
     body {
-      font-family: 'Manrope', sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--fg);
       overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
     }
-
-    .font-serif { font-family: 'Cormorant Garamond', serif; }
-
-    /* Noise Texture Overlay */
-    body::before {
-      content: "";
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--cart-red);
+      border-radius: 4px;
+    }
+    
+    /* Typography */
+    .font-display {
+      font-family: 'Rozha One', serif;
+    }
+    
+    /* Noise texture overlay */
+    .noise-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 1000;
-      opacity: 0.5;
-    }
-
-    /* Custom Cursor */
-    .cursor-dot {
-      width: 8px;
-      height: 8px;
-      background: var(--accent);
-      border-radius: 50%;
-      position: fixed;
       pointer-events: none;
       z-index: 9999;
-      transition: transform 0.1s ease;
-      mix-blend-mode: difference;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
     }
-    .cursor-outline {
-      width: 40px;
-      height: 40px;
-      border: 1px solid var(--accent);
-      border-radius: 50%;
-      position: fixed;
-      pointer-events: none;
-      z-index: 9998;
-      transition: transform 0.15s ease, width 0.3s, height 0.3s, border-color 0.3s;
-      transform: translate(-50%, -50%);
+    
+    /* Fire Animation */
+    @keyframes fireFlicker {
+      0%, 100% { transform: scaleY(1) scaleX(1); opacity: 1; }
+      25% { transform: scaleY(1.1) scaleX(0.95); opacity: 0.9; }
+      50% { transform: scaleY(0.95) scaleX(1.05); opacity: 1; }
+      75% { transform: scaleY(1.05) scaleX(0.98); opacity: 0.95; }
     }
-    body:hover .cursor-outline {
-      opacity: 1;
+    
+    @keyframes fireGlow {
+      0%, 100% { box-shadow: 0 0 20px #FF6B35, 0 0 40px #FF4500, 0 0 60px #C41E3A; }
+      50% { box-shadow: 0 0 30px #FF6B35, 0 0 60px #FF4500, 0 0 80px #C41E3A; }
     }
-    .hover-trigger:hover ~ .cursor-outline,
-    a:hover ~ .cursor-outline {
-      width: 60px;
-      height: 60px;
-      border-color: var(--accent-bright);
+    
+    @keyframes steamRise {
+      0% { transform: translateY(0) scale(1); opacity: 0.8; }
+      50% { transform: translateY(-30px) scale(1.2); opacity: 0.4; }
+      100% { transform: translateY(-60px) scale(1.5); opacity: 0; }
     }
-
-    /* Typography */
-    .headline-xl {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(3rem, 10vw, 8rem);
-      line-height: 0.95;
-      font-weight: 300;
-      letter-spacing: -0.02em;
+    
+    @keyframes wheelSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
-
-    .headline-lg {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2.5rem, 6vw, 5rem);
-      line-height: 1.1;
-      font-weight: 400;
+    
+    @keyframes floatUp {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
     }
-
-    .label {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--accent);
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
     }
-
-    /* Animation Keyframes */
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(40px); }
-      to { opacity: 1; transform: translateY(0); }
+    
+    @keyframes shimmer {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
     }
-
+    
     @keyframes slideIn {
-      from { transform: translateX(-100%); }
-      to { transform: translateX(0); }
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
     }
-
-    @keyframes revealHorizontal {
-      from { clip-path: inset(0 100% 0 0); }
-      to { clip-path: inset(0 0 0 0); }
+    
+    @keyframes fadeInUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
-
-    @keyframes scaleIn {
-      from { transform: scale(1.2); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+    
+    @keyframes chiliBounce {
+      0%, 100% { transform: rotate(-10deg); }
+      50% { transform: rotate(10deg); }
     }
-
-    @keyframes panOverlay {
-      0% { transform: translateY(100%); }
-      100% { transform: translateY(-100%); }
+    
+    /* Fire Particles */
+    .fire-container {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      height: 80px;
     }
-
-    .reveal-trigger {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .reveal-trigger.is-visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Hero Specifics */
-    .hero-vid-container {
+    
+    .flame {
       position: absolute;
+      bottom: 0;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      animation: fireFlicker 0.3s ease-in-out infinite;
+    }
+    
+    .flame-1 {
+      width: 30px;
+      height: 60px;
+      background: linear-gradient(to top, #FF4500, #FF6B35, #FFD700);
+      left: 50%;
+      transform: translateX(-50%);
+      animation-delay: 0s;
+    }
+    
+    .flame-2 {
+      width: 20px;
+      height: 40px;
+      background: linear-gradient(to top, #FF6B35, #FFB800);
+      left: calc(50% - 20px);
+      animation-delay: 0.1s;
+    }
+    
+    .flame-3 {
+      width: 20px;
+      height: 45px;
+      background: linear-gradient(to top, #FF6B35, #FFB800);
+      left: calc(50% + 20px);
+      animation-delay: 0.15s;
+    }
+    
+    /* Steam Effect */
+    .steam-container {
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 80px;
+      overflow: visible;
+      pointer-events: none;
+    }
+    
+    .steam {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: steamRise 2s ease-out infinite;
+    }
+    
+    .steam:nth-child(1) { left: 20%; animation-delay: 0s; }
+    .steam:nth-child(2) { left: 50%; animation-delay: 0.4s; }
+    .steam:nth-child(3) { left: 70%; animation-delay: 0.8s; }
+    .steam:nth-child(4) { left: 35%; animation-delay: 1.2s; }
+    
+    /* Cart Styles */
+    .food-cart {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    
+    .cart-body {
+      background: linear-gradient(135deg, var(--cart-red) 0%, var(--cart-dark) 100%);
+      border-radius: 12px 12px 0 0;
+      padding: 20px;
+      position: relative;
+      box-shadow: 
+        inset 0 2px 0 rgba(255,255,255,0.2),
+        0 10px 40px rgba(0,0,0,0.5);
+    }
+    
+    .cart-roof {
+      background: linear-gradient(135deg, #8B0000 0%, #5D0000 100%);
+      height: 40px;
+      border-radius: 8px 8px 0 0;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .cart-banner {
+      background: var(--gold);
+      color: var(--cart-dark);
+      padding: 4px 20px;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-radius: 2px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    
+    .cart-window {
+      background: linear-gradient(180deg, #2D1810 0%, #1A0F0A 100%);
+      border: 4px solid #FFD700;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .cart-wheel {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #333 0%, #1a1a1a 100%);
+      border-radius: 50%;
+      border: 4px solid #666;
+      position: absolute;
+      bottom: -25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease;
+    }
+    
+    .cart-wheel::before {
+      content: '';
+      width: 15px;
+      height: 15px;
+      background: #444;
+      border-radius: 50%;
+    }
+    
+    .cart-wheel:hover {
+      animation: wheelSpin 0.5s linear;
+    }
+    
+    .wheel-left { left: 30px; }
+    .wheel-right { right: 30px; }
+    
+    /* Menu Card */
+    .menu-card {
+      background: linear-gradient(145deg, var(--card) 0%, #2A1810 100%);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 1px solid var(--border);
+      position: relative;
+    }
+    
+    .menu-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(196, 30, 58, 0.3);
+      border-color: var(--cart-red);
+    }
+    
+    .menu-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--cart-red), var(--gold), var(--fire));
+    }
+    
+    /* Spice Meter */
+    .spice-meter {
+      display: flex;
+      gap: 4px;
+    }
+    
+    .chili {
+      width: 16px;
+      height: 24px;
+      transition: all 0.3s ease;
+    }
+    
+    .chili.active {
+      animation: chiliBounce 0.5s ease-in-out;
+    }
+    
+    .chili svg {
+      fill: var(--border);
+      transition: fill 0.3s ease;
+    }
+    
+    .chili.active svg {
+      fill: #E53935;
+    }
+    
+    /* Button Styles */
+    .btn-primary {
+      background: linear-gradient(135deg, var(--cart-red) 0%, var(--cart-dark) 100%);
+      color: white;
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(196, 30, 58, 0.4);
+    }
+    
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s ease;
+    }
+    
+    .btn-primary:hover::before {
+      left: 100%;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(196, 30, 58, 0.5);
+    }
+    
+    .btn-secondary {
+      background: transparent;
+      color: var(--gold);
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-weight: 600;
+      border: 2px solid var(--gold);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-secondary:hover {
+      background: var(--gold);
+      color: var(--bg);
+    }
+    
+    /* Cart Sidebar */
+    .cart-sidebar {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 100%;
+      max-width: 400px;
+      height: 100vh;
+      background: linear-gradient(180deg, var(--bg-light) 0%, var(--bg) 100%);
+      z-index: 1000;
+      transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: -10px 0 40px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .cart-sidebar.open {
+      right: 0;
+    }
+    
+    .cart-overlay {
+      position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      opacity: 0.6;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
     }
-    .hero-vid-container::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to bottom, rgba(15,15,15,0.2) 0%, rgba(15,15,15,1) 100%);
+    
+    .cart-overlay.open {
+      opacity: 1;
+      pointer-events: all;
     }
-    .hero-vid-container video {
+    
+    /* WhatsApp Button */
+    .whatsapp-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 60px;
+      height: 60px;
+      background: #25D366;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+      transition: all 0.3s ease;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    .whatsapp-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 30px rgba(37, 211, 102, 0.6);
+    }
+    
+    /* Customizer */
+    .customizer-option {
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .customizer-option:hover {
+      border-color: var(--cart-red);
+    }
+    
+    .customizer-option.selected {
+      border-color: var(--gold);
+      background: linear-gradient(145deg, rgba(255,184,0,0.1) 0%, var(--card) 100%);
+    }
+    
+    /* Gallery */
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+    
+    .gallery-item img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      transition: transform 0.5s ease;
     }
-
-    /* Marquee */
-    .marquee-track {
-      display: flex;
-      white-space: nowrap;
-      animation: marquee 30s linear infinite;
+    
+    .gallery-item:hover img {
+      transform: scale(1.1);
     }
-    @keyframes marquee {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
-    /* Menu Item Hover */
-    .menu-item-img {
-      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .menu-item:hover .menu-item-img {
-      transform: scale(1.05);
-    }
-    .menu-item-content {
-      background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
-    }
-
-    /* Button Styles */
-    .btn-luxury {
-      position: relative;
-      padding: 16px 40px;
-      background: transparent;
-      border: 1px solid var(--accent);
-      color: var(--accent);
-      font-family: 'Manrope', sans-serif;
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      overflow: hidden;
-      transition: color 0.3s ease;
-      cursor: pointer;
-    }
-    .btn-luxury::before {
+    
+    .gallery-item::after {
       content: '';
       position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--accent);
-      transform: scaleY(0);
-      transform-origin: bottom;
-      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      z-index: -1;
-    }
-    .btn-luxury:hover {
-      color: #000;
-    }
-    .btn-luxury:hover::before {
-      transform: scaleY(1);
-    }
-
-    /* Scrollbar */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--accent); }
-
-    /* Glass Panel */
-    .glass-panel {
-      background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    /* Custom Animations for specific elements */
-    .char-reveal span {
+      inset: 0;
+      background: linear-gradient(to top, rgba(196, 30, 58, 0.8) 0%, transparent 50%);
       opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .gallery-item:hover::after {
+      opacity: 1;
+    }
+    
+    /* Reviews */
+    .review-card {
+      background: linear-gradient(145deg, var(--card) 0%, rgba(45,24,16,0.8) 100%);
+      border-radius: 16px;
+      padding: 24px;
+      border: 1px solid var(--border);
+      position: relative;
+    }
+    
+    .review-card::before {
+      content: '"';
+      position: absolute;
+      top: 10px;
+      left: 20px;
+      font-size: 60px;
+      font-family: 'Rozha One', serif;
+      color: var(--cart-red);
+      opacity: 0.3;
+      line-height: 1;
+    }
+    
+    /* Scroll Reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    /* Reduced Motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+    
+    /* Glow Effects */
+    .fire-glow {
+      animation: fireGlow 1.5s ease-in-out infinite;
+    }
+    
+    .text-glow {
+      text-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+    }
+    
+    /* Badge */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 12px;
+      background: linear-gradient(135deg, var(--gold) 0%, #FF9500 100%);
+      color: var(--bg);
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    /* Counter */
+    .counter-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: var(--card);
+      color: var(--fg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 18px;
+    }
+    
+    .counter-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+    
+    /* Focus States */
+    button:focus-visible,
+    a:focus-visible,
+    input:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 2px;
+    }
+    
+    /* Range Slider */
+    input[type="range"] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      outline: none;
+    }
+    
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 24px;
+      height: 24px;
+      background: linear-gradient(135deg, var(--cart-red) 0%, var(--cart-dark) 100%);
+      border-radius: 50%;
+      cursor: pointer;
+      border: 3px solid var(--gold);
+      box-shadow: 0 2px 10px rgba(196, 30, 58, 0.5);
+    }
+    
+    /* Marquee */
+    .marquee {
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    
+    .marquee-content {
       display: inline-block;
-      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation: marquee 20s linear infinite;
+    }
+    
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+    
+    /* Hero Background Pattern */
+    .hero-pattern {
+      background-image: 
+        radial-gradient(circle at 20% 80%, rgba(196, 30, 58, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 107, 53, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(255, 184, 0, 0.05) 0%, transparent 30%);
     }
   </style>
 </head>
 <body>
-
-  <!-- Custom Cursor -->
-  <div class="cursor-dot hidden md:block" id="cursor-dot"></div>
-  <div class="cursor-outline hidden md:block" id="cursor-outline"></div>
-
+  <!-- Noise Overlay -->
+  <div class="noise-overlay"></div>
+  
+  <!-- Cart Overlay -->
+  <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+  
   <!-- Navigation -->
-  <nav class="fixed top-0 left-0 w-full z-50 mix-blend-difference">
-    <div class="max-w-7xl mx-auto px-8 py-6 flex justify-between items-center">
-      <a href="#" class="font-serif text-2xl font-light text-white tracking-wider">Chef's Hearth</a>
-      
-      <div class="hidden md:flex items-center gap-12">
-        <a href="#story" class="text-sm text-white/80 hover:text-white transition-colors tracking-widest uppercase">Story</a>
-        <a href="#menu" class="text-sm text-white/80 hover:text-white transition-colors tracking-widest uppercase">Menu</a>
-        <a href="#experience" class="text-sm text-white/80 hover:text-white transition-colors tracking-widest uppercase">Experience</a>
-      </div>
-
-      <a href="#contact" class="btn-luxury py-3 px-6 text-xs">Reserve</a>
-    </div>
-  </nav>
-
-  <!-- Hero Section -->
-  <section class="relative h-screen flex items-center justify-center overflow-hidden">
-    <div class="hero-vid-container">
-      <video autoplay muted loop playsinline>
-        <source src="https://cdn.coverr.co/videos/coverr-chef-garnishing-food-5641/1080p.mp4" type="video/mp4">
-      </video>
-    </div>
-
-    <div class="relative z-10 text-center max-w-5xl mx-auto px-6">
-      <div class="overflow-hidden mb-4">
-        <p class="label animate-fade-in" style="animation-delay: 0.5s; opacity: 0; animation-fill-mode: forwards;">Authentic Cloud Kitchen</p>
-      </div>
-      
-      <h1 class="headline-xl text-white mb-8" style="animation: fadeInUp 1s ease forwards; animation-delay: 0.7s; opacity: 0;">
-        Culinary Heritage,<br>
-        <span class="italic font-light text-[var(--accent)]">Delivered</span>
-      </h1>
-
-      <p class="text-lg text-white/60 max-w-xl mx-auto mb-12" style="animation: fadeInUp 1s ease forwards; animation-delay: 0.9s; opacity: 0;">
-        Experience the depth of traditional recipes, crafted with decades of expertise and the finest ingredients, served at your table.
-      </p>
-
-      <div style="animation: fadeInUp 1s ease forwards; animation-delay: 1.1s; opacity: 0;">
-        <a href="#menu" class="btn-luxury inline-block">View Menu</a>
-      </div>
-    </div>
-
-    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-10">
-      <div class="w-px h-20 bg-gradient-to-b from-transparent via-[var(--accent)] to-transparent opacity-50"></div>
-    </div>
-  </section>
-
-  <!-- Marquee Banner -->
-  <div class="bg-[var(--accent)] py-4 overflow-hidden">
-    <div class="marquee-track">
-      <span class="text-black text-sm font-semibold tracking-widest uppercase mx-8">FSSAI Certified Kitchen</span>
-      <span class="text-black/50">&#9670;</span>
-      <span class="text-black text-sm font-semibold tracking-widest uppercase mx-8">15+ Years of Expertise</span>
-      <span class="text-black/50">&#9670;</span>
-      <span class="text-black text-sm font-semibold tracking-widest uppercase mx-8">No Preservatives</span>
-      <span class="text-black/50">&#9670;</span>
-      <span class="text-black text-sm font-semibold tracking-widest uppercase mx-8">Fresh Ingredients Daily</span>
-      <span class="text-black/50">&#9670;</span>
-      <span class="text-black text-sm font-semibold tracking-widest uppercase mx-8">FSSAI Certified Kitchen</span>
-      <span class="text-black/50">&#9670;</span>
-      <span class="text-black text-sm font-semibold tracking-widest uppercase mx-8">15+ Years of Expertise</span>
-      <span class="text-black/50">&#9670;</span>
-      <span class="text-black text-sm font-semibold tracking-widest uppercase mx-8">No Preservatives</span>
-      <span class="text-black/50">&#9670;</span>
-      <span class="text-black text-sm font-semibold tracking-widest uppercase mx-8">Fresh Ingredients Daily</span>
-      <span class="text-black/50">&#9670;</span>
-    </div>
-  </div>
-
-  <!-- Story Section -->
-  <section id="story" class="py-32 bg-[var(--bg)]">
-    <div class="max-w-7xl mx-auto px-6 md:px-12">
-      <div class="grid md:grid-cols-12 gap-12 items-center">
-        <div class="md:col-span-5 reveal-trigger">
-          <div class="relative">
-            <div class="absolute -top-6 -left-6 w-full h-full border border-[var(--accent)] opacity-20 z-0"></div>
-            <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=800&q=80" alt="Chef Plating" class="relative z-10 grayscale hover:grayscale-0 transition-all duration-700 w-full aspect-[3/4] object-cover">
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-cart-charcoal/95 to-transparent backdrop-blur-sm">
+    <div class="max-w-7xl mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="#" class="flex items-center gap-3">
+          <div class="w-12 h-12 bg-gradient-to-br from-cart-red to-cart-dark rounded-full flex items-center justify-center border-2 border-cart-gold">
+            <span class="font-display text-lg text-cart-cream">BK</span>
           </div>
+          <div class="hidden sm:block">
+            <p class="font-display text-lg text-cart-cream leading-tight">Bunty Kaka</p>
+            <p class="text-xs text-cart-gold tracking-widest uppercase">Bhavnagari</p>
+          </div>
+        </a>
+        
+        <div class="hidden md:flex items-center gap-8">
+          <a href="#menu" class="text-cart-cream/80 hover:text-cart-gold transition-colors text-sm font-medium">Menu</a>
+          <a href="#customizer" class="text-cart-cream/80 hover:text-cart-gold transition-colors text-sm font-medium">Customize</a>
+          <a href="#location" class="text-cart-cream/80 hover:text-cart-gold transition-colors text-sm font-medium">Find Us</a>
+          <a href="#story" class="text-cart-cream/80 hover:text-cart-gold transition-colors text-sm font-medium">Our Story</a>
         </div>
         
-        <div class="md:col-span-6 md:col-start-7">
-          <span class="label reveal-trigger">The Chef</span>
-          <h2 class="headline-lg text-white mt-4 mb-8 reveal-trigger">
-            A Lifetime of<br><span class="italic text-[var(--accent)]">Passion</span>
-          </h2>
-          <div class="space-y-6 text-[var(--text-muted)] leading-relaxed reveal-trigger">
-            <p>
-              My journey began in my grandmother's kitchen, where I learned that true cooking is an act of love. For over 15 years, I have dedicated myself to mastering the art of authentic cuisine.
-            </p>
-            <p>
-              Today, Chef's Hearth brings that heritage to your home. Every dish is a story, every spice a memory. We don't just cook food; we curate experiences that resonate with the soul.
-            </p>
-            <div class="flex items-center gap-6 pt-6 border-t border-[var(--border)]">
-              <div>
-                <span class="block text-3xl font-serif text-[var(--accent)]">100%</span>
-                <span class="text-xs text-[var(--text-muted)] uppercase tracking-widest">Fresh</span>
-              </div>
-              <div>
-                <span class="block text-3xl font-serif text-[var(--accent)]">500+</span>
-                <span class="text-xs text-[var(--text-muted)] uppercase tracking-widest">Families</span>
-              </div>
-              <div>
-                <span class="block text-3xl font-serif text-[var(--accent)]">4.9</span>
-                <span class="text-xs text-[var(--text-muted)] uppercase tracking-widest">Rating</span>
-              </div>
-            </div>
-          </div>
+        <div class="flex items-center gap-4">
+          <button onclick="toggleCart()" class="relative p-2 hover:bg-cart-brown/50 rounded-full transition-colors" aria-label="Open cart">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-cart-cream">
+              <circle cx="9" cy="21" r="1"/>
+              <circle cx="20" cy="21" r="1"/>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+            </svg>
+            <span id="cartCount" class="absolute -top-1 -right-1 w-5 h-5 bg-cart-red text-white text-xs rounded-full flex items-center justify-center font-bold">0</span>
+          </button>
+          
+          <button class="md:hidden p-2" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-cart-cream">
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <line x1="3" y1="12" x2="21" y2="12"/>
+              <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+          </button>
         </div>
       </div>
     </div>
-  </section>
-
-  <!-- Menu Section -->
-  <section id="menu" class="py-32 bg-[var(--bg-elevated)]">
-    <div class="max-w-7xl mx-auto px-6 md:px-12">
-      <div class="text-center mb-20">
-        <span class="label reveal-trigger">Curated Selection</span>
-        <h2 class="headline-lg text-white mt-4 reveal-trigger">
-          The Menu
-        </h2>
-      </div>
-
-      <!-- Filter Tabs -->
-      <div class="flex flex-wrap justify-center gap-4 mb-16 reveal-trigger">
-        <button class="menu-tab active" data-filter="all">All</button>
-        <button class="menu-tab" data-filter="veg">Vegetarian</button>
-        <button class="menu-tab" data-filter="nonveg">Non-Vegetarian</button>
-        <button class="menu-tab" data-filter="signature">Chef's Special</button>
-      </div>
-
-      <style>
-        .menu-tab {
-          background: transparent;
-          border: 1px solid transparent;
-          color: var(--text-muted);
-          padding: 8px 24px;
-          font-size: 12px;
-          font-weight: 600;
-          letter-spacing: 0.1em;
-          text-transform: uppercase;
-          cursor: pointer;
-          transition: all 0.3s ease;
-        }
-        .menu-tab.active {
-          border-color: var(--accent);
-          color: var(--accent);
-        }
-        .menu-tab:hover {
-          color: var(--text);
-        }
-      </style>
-
-      <!-- Menu Grid -->
-      <div id="menu-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <!-- Rendered via JS -->
-      </div>
+  </nav>
+  
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="fixed inset-0 bg-cart-charcoal/98 z-40 hidden flex-col items-center justify-center gap-8">
+    <a href="#menu" onclick="toggleMobileMenu()" class="font-display text-2xl text-cart-cream hover:text-cart-gold transition-colors">Menu</a>
+    <a href="#customizer" onclick="toggleMobileMenu()" class="font-display text-2xl text-cart-cream hover:text-cart-gold transition-colors">Customize</a>
+    <a href="#location" onclick="toggleMobileMenu()" class="font-display text-2xl text-cart-cream hover:text-cart-gold transition-colors">Find Us</a>
+    <a href="#story" onclick="toggleMobileMenu()" class="font-display text-2xl text-cart-cream hover:text-cart-gold transition-colors">Our Story</a>
+    <button onclick="toggleMobileMenu()" class="absolute top-6 right-6 p-2" aria-label="Close menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-cart-cream">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+  
+  <!-- Hero Section -->
+  <section class="min-h-screen hero-pattern relative flex items-center pt-20">
+    <!-- Floating Elements -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <div class="absolute top-20 left-10 w-20 h-20 bg-cart-red/20 rounded-full blur-xl" style="animation: floatUp 4s ease-in-out infinite;"></div>
+      <div class="absolute top-40 right-20 w-32 h-32 bg-cart-fire/10 rounded-full blur-2xl" style="animation: floatUp 5s ease-in-out infinite 1s;"></div>
+      <div class="absolute bottom-40 left-1/4 w-24 h-24 bg-cart-gold/10 rounded-full blur-xl" style="animation: floatUp 6s ease-in-out infinite 0.5s;"></div>
     </div>
-  </section>
-
-  <!-- Experience Section -->
-  <section id="experience" class="py-32 bg-[var(--bg)]">
-    <div class="max-w-7xl mx-auto px-6 md:px-12">
-      <div class="grid lg:grid-cols-2 gap-20 items-center">
-        <div>
-          <span class="label reveal-trigger">The Process</span>
-          <h2 class="headline-lg text-white mt-4 mb-12 reveal-trigger">
-            From Kitchen<br><span class="italic text-[var(--accent)]">To Table</span>
-          </h2>
-
-          <div class="space-y-12">
-            <div class="flex gap-6 reveal-trigger">
-              <div class="flex-shrink-0 w-12 h-12 rounded-full border border-[var(--accent)] flex items-center justify-center text-[var(--accent)] font-serif text-xl">1</div>
-              <div>
-                <h4 class="text-lg font-semibold text-white mb-2">Curated Ingredients</h4>
-                <p class="text-[var(--text-muted)] text-sm leading-relaxed">Hand-picked produce and premium spices sourced directly from trusted local farms.</p>
+    
+    <div class="max-w-7xl mx-auto px-4 py-12 grid lg:grid-cols-2 gap-12 items-center">
+      <!-- Left Content -->
+      <div class="text-center lg:text-left reveal">
+        <div class="inline-flex items-center gap-2 bg-cart-red/20 border border-cart-red/30 rounded-full px-4 py-2 mb-6">
+          <span class="w-2 h-2 bg-cart-gold rounded-full animate-pulse"></span>
+          <span class="text-sm text-cart-cream/90">Open Now: 5:30 PM - 12:00 AM</span>
+        </div>
+        
+        <h1 class="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-cart-cream leading-tight mb-4">
+          Bunty Kaka<br>
+          <span class="text-cart-gold">Bhavnagari</span>
+        </h1>
+        
+        <p class="font-display text-xl sm:text-2xl text-cart-fire mb-2">Bateka Bhungla</p>
+        <p class="text-cart-muted text-lg mb-8">Bhavnagar na famous</p>
+        
+        <!-- Fire Animation -->
+        <div class="flex items-center justify-center lg:justify-start gap-4 mb-8">
+          <div class="fire-container">
+            <div class="flame flame-1"></div>
+            <div class="flame flame-2"></div>
+            <div class="flame flame-3"></div>
+          </div>
+          <p class="text-cart-cream/70 text-sm">Fresh & Hot Since 2024</p>
+        </div>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+          <button onclick="scrollToMenu()" class="btn-primary text-lg">
+            Order Now
+          </button>
+          <a href="#location" class="btn-secondary text-center">
+            Find Our Cart
+          </a>
+        </div>
+        
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-3 gap-4 mt-12 pt-8 border-t border-cart-brown/50">
+          <div>
+            <p class="font-display text-3xl text-cart-gold">500+</p>
+            <p class="text-sm text-cart-muted">Daily Customers</p>
+          </div>
+          <div>
+            <p class="font-display text-3xl text-cart-gold">4.8</p>
+            <p class="text-sm text-cart-muted">Rating</p>
+          </div>
+          <div>
+            <p class="font-display text-3xl text-cart-gold">10+</p>
+            <p class="text-sm text-cart-muted">Menu Items</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Right - Food Cart Visual -->
+      <div class="reveal" style="transition-delay: 0.2s;">
+        <div class="food-cart">
+          <!-- Cart Roof -->
+          <div class="cart-roof">
+            <div class="cart-banner">Since 2024</div>
+          </div>
+          
+          <!-- Cart Body -->
+          <div class="cart-body">
+            <!-- Gujarati Text Banner -->
+            <div class="text-center mb-4">
+              <p class="text-cart-gold font-display text-lg tracking-wide">બટેકા ભુંગળા</p>
+              <p class="text-cart-cream/80 text-xs mt-1">Authentic Kathiawadi Taste</p>
+            </div>
+            
+            <!-- Serving Window -->
+            <div class="cart-window relative">
+              <!-- Steam Effect -->
+              <div class="steam-container">
+                <div class="steam"></div>
+                <div class="steam"></div>
+                <div class="steam"></div>
+                <div class="steam"></div>
+              </div>
+              
+              <!-- Food Display -->
+              <div class="relative bg-gradient-to-b from-cart-brown/50 to-transparent rounded-lg p-4">
+                <img src="https://z-cdn-media.chatglm.cn/files/0f3033a1-23bc-4bdf-87b4-2b55ea9c861a.png?auth_key=1873079545-5db6ed767255465a84d6d0fa54b5d7e8-0-00eb82b1ff88015bc124f902da1cbd4f" 
+                     alt="Bateka Bhungla" 
+                     class="w-full h-40 object-cover rounded-lg">
+                
+                <!-- Fire Glow Effect -->
+                <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-4 bg-gradient-to-t from-cart-fire/60 to-transparent blur-sm rounded-full"></div>
+              </div>
+              
+              <!-- Menu Stickers -->
+              <div class="flex justify-around mt-4">
+                <div class="text-center">
+                  <div class="w-12 h-12 bg-cart-red/30 rounded-full flex items-center justify-center border border-cart-gold/30">
+                    <span class="text-xs text-cart-gold">Spicy</span>
+                  </div>
+                </div>
+                <div class="text-center">
+                  <div class="w-12 h-12 bg-cart-fire/30 rounded-full flex items-center justify-center border border-cart-gold/30">
+                    <span class="text-xs text-cart-fire">Hot</span>
+                  </div>
+                </div>
+                <div class="text-center">
+                  <div class="w-12 h-12 bg-cart-gold/30 rounded-full flex items-center justify-center border border-cart-gold/30">
+                    <span class="text-xs text-cart-gold">Fresh</span>
+                  </div>
+                </div>
               </div>
             </div>
             
-            <div class="flex gap-6 reveal-trigger">
-              <div class="flex-shrink-0 w-12 h-12 rounded-full border border-[var(--accent)] flex items-center justify-center text-[var(--accent)] font-serif text-xl">2</div>
-              <div>
-                <h4 class="text-lg font-semibold text-white mb-2">Artisan Preparation</h4>
-                <p class="text-[var(--text-muted)] text-sm leading-relaxed">Slow-cooked with patience. Each dish is prepared fresh upon order, ensuring peak flavor.</p>
-              </div>
-            </div>
-
-            <div class="flex gap-6 reveal-trigger">
-              <div class="flex-shrink-0 w-12 h-12 rounded-full border border-[var(--accent)] flex items-center justify-center text-[var(--accent)] font-serif text-xl">3</div>
-              <div>
-                <h4 class="text-lg font-semibold text-white mb-2">Elegant Delivery</h4>
-                <p class="text-[var(--text-muted)] text-sm leading-relaxed">Packed in eco-friendly, temperature-controlled packaging to preserve integrity and warmth.</p>
+            <!-- Contact Info -->
+            <div class="mt-4 text-center">
+              <p class="text-cart-cream/60 text-xs">Call: 9824847345</p>
+              <div class="flex justify-center gap-4 mt-2">
+                <span class="text-xs bg-cart-brown/50 px-3 py-1 rounded-full text-cart-cream/70">Swiggy</span>
+                <span class="text-xs bg-cart-brown/50 px-3 py-1 rounded-full text-cart-cream/70">Zomato</span>
               </div>
             </div>
           </div>
-        </div>
-
-        <div class="relative reveal-trigger">
-          <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80" alt="Plated Food" class="w-full aspect-square object-cover">
-          <div class="absolute -bottom-8 -left-8 glass-panel p-8 max-w-xs">
-            <p class="font-serif text-2xl text-white italic mb-2">"Food is not just eating. It is an experience."</p>
-            <span class="text-[var(--accent)] text-sm uppercase tracking-widest">- Chef's Philosophy</span>
+          
+          <!-- Wheels -->
+          <div class="relative h-12 bg-gradient-to-b from-cart-dark to-transparent">
+            <div class="cart-wheel wheel-left"></div>
+            <div class="cart-wheel wheel-right"></div>
           </div>
         </div>
       </div>
     </div>
+    
+    <!-- Scroll Indicator -->
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
+      <span class="text-xs text-cart-muted">Scroll to explore</span>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-cart-gold">
+        <path d="M12 5v14M5 12l7 7 7-7"/>
+      </svg>
+    </div>
   </section>
-
+  
+  <!-- Marquee Banner -->
+  <div class="bg-cart-red py-3 marquee">
+    <div class="marquee-content">
+      <span class="inline-flex items-center gap-8 text-cart-cream font-medium">
+        <span class="flex items-center gap-2"><span class="text-cart-gold">●</span> Authentic Kathiawadi Taste</span>
+        <span class="flex items-center gap-2"><span class="text-cart-gold">●</span> Fresh Ingredients</span>
+        <span class="flex items-center gap-2"><span class="text-cart-gold">●</span> Made with Love</span>
+        <span class="flex items-center gap-2"><span class="text-cart-gold">●</span> Bhavnagar na Famous</span>
+        <span class="flex items-center gap-2"><span class="text-cart-gold">●</span> Open Evening 5:30 to Midnight</span>
+        <span class="flex items-center gap-2"><span class="text-cart-gold">●</span> Authentic Kathiawadi Taste</span>
+        <span class="flex items-center gap-2"><span class="text-cart-gold">●</span> Fresh Ingredients</span>
+        <span class="flex items-center gap-2"><span class="text-cart-gold">●</span> Made with Love</span>
+        <span class="flex items-center gap-2"><span class="text-cart-gold">●</span> Bhavnagar na Famous</span>
+        <span class="flex items-center gap-2"><span class="text-cart-gold">●</span> Open Evening 5:30 to Midnight</span>
+      </span>
+    </div>
+  </div>
+  
+  <!-- Menu Section -->
+  <section id="menu" class="py-20 bg-gradient-to-b from-cart-charcoal to-cart-brown/30">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="text-center mb-16 reveal">
+        <span class="badge mb-4">Our Menu</span>
+        <h2 class="font-display text-4xl md:text-5xl text-cart-cream mb-4">Authentic Kathiawadi Menu</h2>
+        <p class="text-cart-muted max-w-2xl mx-auto">Each dish is prepared fresh with traditional spices and love, just like how Kaka used to make in Bhavnagar</p>
+      </div>
+      
+      <!-- Menu Grid -->
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" id="menuGrid">
+        <!-- Menu items will be rendered by JS -->
+      </div>
+    </div>
+  </section>
+  
+  <!-- Spice Meter Section -->
+  <section class="py-16 bg-gradient-to-r from-cart-red/20 via-cart-fire/10 to-cart-red/20">
+    <div class="max-w-4xl mx-auto px-4 text-center reveal">
+      <h3 class="font-display text-2xl text-cart-cream mb-8">Choose Your Spice Level</h3>
+      <div class="flex flex-wrap justify-center gap-6" id="spiceMeter">
+        <!-- Spice levels rendered by JS -->
+      </div>
+    </div>
+  </section>
+  
+  <!-- Customizer Section -->
+  <section id="customizer" class="py-20 bg-gradient-to-b from-cart-brown/30 to-cart-charcoal">
+    <div class="max-w-4xl mx-auto px-4">
+      <div class="text-center mb-12 reveal">
+        <span class="badge mb-4">Customize</span>
+        <h2 class="font-display text-4xl md:text-5xl text-cart-cream mb-4">Build Your Bhungla</h2>
+        <p class="text-cart-muted">Customize your perfect Bhungla just the way you like it</p>
+      </div>
+      
+      <div class="bg-gradient-to-br from-cart-card to-cart-brown/50 rounded-3xl p-6 md:p-8 border border-cart-border reveal">
+        <!-- Customizer Preview -->
+        <div class="flex justify-center mb-8">
+          <div class="relative">
+            <img src="https://z-cdn-media.chatglm.cn/files/2b9c3848-86ca-4306-b3cd-8afacf133d59.png?auth_key=1873079545-1b8bf09abc7641d5905977df01ca4764-0-020fb015a711ab7ea512fa54ef6a8069" 
+                 alt="Customize Bhungla" 
+                 class="w-48 h-48 object-cover rounded-full border-4 border-cart-gold">
+            <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 fire-container">
+              <div class="flame flame-1" style="height: 30px; width: 15px;"></div>
+              <div class="flame flame-2" style="height: 20px; width: 10px;"></div>
+              <div class="flame flame-3" style="height: 20px; width: 10px;"></div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Spice Level -->
+        <div class="mb-8">
+          <label class="block text-cart-cream font-medium mb-4">Spice Level</label>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3" id="spiceOptions">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+        
+        <!-- Toppings -->
+        <div class="mb-8">
+          <label class="block text-cart-cream font-medium mb-4">Extra Toppings</label>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3" id="toppingOptions">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+        
+        <!-- Summary -->
+        <div class="bg-cart-brown/50 rounded-xl p-4 mb-6">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-cart-muted">Base Price</span>
+            <span class="text-cart-cream">Rs 40</span>
+          </div>
+          <div id="customExtras" class="space-y-1">
+            <!-- Extra items rendered by JS -->
+          </div>
+          <div class="border-t border-cart-border mt-3 pt-3 flex justify-between items-center">
+            <span class="text-cart-cream font-medium">Total</span>
+            <span class="font-display text-2xl text-cart-gold" id="customTotal">Rs 40</span>
+          </div>
+        </div>
+        
+        <button onclick="addCustomToCart()" class="btn-primary w-full text-lg">
+          Add to Cart
+        </button>
+      </div>
+    </div>
+  </section>
+  
   <!-- Gallery Section -->
-  <section class="py-20 bg-[var(--bg)]">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
-      <div class="aspect-square overflow-hidden col-span-2 row-span-2">
-        <img src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=800&q=80" alt="Biryani" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700">
+  <section id="gallery" class="py-20 bg-cart-charcoal">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="text-center mb-12 reveal">
+        <span class="badge mb-4">Gallery</span>
+        <h2 class="font-display text-4xl md:text-5xl text-cart-cream mb-4">Food Moments</h2>
+        <p class="text-cart-muted">See how we bring the taste of Bhavnagar to your plate</p>
       </div>
-      <div class="aspect-square overflow-hidden">
-        <img src="https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=400&q=80" alt="Curry" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700">
-      </div>
-      <div class="aspect-square overflow-hidden">
-        <img src="https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=400&q=80" alt="Paneer" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700">
-      </div>
-      <div class="aspect-square overflow-hidden">
-        <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=400&q=80" alt="Kebab" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700">
-      </div>
-      <div class="aspect-square overflow-hidden">
-        <img src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400&q=80" alt="Salad" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700">
-      </div>
-    </div>
-  </section>
-
-  <!-- Testimonials -->
-  <section class="py-32 bg-[var(--bg-elevated)]">
-    <div class="max-w-5xl mx-auto px-6 md:px-12 text-center">
-      <span class="label reveal-trigger">Testimonials</span>
-      <h2 class="headline-lg text-white mt-4 mb-16 reveal-trigger">
-        Words of Praise
-      </h2>
-
-      <div id="testimonial-slider" class="relative min-h-[300px] flex items-center justify-center">
-        <!-- Rendered via JS -->
+      
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 reveal">
+        <div class="gallery-item col-span-2 row-span-2 h-64 md:h-auto">
+          <img src="https://z-cdn-media.chatglm.cn/files/0f3033a1-23bc-4bdf-87b4-2b55ea9c861a.png?auth_key=1873079545-5db6ed767255465a84d6d0fa54b5d7e8-0-00eb82b1ff88015bc124f902da1cbd4f" alt="Cooking Bhungla">
+        </div>
+        <div class="gallery-item h-32 md:h-40">
+          <img src="https://z-cdn-media.chatglm.cn/files/2b9c3848-86ca-4306-b3cd-8afacf133d59.png?auth_key=1873079545-1b8bf09abc7641d5905977df01ca4764-0-020fb015a711ab7ea512fa54ef6a8069" alt="Fire cooking">
+        </div>
+        <div class="gallery-item h-32 md:h-40">
+          <img src="https://z-cdn-media.chatglm.cn/files/59d4d2b7-0478-40dc-bf8c-45498f0e7d1f.png?auth_key=1873079545-8d884bc62d2a4b60b5d246095ea6bafb-0-fdf46b960866a9d06259be7bc862ffcb" alt="Served Bhungla">
+        </div>
+        <div class="gallery-item h-32 md:h-40">
+          <img src="https://z-cdn-media.chatglm.cn/files/f46cfece-aa3c-4182-b937-0d755a9bf3dd.jpg?auth_key=1873079545-939b1065e361456099acc33723517376-0-7c94ee61c520b8e8733b5cab25f4bbd9" alt="Food Cart">
+        </div>
+        <div class="gallery-item h-32 md:h-40">
+          <img src="https://z-cdn-media.chatglm.cn/files/2b9c3848-86ca-4306-b3cd-8afacf133d59.png?auth_key=1873079545-1b8bf09abc7641d5905977df01ca4764-0-020fb015a711ab7ea512fa54ef6a8069" alt="Cooking action">
+        </div>
       </div>
     </div>
   </section>
-
-  <!-- Contact / Reservation -->
-  <section id="contact" class="py-32 bg-[var(--bg)]">
-    <div class="max-w-7xl mx-auto px-6 md:px-12">
-      <div class="grid lg:grid-cols-2 gap-16">
-        <div>
-          <span class="label reveal-trigger">Contact</span>
-          <h2 class="headline-lg text-white mt-4 mb-8 reveal-trigger">
-            Make a Reservation
-          </h2>
-          <p class="text-[var(--text-muted)] mb-12 reveal-trigger">
-            For party orders, corporate catering, or daily meals, reach out to us directly. We deliver within a 10km radius.
+  
+  <!-- Reviews Section -->
+  <section class="py-20 bg-gradient-to-b from-cart-charcoal to-cart-brown/30">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="text-center mb-12 reveal">
+        <span class="badge mb-4">Reviews</span>
+        <h2 class="font-display text-4xl md:text-5xl text-cart-cream mb-4">What People Say</h2>
+        <p class="text-cart-muted">Real reviews from our happy customers</p>
+      </div>
+      
+      <div class="grid md:grid-cols-3 gap-6 reveal" id="reviewsContainer">
+        <!-- Reviews rendered by JS -->
+      </div>
+    </div>
+  </section>
+  
+  <!-- Story Section -->
+  <section id="story" class="py-20 bg-gradient-to-b from-cart-brown/30 to-cart-charcoal">
+    <div class="max-w-4xl mx-auto px-4">
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div class="reveal">
+          <span class="badge mb-4">Our Story</span>
+          <h2 class="font-display text-4xl text-cart-cream mb-6">From Bhavnagar to Your Heart</h2>
+          <p class="text-cart-muted mb-4 leading-relaxed">
+            What started as a small dream in Bhavnagar has now become Nikol's favorite street food destination. Bunty Kaka brought the authentic Kathiawadi flavors to Ahmedabad with his signature Bateka Bhungla.
           </p>
-
-          <div class="space-y-8 reveal-trigger">
-            <div class="flex items-center gap-6">
-              <div class="w-12 h-12 flex items-center justify-center border border-[var(--border)] rounded-full">
-                 <svg class="w-5 h-5 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
-              </div>
-              <div>
-                <span class="block text-white text-lg">+91 98765 43210</span>
-                <span class="block text-[var(--text-muted)] text-sm">Mon - Sat, 11am - 10pm</span>
-              </div>
+          <p class="text-cart-muted mb-6 leading-relaxed">
+            Every dish is prepared with the same traditional recipe passed down through generations. The secret lies in the perfect blend of spices and the love we put into every serving.
+          </p>
+          <div class="flex items-center gap-4">
+            <div class="w-16 h-16 bg-gradient-to-br from-cart-red to-cart-dark rounded-full flex items-center justify-center border-2 border-cart-gold">
+              <span class="font-display text-xl text-cart-cream">BK</span>
             </div>
-
-            <div class="flex items-center gap-6">
-              <div class="w-12 h-12 flex items-center justify-center border border-[var(--border)] rounded-full">
-                <svg class="w-5 h-5 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-              </div>
-              <div>
-                <span class="block text-white text-lg">order@chefshearth.com</span>
-                <span class="block text-[var(--text-muted)] text-sm">Email us anytime</span>
-              </div>
+            <div>
+              <p class="text-cart-cream font-medium">Bunty Kaka</p>
+              <p class="text-cart-muted text-sm">Founder & Head Chef</p>
             </div>
           </div>
         </div>
-
-        <div class="relative reveal-trigger">
-          <div class="absolute inset-0 border border-[var(--accent)] transform translate-x-4 translate-y-4"></div>
-          <form class="relative z-10 bg-[var(--card)] p-10 border border-[var(--border)]" style="background: rgba(255,255,255,0.02);">
-            <div class="space-y-6">
-              <div>
-                <label class="block text-xs uppercase tracking-widest text-[var(--text-muted)] mb-3">Name</label>
-                <input type="text" class="w-full bg-transparent border-b border-[var(--border)] py-3 text-white focus:outline-none focus:border-[var(--accent)] transition-colors" placeholder="Your Name">
-              </div>
-              <div>
-                <label class="block text-xs uppercase tracking-widest text-[var(--text-muted)] mb-3">Phone</label>
-                <input type="tel" class="w-full bg-transparent border-b border-[var(--border)] py-3 text-white focus:outline-none focus:border-[var(--accent)] transition-colors" placeholder="+91 XXXXX XXXXX">
-              </div>
-              <div>
-                <label class="block text-xs uppercase tracking-widest text-[var(--text-muted)] mb-3">Message</label>
-                <textarea rows="4" class="w-full bg-transparent border-b border-[var(--border)] py-3 text-white focus:outline-none focus:border-[var(--accent)] transition-colors resize-none" placeholder="Tell us about your event..."></textarea>
-              </div>
-              <button type="submit" class="btn-luxury w-full mt-4">Send Request</button>
+        
+        <div class="reveal" style="transition-delay: 0.2s;">
+          <div class="relative">
+            <img src="https://z-cdn-media.chatglm.cn/files/f46cfece-aa3c-4182-b937-0d755a9bf3dd.jpg?auth_key=1873079545-939b1065e361456099acc33723517376-0-7c94ee61c520b8e8733b5cab25f4bbd9" 
+                 alt="Bunty Kaka Food Cart" 
+                 class="rounded-2xl shadow-2xl">
+            <div class="absolute -bottom-6 -right-6 bg-cart-red rounded-xl p-4 shadow-xl">
+              <p class="font-display text-2xl text-cart-gold">2024</p>
+              <p class="text-cart-cream text-sm">Since</p>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </div>
   </section>
-
-  <!-- Footer -->
-  <footer class="py-12 bg-[var(--bg)] border-t border-[var(--border)]">
-    <div class="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-8">
-      <div>
-        <a href="#" class="font-serif text-2xl font-light text-white tracking-wider">Chef's Hearth</a>
-        <p class="text-[var(--text-muted)] text-sm mt-2">Authentic Cloud Kitchen. FSSAI Licensed.</p>
+  
+  <!-- Location Section -->
+  <section id="location" class="py-20 bg-cart-charcoal">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="text-center mb-12 reveal">
+        <span class="badge mb-4">Find Us</span>
+        <h2 class="font-display text-4xl md:text-5xl text-cart-cream mb-4">Cart Location</h2>
+        <p class="text-cart-muted">Come visit us for the authentic street food experience</p>
       </div>
-      <div class="flex items-center gap-4">
-        <a href="#" class="w-10 h-10 rounded-full border border-[var(--border)] flex items-center justify-center text-[var(--text-muted)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-        </a>
-        <a href="#" class="w-10 h-10 rounded-full border border-[var(--border)] flex items-center justify-center text-[var(--text-muted)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-        </a>
+      
+      <div class="grid md:grid-cols-2 gap-8 items-center reveal">
+        <div class="bg-gradient-to-br from-cart-card to-cart-brown/50 rounded-2xl p-6 border border-cart-border">
+          <div class="flex items-start gap-4 mb-6">
+            <div class="w-12 h-12 bg-cart-red/20 rounded-full flex items-center justify-center flex-shrink-0">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-cart-gold">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="text-cart-cream font-medium mb-1">Location</h4>
+              <p class="text-cart-muted">Nikol, Ahmedabad, Gujarat</p>
+            </div>
+          </div>
+          
+          <div class="flex items-start gap-4 mb-6">
+            <div class="w-12 h-12 bg-cart-red/20 rounded-full flex items-center justify-center flex-shrink-0">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-cart-gold">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="text-cart-cream font-medium mb-1">Opening Hours</h4>
+              <p class="text-cart-muted">Daily: 5:30 PM - 12:00 AM</p>
+            </div>
+          </div>
+          
+          <div class="flex items-start gap-4 mb-6">
+            <div class="w-12 h-12 bg-cart-red/20 rounded-full flex items-center justify-center flex-shrink-0">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-cart-gold">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="text-cart-cream font-medium mb-1">Contact</h4>
+              <p class="text-cart-muted">+91 9824847345</p>
+            </div>
+          </div>
+          
+          <a href="https://maps.app.goo.gl/kiqJ2gdhNNmNhd5T9" target="_blank" rel="noopener noreferrer" class="btn-primary w-full text-center block">
+            Get Directions
+          </a>
+        </div>
+        
+        <div class="rounded-2xl overflow-hidden border border-cart-border h-80">
+          <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3671.9040861737367!2d72.65!3d23.05!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDAzJzAwLjAiTiA3MsKwMzknMDAuMCJF!5e0!3m2!1sen!2sin!4v1234567890"
+            width="100%" 
+            height="100%" 
+            style="border:0;" 
+            allowfullscreen="" 
+            loading="lazy"
+            title="Bunty Kaka Location">
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Footer -->
+  <footer class="bg-gradient-to-b from-cart-brown/50 to-cart-charcoal py-12 border-t border-cart-border">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="grid md:grid-cols-4 gap-8 mb-8">
+        <div class="md:col-span-2">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-cart-red to-cart-dark rounded-full flex items-center justify-center border-2 border-cart-gold">
+              <span class="font-display text-lg text-cart-cream">BK</span>
+            </div>
+            <div>
+              <p class="font-display text-xl text-cart-cream">Bunty Kaka Bhavnagari</p>
+              <p class="text-cart-gold text-sm">Bateka Bhungla</p>
+            </div>
+          </div>
+          <p class="text-cart-muted mb-4 max-w-md">Bringing the authentic taste of Kathiawad to your neighborhood. Every dish made with tradition, love, and the perfect blend of spices.</p>
+          <div class="flex gap-4">
+            <a href="https://wa.me/919824847345" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-cart-brown/50 rounded-full flex items-center justify-center hover:bg-cart-red transition-colors" aria-label="WhatsApp">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="text-cart-cream">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+            </a>
+            <a href="tel:+919824847345" class="w-10 h-10 bg-cart-brown/50 rounded-full flex items-center justify-center hover:bg-cart-red transition-colors" aria-label="Phone">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-cart-cream">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+        
+        <div>
+          <h4 class="text-cart-cream font-medium mb-4">Quick Links</h4>
+          <ul class="space-y-2">
+            <li><a href="#menu" class="text-cart-muted hover:text-cart-gold transition-colors">Menu</a></li>
+            <li><a href="#customizer" class="text-cart-muted hover:text-cart-gold transition-colors">Customize</a></li>
+            <li><a href="#location" class="text-cart-muted hover:text-cart-gold transition-colors">Find Us</a></li>
+            <li><a href="#story" class="text-cart-muted hover:text-cart-gold transition-colors">Our Story</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="text-cart-cream font-medium mb-4">Opening Hours</h4>
+          <ul class="space-y-2 text-cart-muted">
+            <li>Monday - Sunday</li>
+            <li class="text-cart-gold">5:30 PM - 12:00 AM</li>
+            <li class="mt-4">Order on</li>
+            <li class="flex gap-2 mt-2">
+              <span class="bg-cart-brown/50 px-3 py-1 rounded text-sm">Swiggy</span>
+              <span class="bg-cart-brown/50 px-3 py-1 rounded text-sm">Zomato</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="border-t border-cart-border pt-8 text-center">
+        <p class="text-cart-muted text-sm">2024 Bunty Kaka Bhavnagari. All rights reserved. Made with love in Bhavnagar.</p>
       </div>
     </div>
   </footer>
-
+  
+  <!-- Cart Sidebar -->
+  <aside class="cart-sidebar" id="cartSidebar" role="dialog" aria-label="Shopping cart">
+    <div class="p-6 border-b border-cart-border">
+      <div class="flex items-center justify-between">
+        <h3 class="font-display text-2xl text-cart-cream">Your Order</h3>
+        <button onclick="toggleCart()" class="p-2 hover:bg-cart-brown/50 rounded-full transition-colors" aria-label="Close cart">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-cart-cream">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    
+    <div class="flex-1 overflow-y-auto p-6" id="cartItems">
+      <!-- Cart items rendered by JS -->
+    </div>
+    
+    <div class="p-6 border-t border-cart-border bg-cart-brown/30">
+      <div class="flex justify-between items-center mb-4">
+        <span class="text-cart-muted">Subtotal</span>
+        <span class="text-cart-cream" id="cartSubtotal">Rs 0</span>
+      </div>
+      <div class="flex justify-between items-center mb-6">
+        <span class="text-cart-cream font-medium">Total</span>
+        <span class="font-display text-2xl text-cart-gold" id="cartTotal">Rs 0</span>
+      </div>
+      <button onclick="checkout()" class="btn-primary w-full text-lg mb-3">
+        Order on WhatsApp
+      </button>
+      <p class="text-cart-muted text-xs text-center">Free pickup from our cart location</p>
+    </div>
+  </aside>
+  
+  <!-- WhatsApp Button -->
+  <a href="https://wa.me/919824847345?text=Hi%20Bunty%20Kaka!%20I%20want%20to%20order%20Bateka%20Bhungla" 
+     target="_blank" 
+     rel="noopener noreferrer"
+     class="whatsapp-btn"
+     aria-label="Order on WhatsApp">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+  </a>
+  
   <script>
-    // Custom Cursor Logic
-    const cursorDot = document.querySelector('#cursor-dot');
-    const cursorOutline = document.querySelector('#cursor-outline');
-
-    if (cursorDot && cursorOutline) {
-      window.addEventListener('mousemove', (e) => {
-        const posX = e.clientX;
-        const posY = e.clientY;
-        
-        cursorDot.style.left = `${posX}px`;
-        cursorDot.style.top = `${posY}px`;
-        cursorDot.style.transform = 'translate(-50%, -50%)';
-
-        cursorOutline.style.left = `${posX}px`;
-        cursorOutline.style.top = `${posY}px`;
-      });
-
-      document.querySelectorAll('a, button').forEach(el => {
-        el.addEventListener('mouseenter', () => {
-          cursorOutline.style.width = '60px';
-          cursorOutline.style.height = '60px';
-          cursorOutline.style.borderColor = 'var(--accent-bright)';
-        });
-        el.addEventListener('mouseleave', () => {
-          cursorOutline.style.width = '40px';
-          cursorOutline.style.height = '40px';
-          cursorOutline.style.borderColor = 'var(--accent)';
-        });
-      });
-    }
-
-    // Intersection Observer for Reveal Animations
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-        }
-      });
-    }, observerOptions);
-
-    document.querySelectorAll('.reveal-trigger').forEach(el => {
-      observer.observe(el);
-    });
-
-    // Menu Data & Rendering
-    const menuData = [
-      { id: 1, name: "Hyderabadi Dum Biryani", desc: "Slow-cooked aromatic rice with tender meat and saffron", price: 380, type: "nonveg", category: "signature", img: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600&q=80" },
-      { id: 2, name: "Butter Chicken", desc: "Creamy tomato-based curry with tender chicken pieces", price: 340, type: "nonveg", category: "signature", img: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=600&q=80" },
-      { id: 3, name: "Dal Makhani", desc: "Slow-cooked black lentils in butter and cream", price: 220, type: "veg", category: "signature", img: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=600&q=80" },
-      { id: 4, name: "Paneer Lababdar", desc: "Rich and creamy paneer in tomato cashew gravy", price: 280, type: "veg", category: "veg", img: "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=600&q=80" },
-      { id: 5, name: "Mutton Rogan Josh", desc: "Kashmiri style mutton curry with aromatic spices", price: 420, type: "nonveg", category: "nonveg", img: "https://images.unsplash.com/photo-1545247181-516773cae754?w=600&q=80" },
-      { id: 6, name: "Palak Paneer", desc: "Cottage cheese cubes in creamy spinach gravy", price: 260, type: "veg", category: "veg", img: "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&q=80" },
+    // ============================================
+    // DATA
+    // ============================================
+    
+    const menuItems = [
+      {
+        id: 1,
+        name: 'Bateka Bhungla',
+        description: 'Signature spicy potato dish cooked in iron kadai with traditional Kathiawadi spices',
+        price: 40,
+        image: 'https://z-cdn-media.chatglm.cn/files/0f3033a1-23bc-4bdf-87b4-2b55ea9c861a.png?auth_key=1873079545-5db6ed767255465a84d6d0fa54b5d7e8-0-00eb82b1ff88015bc124f902da1cbd4f',
+        spiceLevel: 3,
+        badge: 'Best Seller'
+      },
+      {
+        id: 2,
+        name: 'Bhungla Packet',
+        description: 'Quick bite sized bhungla portions for on-the-go snacking',
+        price: 10,
+        image: 'https://z-cdn-media.chatglm.cn/files/59d4d2b7-0478-40dc-bf8c-45498f0e7d1f.png?auth_key=1873079545-8d884bc62d2a4b60b5d246095ea6bafb-0-fdf46b960866a9d06259be7bc862ffcb',
+        spiceLevel: 2,
+        badge: null
+      },
+      {
+        id: 3,
+        name: 'Dry Bhungla',
+        description: 'Crispy roasted potatoes with extra spice coating',
+        price: 50,
+        image: 'https://z-cdn-media.chatglm.cn/files/2b9c3848-86ca-4306-b3cd-8afacf133d59.png?auth_key=1873079545-1b8bf09abc7641d5905977df01ca4764-0-020fb015a711ab7ea512fa54ef6a8069',
+        spiceLevel: 3,
+        badge: null
+      },
+      {
+        id: 4,
+        name: 'Spicy Bhungla',
+        description: 'Extra fiery version for spice lovers with special red chili blend',
+        price: 60,
+        image: 'https://z-cdn-media.chatglm.cn/files/0f3033a1-23bc-4bdf-87b4-2b55ea9c861a.png?auth_key=1873079545-5db6ed767255465a84d6d0fa54b5d7e8-0-00eb82b1ff88015bc124f902da1cbd4f',
+        spiceLevel: 4,
+        badge: 'Spicy'
+      },
+      {
+        id: 5,
+        name: 'Kathiawadi Mix',
+        description: 'Combination platter with bhungla, chutney, salad and chaas',
+        price: 70,
+        image: 'https://z-cdn-media.chatglm.cn/files/59d4d2b7-0478-40dc-bf8c-45498f0e7d1f.png?auth_key=1873079545-8d884bc62d2a4b60b5d246095ea6bafb-0-fdf46b960866a9d06259be7bc862ffcb',
+        spiceLevel: 3,
+        badge: 'Value'
+      },
+      {
+        id: 6,
+        name: 'Special Chaas',
+        description: 'Refreshing buttermilk with roasted cumin and coriander',
+        price: 30,
+        image: 'https://z-cdn-media.chatglm.cn/files/2b9c3848-86ca-4306-b3cd-8afacf133d59.png?auth_key=1873079545-1b8bf09abc7641d5905977df01ca4764-0-020fb015a711ab7ea512fa54ef6a8069',
+        spiceLevel: 0,
+        badge: null
+      },
+      {
+        id: 7,
+        name: 'Chutney',
+        description: 'Fresh homemade garlic and chili chutney',
+        price: 40,
+        image: 'https://z-cdn-media.chatglm.cn/files/0f3033a1-23bc-4bdf-87b4-2b55ea9c861a.png?auth_key=1873079545-5db6ed767255465a84d6d0fa54b5d7e8-0-00eb82b1ff88015bc124f902da1cbd4f',
+        spiceLevel: 4,
+        badge: null
+      },
+      {
+        id: 8,
+        name: 'Salad',
+        description: 'Fresh onion, tomato and cucumber salad with lemon dressing',
+        price: 40,
+        image: 'https://z-cdn-media.chatglm.cn/files/59d4d2b7-0478-40dc-bf8c-45498f0e7d1f.png?auth_key=1873079545-8d884bc62d2a4b60b5d246095ea6bafb-0-fdf46b960866a9d06259be7bc862ffcb',
+        spiceLevel: 1,
+        badge: null
+      },
+      {
+        id: 9,
+        name: 'Chaas',
+        description: 'Traditional Gujarati buttermilk - perfect with spicy food',
+        price: 20,
+        image: 'https://z-cdn-media.chatglm.cn/files/2b9c3848-86ca-4306-b3cd-8afacf133d59.png?auth_key=1873079545-1b8bf09abc7641d5905977df01ca4764-0-020fb015a711ab7ea512fa54ef6a8069',
+        spiceLevel: 0,
+        badge: null
+      }
     ];
-
-    const menuGrid = document.getElementById('menu-grid');
-    const filterButtons = document.querySelectorAll('.menu-tab');
-
-    function renderMenu(filter = 'all') {
-      const filteredData = filter === 'all' ? menuData : menuData.filter(item => item.type === filter || item.category === filter);
+    
+    const spiceLevels = [
+      { id: 'mild', name: 'Mild', chilies: 1, color: '#4CAF50' },
+      { id: 'medium', name: 'Medium', chilies: 2, color: '#FFC107' },
+      { id: 'spicy', name: 'Spicy', chilies: 3, color: '#FF5722' },
+      { id: 'fire', name: 'Kathiawadi Fire', chilies: 4, color: '#E53935' }
+    ];
+    
+    const toppings = [
+      { id: 'extra-masala', name: 'Extra Masala', price: 10 },
+      { id: 'onion', name: 'Onion Topping', price: 5 },
+      { id: 'lemon', name: 'Extra Lemon', price: 5 },
+      { id: 'butter', name: 'Butter', price: 15 }
+    ];
+    
+    const reviews = [
+      {
+        id: 1,
+        name: 'Rajesh Patel',
+        rating: 5,
+        text: 'Best Bhungla in Ahmedabad! Reminds me of my hometown Bhavnagar. The spices are perfect.',
+        date: '2 days ago'
+      },
+      {
+        id: 2,
+        name: 'Priya Shah',
+        rating: 5,
+        text: 'Finally found authentic Kathiawadi taste. The spicy version is amazing!',
+        date: '1 week ago'
+      },
+      {
+        id: 3,
+        name: 'Amit Mehta',
+        rating: 4,
+        text: 'Great food, great prices. The chaas is must-have with spicy bhungla.',
+        date: '2 weeks ago'
+      }
+    ];
+    
+    // ============================================
+    // STATE
+    // ============================================
+    
+    let cart = [];
+    let customBhungla = {
+      spiceLevel: 'medium',
+      toppings: [],
+      basePrice: 40
+    };
+    
+    // ============================================
+    // INITIALIZATION
+    // ============================================
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      renderMenu();
+      renderSpiceMeter();
+      renderCustomizerOptions();
+      renderReviews();
+      initScrollReveal();
+    });
+    
+    // ============================================
+    // RENDER FUNCTIONS
+    // ============================================
+    
+    function renderMenu() {
+      const menuGrid = document.getElementById('menuGrid');
+      if (!menuGrid) return;
       
-      menuGrid.innerHTML = filteredData.map((item, index) => `
-        <div class="menu-item relative overflow-hidden group cursor-pointer" style="animation: fadeInUp 0.8s ease forwards; animation-delay: ${index * 0.1}s; opacity: 0;">
-          <div class="aspect-[4/5] overflow-hidden">
-            <img src="${item.img}" alt="${item.name}" class="menu-item-img w-full h-full object-cover">
+      menuGrid.innerHTML = menuItems.map((item, index) => `
+        <article class="menu-card reveal" style="transition-delay: ${index * 0.1}s;">
+          <div class="relative h-48 overflow-hidden">
+            <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover">
+            ${item.badge ? `<span class="absolute top-3 left-3 badge">${item.badge}</span>` : ''}
+            <div class="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-cart-card to-transparent"></div>
           </div>
-          <div class="menu-item-content absolute inset-0 flex flex-col justify-end p-6">
-            <span class="text-[var(--accent)] text-xs uppercase tracking-widest mb-2">${item.type === 'veg' ? 'Vegetarian' : 'Non-Vegetarian'}</span>
-            <h3 class="font-serif text-3xl text-white mb-2">${item.name}</h3>
-            <p class="text-white/60 text-sm mb-4 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500">${item.desc}</p>
-            <div class="flex justify-between items-center">
-              <span class="text-white font-semibold text-lg">₹${item.price}</span>
-              <button class="px-4 py-2 bg-white text-black text-xs uppercase tracking-widest hover:bg-[var(--accent)] hover:text-white transition-colors">Add</button>
+          <div class="p-5">
+            <div class="flex items-start justify-between mb-2">
+              <h3 class="font-display text-xl text-cart-cream">${item.name}</h3>
+              <span class="font-display text-lg text-cart-gold">Rs ${item.price}</span>
+            </div>
+            <p class="text-cart-muted text-sm mb-4 line-clamp-2">${item.description}</p>
+            <div class="flex items-center justify-between">
+              <div class="spice-meter">
+                ${renderSpiceChilies(item.spiceLevel)}
+              </div>
+              <button onclick="addToCart(${item.id})" class="btn-primary py-2 px-4 text-sm">
+                Add
+              </button>
             </div>
           </div>
+        </article>
+      `).join('');
+    }
+    
+    function renderSpiceChilies(level) {
+      let html = '';
+      for (let i = 1; i <= 4; i++) {
+        const active = i <= level ? 'active' : '';
+        html += `
+          <span class="chili ${active}">
+            <svg viewBox="0 0 24 24" width="16" height="24">
+              <path d="M12 2C9.5 2 7.5 3.5 7 6C6.5 8.5 7 11 8 14C9 17 11 20 12 22C13 20 15 17 16 14C17 11 17.5 8.5 17 6C16.5 3.5 14.5 2 12 2Z"/>
+            </svg>
+          </span>
+        `;
+      }
+      return html;
+    }
+    
+    function renderSpiceMeter() {
+      const container = document.getElementById('spiceMeter');
+      if (!container) return;
+      
+      container.innerHTML = spiceLevels.map(level => `
+        <div class="bg-cart-card border border-cart-border rounded-xl p-4 text-center min-w-[120px]">
+          <div class="flex justify-center gap-1 mb-2">
+            ${Array(level.chilies).fill().map(() => `
+              <svg width="20" height="28" viewBox="0 0 24 24" fill="${level.color}">
+                <path d="M12 2C9.5 2 7.5 3.5 7 6C6.5 8.5 7 11 8 14C9 17 11 20 12 22C13 20 15 17 16 14C17 11 17.5 8.5 17 6C16.5 3.5 14.5 2 12 2Z"/>
+              </svg>
+            `).join('')}
+          </div>
+          <p class="text-cart-cream text-sm font-medium">${level.name}</p>
         </div>
       `).join('');
     }
-
-    filterButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        filterButtons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        renderMenu(btn.dataset.filter);
-      });
-    });
-
-    renderMenu();
-
-    // Testimonial Slider
-    const testimonials = [
-      { text: "The Biryani transported me back to the streets of Hyderabad. Absolutely authentic.", author: "Rahul S., Food Critic" },
-      { text: "Finally, a cloud kitchen that cares about quality as much as a fine dining restaurant.", author: "Priya M., Regular Customer" },
-      { text: "Their Dal Makhani is a masterclass in patience and flavor. The best I've ever had.", author: "Amit K., Chef" }
-    ];
-
-    let currentTestimonial = 0;
-    const testimonialSlider = document.getElementById('testimonial-slider');
-
-    function renderTestimonial() {
-      const t = testimonials[currentTestimonial];
-      testimonialSlider.innerHTML = `
-        <div class="text-center px-8" style="animation: fadeInUp 0.8s ease forwards;">
-          <svg class="w-12 h-12 mx-auto mb-8 text-[var(--accent)] opacity-30" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
-          <p class="text-2xl md:text-3xl font-serif text-white italic mb-6 leading-relaxed max-w-3xl mx-auto">${t.text}</p>
-          <span class="text-[var(--text-muted)] text-sm uppercase tracking-widest">${t.author}</span>
-        </div>
-      `;
+    
+    function renderCustomizerOptions() {
+      const spiceContainer = document.getElementById('spiceOptions');
+      const toppingContainer = document.getElementById('toppingOptions');
+      
+      if (spiceContainer) {
+        spiceContainer.innerHTML = spiceLevels.map(level => `
+          <button onclick="selectSpiceLevel('${level.id}')" 
+                  class="customizer-option text-center ${customBhungla.spiceLevel === level.id ? 'selected' : ''}"
+                  data-spice="${level.id}">
+            <div class="flex justify-center gap-1 mb-1">
+              ${Array(level.chilies).fill().map(() => `
+                <svg width="14" height="20" viewBox="0 0 24 24" fill="${level.color}">
+                  <path d="M12 2C9.5 2 7.5 3.5 7 6C6.5 8.5 7 11 8 14C9 17 11 20 12 22C13 20 15 17 16 14C17 11 17.5 8.5 17 6C16.5 3.5 14.5 2 12 2Z"/>
+                </svg>
+              `).join('')}
+            </div>
+            <span class="text-cart-cream text-xs">${level.name}</span>
+          </button>
+        `).join('');
+      }
+      
+      if (toppingContainer) {
+        toppingContainer.innerHTML = toppings.map(topping => `
+          <button onclick="toggleTopping('${topping.id}')" 
+                  class="customizer-option text-center ${customBhungla.toppings.includes(topping.id) ? 'selected' : ''}"
+                  data-topping="${topping.id}">
+            <span class="text-cart-cream text-xs block">${topping.name}</span>
+            <span class="text-cart-gold text-xs">+Rs ${topping.price}</span>
+          </button>
+        `).join('');
+      }
+      
+      updateCustomTotal();
     }
-
-    renderTestimonial();
-    setInterval(() => {
-      currentTestimonial = (currentTestimonial + 1) % testimonials.length;
-      renderTestimonial();
-    }, 5000);
-
-    // Form Submission
-    document.querySelector('form').addEventListener('submit', (e) => {
-      e.preventDefault();
-      alert('Thank you for your request! We will contact you shortly.');
+    
+    function renderReviews() {
+      const container = document.getElementById('reviewsContainer');
+      if (!container) return;
+      
+      container.innerHTML = reviews.map((review, index) => `
+        <article class="review-card reveal" style="transition-delay: ${index * 0.1}s;">
+          <div class="flex items-center gap-1 mb-3">
+            ${Array(5).fill().map((_, i) => `
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="${i < review.rating ? '#FFB800' : '#5D3A2A'}">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+            `).join('')}
+          </div>
+          <p class="text-cart-cream/80 mb-4 text-sm leading-relaxed">${review.text}</p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-cart-red/30 rounded-full flex items-center justify-center">
+              <span class="text-cart-gold font-medium">${review.name.charAt(0)}</span>
+            </div>
+            <div>
+              <p class="text-cart-cream text-sm font-medium">${review.name}</p>
+              <p class="text-cart-muted text-xs">${review.date}</p>
+            </div>
+          </div>
+        </article>
+      `).join('');
+    }
+    
+    function renderCart() {
+      const cartItems = document.getElementById('cartItems');
+      const cartCount = document.getElementById('cartCount');
+      const cartSubtotal = document.getElementById('cartSubtotal');
+      const cartTotal = document.getElementById('cartTotal');
+      
+      if (!cartItems) return;
+      
+      if (cart.length === 0) {
+        cartItems.innerHTML = `
+          <div class="text-center py-12">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="text-cart-muted mx-auto mb-4">
+              <circle cx="9" cy="21" r="1"/>
+              <circle cx="20" cy="21" r="1"/>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+            </svg>
+            <p class="text-cart-muted">Your cart is empty</p>
+            <button onclick="toggleCart(); scrollToMenu();" class="btn-secondary mt-4 text-sm">Browse Menu</button>
+          </div>
+        `;
+      } else {
+        cartItems.innerHTML = cart.map(item => `
+          <div class="flex gap-4 mb-4 pb-4 border-b border-cart-border">
+            <img src="${item.image}" alt="${item.name}" class="w-20 h-20 object-cover rounded-lg">
+            <div class="flex-1">
+              <h4 class="text-cart-cream font-medium">${item.name}</h4>
+              <p class="text-cart-gold text-sm">Rs ${item.price}</p>
+              <div class="flex items-center gap-3 mt-2">
+                <button onclick="updateCartQuantity(${item.id}, -1)" class="counter-btn">-</button>
+                <span class="text-cart-cream">${item.quantity}</span>
+                <button onclick="updateCartQuantity(${item.id}, 1)" class="counter-btn">+</button>
+                <button onclick="removeFromCart(${item.id})" class="ml-auto text-cart-muted hover:text-cart-red transition-colors" aria-label="Remove item">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"/>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+      
+      const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+      
+      if (cartCount) cartCount.textContent = count;
+      if (cartSubtotal) cartSubtotal.textContent = `Rs ${total}`;
+      if (cartTotal) cartTotal.textContent = `Rs ${total}`;
+    }
+    
+    // ============================================
+    // CART FUNCTIONS
+    // ============================================
+    
+    function addToCart(itemId) {
+      const item = menuItems.find(i => i.id === itemId);
+      if (!item) return;
+      
+      const existingItem = cart.find(i => i.id === itemId);
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        cart.push({
+          id: item.id,
+          name: item.name,
+          price: item.price,
+          image: item.image,
+          quantity: 1
+        });
+      }
+      
+      renderCart();
+      animateCartButton();
+    }
+    
+    function removeFromCart(itemId) {
+      cart = cart.filter(i => i.id !== itemId);
+      renderCart();
+    }
+    
+    function updateCartQuantity(itemId, delta) {
+      const item = cart.find(i => i.id === itemId);
+      if (!item) return;
+      
+      item.quantity += delta;
+      if (item.quantity <= 0) {
+        removeFromCart(itemId);
+      } else {
+        renderCart();
+      }
+    }
+    
+    function toggleCart() {
+      const sidebar = document.getElementById('cartSidebar');
+      const overlay = document.getElementById('cartOverlay');
+      
+      if (sidebar && overlay) {
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('open');
+        
+        if (sidebar.classList.contains('open')) {
+          document.body.style.overflow = 'hidden';
+          renderCart();
+        } else {
+          document.body.style.overflow = '';
+        }
+      }
+    }
+    
+    function animateCartButton() {
+      const countEl = document.getElementById('cartCount');
+      if (countEl) {
+        countEl.style.transform = 'scale(1.3)';
+        setTimeout(() => {
+          countEl.style.transform = 'scale(1)';
+        }, 200);
+      }
+    }
+    
+    function checkout() {
+      if (cart.length === 0) return;
+      
+      const orderText = cart.map(item => 
+        `${item.name} x${item.quantity} - Rs ${item.price * item.quantity}`
+      ).join('%0A');
+      
+      const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      
+      const message = `Hi Bunty Kaka!%0A%0AI want to order:%0A${orderText}%0A%0ATotal: Rs ${total}%0A%0APlease confirm my order.`;
+      
+      window.open(`https://wa.me/919824847345?text=${message}`, '_blank');
+    }
+    
+    // ============================================
+    // CUSTOMIZER FUNCTIONS
+    // ============================================
+    
+    function selectSpiceLevel(level) {
+      customBhungla.spiceLevel = level;
+      renderCustomizerOptions();
+    }
+    
+    function toggleTopping(toppingId) {
+      const index = customBhungla.toppings.indexOf(toppingId);
+      if (index > -1) {
+        customBhungla.toppings.splice(index, 1);
+      } else {
+        customBhungla.toppings.push(toppingId);
+      }
+      renderCustomizerOptions();
+    }
+    
+    function updateCustomTotal() {
+      const extrasContainer = document.getElementById('customExtras');
+      const totalEl = document.getElementById('customTotal');
+      
+      let extrasHtml = '';
+      let total = customBhungla.basePrice;
+      
+      customBhungla.toppings.forEach(toppingId => {
+        const topping = toppings.find(t => t.id === toppingId);
+        if (topping) {
+          total += topping.price;
+          extrasHtml += `
+            <div class="flex justify-between items-center">
+              <span class="text-cart-muted text-sm">+ ${topping.name}</span>
+              <span class="text-cart-cream text-sm">Rs ${topping.price}</span>
+            </div>
+          `;
+        }
+      });
+      
+      if (extrasContainer) extrasContainer.innerHTML = extrasHtml;
+      if (totalEl) totalEl.textContent = `Rs ${total}`;
+    }
+    
+    function addCustomToCart() {
+      let name = 'Custom Bhungla';
+      let price = customBhungla.basePrice;
+      
+      const spiceLevel = spiceLevels.find(l => l.id === customBhungla.spiceLevel);
+      if (spiceLevel) {
+        name += ` (${spiceLevel.name})`;
+      }
+      
+      customBhungla.toppings.forEach(toppingId => {
+        const topping = toppings.find(t => t.id === toppingId);
+        if (topping) {
+          price += topping.price;
+        }
+      });
+      
+      cart.push({
+        id: Date.now(),
+        name: name,
+        price: price,
+        image: 'https://z-cdn-media.chatglm.cn/files/0f3033a1-23bc-4bdf-87b4-2b55ea9c861a.png?auth_key=1873079545-5db6ed767255465a84d6d0fa54b5d7e8-0-00eb82b1ff88015bc124f902da1cbd4f',
+        quantity: 1
+      });
+      
+      renderCart();
+      toggleCart();
+    }
+    
+    // ============================================
+    // NAVIGATION FUNCTIONS
+    // ============================================
+    
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      if (menu) {
+        menu.classList.toggle('hidden');
+        menu.classList.toggle('flex');
+      }
+    }
+    
+    function scrollToMenu() {
+      const menu = document.getElementById('menu');
+      if (menu) {
+        menu.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+    
+    // ============================================
+    // SCROLL REVEAL
+    // ============================================
+    
+    function initScrollReveal() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+          }
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      });
+      
+      document.querySelectorAll('.reveal').forEach(el => {
+        observer.observe(el);
+      });
+    }
+    
+    // ============================================
+    // KEYBOARD NAVIGATION
+    // ============================================
+    
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        const sidebar = document.getElementById('cartSidebar');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        if (sidebar && sidebar.classList.contains('open')) {
+          toggleCart();
+        }
+        if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+          toggleMobileMenu();
+        }
+      }
     });
   </script>
 </body>
