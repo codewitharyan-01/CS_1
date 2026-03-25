@@ -1,0 +1,2580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP (3161610) — Study Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=IBM+Plex+Mono:wght@400;500&family=Literata:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f4ef;
+    --surface: #ffffff;
+    --ink: #1a1714;
+    --muted: #6b6560;
+    --accent: #c0392b;
+    --accent2: #2980b9;
+    --code-bg: #1e1e2e;
+    --code-fg: #cdd6f4;
+    --border: #ddd8d0;
+    --unit-colors: #c0392b, #2980b9, #27ae60, #8e44ad;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Literata', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  /* ── SIDEBAR ── */
+  #sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: 270px;
+    height: 100vh;
+    background: var(--ink);
+    color: #e8e2d9;
+    overflow-y: auto;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar-header {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid #3a3530;
+  }
+
+  .sidebar-header .subject-code {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: #888;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .sidebar-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #f0ebe3;
+    line-height: 1.3;
+  }
+
+  .sidebar-header p {
+    font-size: 12px;
+    color: #777;
+    margin-top: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .sidebar-search {
+    padding: 16px 20px;
+    border-bottom: 1px solid #2a2520;
+  }
+
+  .sidebar-search input {
+    width: 100%;
+    background: #2a2520;
+    border: 1px solid #3a3530;
+    border-radius: 6px;
+    padding: 8px 12px;
+    color: #e0dbd2;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .sidebar-search input:focus { border-color: #c0392b; }
+  .sidebar-search input::placeholder { color: #555; }
+
+  .sidebar-nav { padding: 12px 0; flex: 1; }
+
+  .unit-nav-group { margin-bottom: 4px; }
+
+  .unit-nav-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #888;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .unit-badge {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .unit-1 .unit-badge { background: #c0392b; }
+  .unit-2 .unit-badge { background: #2980b9; }
+  .unit-3 .unit-badge { background: #27ae60; }
+  .unit-4 .unit-badge { background: #8e44ad; }
+
+  .unit-questions { padding-bottom: 8px; }
+
+  .sidebar-link {
+    display: block;
+    padding: 6px 20px 6px 38px;
+    font-size: 12.5px;
+    color: #9a9490;
+    text-decoration: none;
+    font-family: 'Literata', serif;
+    line-height: 1.4;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+  }
+
+  .sidebar-link:hover {
+    color: #f0ebe3;
+    background: #2a2520;
+  }
+
+  .sidebar-link.active {
+    color: #f0ebe3;
+    border-left-color: #c0392b;
+    background: #2a2520;
+  }
+
+  .q-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: #555;
+    margin-right: 4px;
+  }
+
+  /* ── MAIN ── */
+  #main {
+    margin-left: 270px;
+    min-height: 100vh;
+  }
+
+  .page-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 40px 60px 32px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .breadcrumb {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .page-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .page-header .meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  /* ── CONTENT ── */
+  #content { padding: 50px 60px 100px; max-width: 900px; }
+
+  /* Unit Section */
+  .unit-section {
+    margin-bottom: 70px;
+  }
+
+  .unit-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .unit-number {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 4px;
+    color: white;
+  }
+
+  .u1 { background: #c0392b; }
+  .u2 { background: #2980b9; }
+  .u3 { background: #27ae60; }
+  .u4 { background: #8e44ad; }
+
+  .unit-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+  }
+
+  /* Q&A Card */
+  .qa-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 24px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+
+  .qa-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+
+  .qa-question {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 20px 24px;
+    cursor: pointer;
+    user-select: none;
+    background: var(--surface);
+    transition: background 0.15s;
+  }
+
+  .qa-question:hover { background: #faf8f4; }
+
+  .q-index {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    font-weight: 500;
+  }
+
+  .q-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+    flex: 1;
+    font-family: 'Literata', serif;
+  }
+
+  .q-chevron {
+    font-size: 18px;
+    color: var(--muted);
+    transition: transform 0.25s;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .qa-card.open .q-chevron { transform: rotate(180deg); }
+
+  .qa-answer {
+    display: none;
+    padding: 0 24px 24px 62px;
+    border-top: 1px solid var(--border);
+    animation: fadeSlide 0.2s ease;
+  }
+
+  .qa-card.open .qa-answer { display: block; }
+
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .qa-answer p { margin: 14px 0; color: #2d2a27; }
+
+  .qa-answer h4 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 18px 0 8px;
+  }
+
+  .qa-answer ul, .qa-answer ol {
+    padding-left: 20px;
+    margin: 10px 0;
+  }
+
+  .qa-answer li { margin: 5px 0; color: #2d2a27; }
+
+  .qa-answer strong { color: var(--ink); font-weight: 600; }
+
+  /* Code block */
+  pre {
+    background: var(--code-bg);
+    color: var(--code-fg);
+    padding: 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    margin: 14px 0;
+    position: relative;
+  }
+
+  .code-lang {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    background: #313244;
+    color: #888;
+    padding: 2px 8px;
+    border-radius: 4px;
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* syntax colors */
+  .kw { color: #cba6f7; }
+  .fn { color: #89b4fa; }
+  .str { color: #a6e3a1; }
+  .cm { color: #6c7086; font-style: italic; }
+  .num { color: #fab387; }
+  .tag { color: #f38ba8; }
+  .attr { color: #89dceb; }
+  .val { color: #a6e3a1; }
+
+  /* Table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 14.5px;
+  }
+
+  th {
+    background: #f0ebe3;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #ede9e2;
+    vertical-align: top;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  /* Diagram */
+  .diagram {
+    background: #f0ebe3;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 14px 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    text-align: center;
+  }
+
+  .diagram .box {
+    display: inline-block;
+    border: 2px solid var(--ink);
+    padding: 6px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    margin: 4px;
+  }
+
+  .diagram .arrow { color: var(--accent); font-size: 18px; margin: 0 8px; }
+
+  /* Note box */
+  .note {
+    background: #fff8e1;
+    border-left: 3px solid #f39c12;
+    padding: 12px 16px;
+    border-radius: 0 6px 6px 0;
+    margin: 14px 0;
+    font-size: 14.5px;
+  }
+
+  .tip {
+    background: #e8f5e9;
+    border-left: 3px solid #27ae60;
+    padding: 12px 16px;
+    border-radius: 0 6px 6px 0;
+    margin: 14px 0;
+    font-size: 14.5px;
+  }
+
+  /* Progress */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 270px;
+    height: 3px;
+    background: var(--accent);
+    z-index: 200;
+    width: 0%;
+    transition: width 0.1s;
+  }
+
+  /* Mobile toggle */
+  #menu-toggle {
+    display: none;
+    position: fixed;
+    top: 16px; left: 16px;
+    z-index: 200;
+    background: var(--ink);
+    color: white;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+  }
+
+  @media (max-width: 768px) {
+    #sidebar { transform: translateX(-100%); }
+    #sidebar.open { transform: translateX(0); }
+    #main { margin-left: 0; }
+    .progress-bar { left: 0; }
+    #content { padding: 24px 20px 80px; }
+    .page-header { padding: 60px 20px 20px; }
+    #menu-toggle { display: block; }
+    .qa-answer { padding-left: 24px; }
+  }
+
+  /* Expand all */
+  .unit-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .btn-sm {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    padding: 5px 12px;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .btn-sm:hover { background: var(--ink); color: white; border-color: var(--ink); }
+
+  /* hidden by search */
+  .qa-card.hidden { display: none; }
+
+  .highlight {
+    background: #fff3cd;
+    border-radius: 2px;
+    padding: 0 2px;
+  }
+
+  /* SVG diagrams */
+  .svg-wrap {
+    text-align: center;
+    margin: 14px 0;
+    background: #fafaf8;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    overflow-x: auto;
+  }
+
+  svg text { font-family: 'IBM Plex Mono', monospace; }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+<button id="menu-toggle" onclick="toggleSidebar()">☰</button>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <div class="subject-code">3161610 · CE · 6th Sem</div>
+    <h2>Web Programming</h2>
+    <p>Units 1 – 4 · Study Guide</p>
+  </div>
+  <div class="sidebar-search">
+    <input type="text" id="searchInput" placeholder="Search questions..." oninput="searchQuestions(this.value)">
+  </div>
+  <div class="sidebar-nav" id="sidebarNav">
+    <!-- generated by JS -->
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div id="main">
+  <div class="page-header">
+    <div class="breadcrumb">Shankersinh Vaghela Bapu Institute of Technology · CE Department</div>
+    <h1>Web Programming — Question Bank</h1>
+    <div class="meta">Units 1–4 &nbsp;·&nbsp; Introduction, Web Design, HTML/CSS, JavaScript</div>
+  </div>
+
+  <div id="content">
+
+    <!-- ═══════════════ UNIT 1 ═══════════════ -->
+    <section class="unit-section" id="unit1">
+      <div class="unit-header">
+        <span class="unit-number u1">Unit 1</span>
+        <h2>Introduction to Web</h2>
+      </div>
+      <div class="unit-controls">
+        <button class="btn-sm" onclick="expandAll('unit1')">Expand All</button>
+        <button class="btn-sm" onclick="collapseAll('unit1')">Collapse All</button>
+      </div>
+
+      <div class="qa-card" id="u1q1">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index u1" style="background:#c0392b">Q1</span>
+          <span class="q-text">What is HTTP? Explain HTTP Request and Response.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <p><strong>HTTP (HyperText Transfer Protocol)</strong> is the foundation of data communication on the World Wide Web. It is an application-layer protocol that defines how messages are formatted and transmitted between a web browser (client) and a web server.</p>
+
+          <h4>Key Characteristics</h4>
+          <ul>
+            <li><strong>Stateless:</strong> Each request is independent; the server does not remember previous requests.</li>
+            <li><strong>Client-Server Model:</strong> The client sends requests; the server responds.</li>
+            <li><strong>Port:</strong> HTTP uses port <strong>80</strong> (HTTPS uses port <strong>443</strong>).</li>
+            <li><strong>Methods:</strong> GET, POST, PUT, DELETE, HEAD, OPTIONS, etc.</li>
+          </ul>
+
+          <div class="svg-wrap">
+            <svg width="600" height="120" viewBox="0 0 600 120">
+              <rect x="20" y="30" width="140" height="60" rx="8" fill="#fdecea" stroke="#c0392b" stroke-width="2"/>
+              <text x="90" y="56" text-anchor="middle" font-size="13" font-weight="bold" fill="#c0392b">CLIENT</text>
+              <text x="90" y="74" text-anchor="middle" font-size="11" fill="#555">(Browser)</text>
+              <rect x="440" y="30" width="140" height="60" rx="8" fill="#e8f4fd" stroke="#2980b9" stroke-width="2"/>
+              <text x="510" y="56" text-anchor="middle" font-size="13" font-weight="bold" fill="#2980b9">SERVER</text>
+              <text x="510" y="74" text-anchor="middle" font-size="11" fill="#555">(Web Server)</text>
+              <!-- request arrow -->
+              <line x1="165" y1="50" x2="435" y2="50" stroke="#c0392b" stroke-width="2" marker-end="url(#arr1)"/>
+              <text x="300" y="44" text-anchor="middle" font-size="12" fill="#c0392b">HTTP Request →</text>
+              <!-- response arrow -->
+              <line x1="435" y1="75" x2="165" y2="75" stroke="#27ae60" stroke-width="2" marker-end="url(#arr2)"/>
+              <text x="300" y="96" text-anchor="middle" font-size="12" fill="#27ae60">← HTTP Response</text>
+              <defs>
+                <marker id="arr1" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#c0392b"/>
+                </marker>
+                <marker id="arr2" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#27ae60"/>
+                </marker>
+              </defs>
+            </svg>
+          </div>
+
+          <h4>HTTP Request Structure</h4>
+          <pre><span class="kw">GET</span> /index.html <span class="fn">HTTP/1.1</span>
+<span class="attr">Host:</span> <span class="val">www.example.com</span>
+<span class="attr">Accept:</span> <span class="val">text/html</span>
+<span class="attr">Connection:</span> <span class="val">keep-alive</span>
+<span class="attr">User-Agent:</span> <span class="val">Mozilla/5.0</span>
+<span class="code-lang">HTTP</span></pre>
+          <p>An HTTP request has three parts: <strong>Request Line</strong> (method + URL + version), <strong>Headers</strong> (metadata like Host, Accept), and an optional <strong>Body</strong> (used in POST/PUT).</p>
+
+          <h4>HTTP Response Structure</h4>
+          <pre><span class="fn">HTTP/1.1</span> <span class="num">200</span> OK
+<span class="attr">Content-Type:</span> <span class="val">text/html; charset=UTF-8</span>
+<span class="attr">Content-Length:</span> <span class="val">1234</span>
+<span class="attr">Date:</span> <span class="val">Mon, 01 Jan 2024 12:00:00 GMT</span>
+
+<span class="tag">&lt;html&gt;</span>
+  <span class="tag">&lt;body&gt;</span>Hello World<span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span>
+<span class="code-lang">HTTP</span></pre>
+
+          <h4>Common HTTP Status Codes</h4>
+          <table>
+            <tr><th>Code</th><th>Meaning</th></tr>
+            <tr><td>200</td><td>OK — Request succeeded</td></tr>
+            <tr><td>301</td><td>Moved Permanently</td></tr>
+            <tr><td>404</td><td>Not Found</td></tr>
+            <tr><td>500</td><td>Internal Server Error</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u1q2">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#c0392b">Q2</span>
+          <span class="q-text">Briefly discuss: Client Server Architecture.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <p><strong>Client-Server Architecture</strong> is a computing model in which tasks are distributed between service providers (servers) and service requesters (clients).</p>
+
+          <div class="svg-wrap">
+            <svg width="580" height="200" viewBox="0 0 580 200">
+              <!-- Clients -->
+              <rect x="20" y="20" width="110" height="50" rx="6" fill="#fdecea" stroke="#c0392b" stroke-width="1.5"/>
+              <text x="75" y="42" text-anchor="middle" font-size="12" font-weight="bold" fill="#c0392b">Browser</text>
+              <text x="75" y="58" text-anchor="middle" font-size="10" fill="#666">Client 1</text>
+              <rect x="20" y="90" width="110" height="50" rx="6" fill="#fdecea" stroke="#c0392b" stroke-width="1.5"/>
+              <text x="75" y="112" text-anchor="middle" font-size="12" font-weight="bold" fill="#c0392b">Mobile App</text>
+              <text x="75" y="128" text-anchor="middle" font-size="10" fill="#666">Client 2</text>
+              <rect x="20" y="160" width="110" height="50" rx="6" fill="#fdecea" stroke="#c0392b" stroke-width="1.5"/>
+              <text x="75" y="182" text-anchor="middle" font-size="12" font-weight="bold" fill="#c0392b">Desktop App</text>
+              <text x="75" y="198" text-anchor="middle" font-size="10" fill="#666">Client 3</text>
+              <!-- lines to network -->
+              <line x1="135" y1="45" x2="245" y2="100" stroke="#aaa" stroke-width="1.5" stroke-dasharray="4"/>
+              <line x1="135" y1="115" x2="245" y2="100" stroke="#aaa" stroke-width="1.5" stroke-dasharray="4"/>
+              <line x1="135" y1="185" x2="245" y2="100" stroke="#aaa" stroke-width="1.5" stroke-dasharray="4"/>
+              <!-- network cloud -->
+              <ellipse cx="280" cy="100" rx="45" ry="28" fill="#e8f4fd" stroke="#2980b9" stroke-width="1.5"/>
+              <text x="280" y="96" text-anchor="middle" font-size="11" font-weight="bold" fill="#2980b9">NET</text>
+              <text x="280" y="110" text-anchor="middle" font-size="10" fill="#2980b9">WORK</text>
+              <!-- lines to server -->
+              <line x1="328" y1="100" x2="400" y2="85" stroke="#aaa" stroke-width="1.5" stroke-dasharray="4"/>
+              <line x1="328" y1="100" x2="400" y2="125" stroke="#aaa" stroke-width="1.5" stroke-dasharray="4"/>
+              <!-- Servers -->
+              <rect x="400" y="55" width="110" height="50" rx="6" fill="#e8f5e9" stroke="#27ae60" stroke-width="1.5"/>
+              <text x="455" y="77" text-anchor="middle" font-size="12" font-weight="bold" fill="#27ae60">Web Server</text>
+              <text x="455" y="93" text-anchor="middle" font-size="10" fill="#666">Apache/Nginx</text>
+              <rect x="400" y="125" width="110" height="50" rx="6" fill="#f3e5f5" stroke="#8e44ad" stroke-width="1.5"/>
+              <text x="455" y="147" text-anchor="middle" font-size="12" font-weight="bold" fill="#8e44ad">DB Server</text>
+              <text x="455" y="163" text-anchor="middle" font-size="10" fill="#666">MySQL</text>
+            </svg>
+          </div>
+
+          <h4>Components</h4>
+          <ul>
+            <li><strong>Client:</strong> Requests services/resources (browser, mobile app). Handles user interface.</li>
+            <li><strong>Server:</strong> Provides services/resources. Processes requests and sends responses.</li>
+            <li><strong>Network:</strong> The communication medium (Internet/LAN) between them.</li>
+          </ul>
+
+          <h4>Types</h4>
+          <table>
+            <tr><th>Type</th><th>Description</th></tr>
+            <tr><td>2-Tier</td><td>Client directly communicates with server (e.g., desktop app + DB)</td></tr>
+            <tr><td>3-Tier</td><td>Client → Application Server → Database Server (most web apps)</td></tr>
+            <tr><td>N-Tier</td><td>Multiple layers (presentation, business, data, etc.)</td></tr>
+          </table>
+
+          <h4>Advantages</h4>
+          <ul>
+            <li>Centralized data management and security</li>
+            <li>Easy scalability — add more clients without changing server</li>
+            <li>Resources are shared efficiently</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u1q3">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#c0392b">Q3</span>
+          <span class="q-text">Define: URL, HTTP, Web Server</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <h4>1. URL — Uniform Resource Locator</h4>
+          <p>A URL is the complete address used to identify a specific resource on the internet. It tells the browser where to go and how to get there.</p>
+          <div class="diagram">
+            <code style="font-size:15px; color:#c0392b">https://www.example.com:8080/path/page.html?id=5#section</code><br><br>
+            <span style="font-size:12px; color:#555">
+              <strong>Protocol</strong>://&nbsp;<strong>Domain</strong>:<strong>Port</strong>/<strong>Path</strong>?<strong>Query</strong>#<strong>Fragment</strong>
+            </span>
+          </div>
+          <ul>
+            <li><strong>Protocol:</strong> https — how to communicate</li>
+            <li><strong>Domain:</strong> www.example.com — which server</li>
+            <li><strong>Port:</strong> 8080 — which service (optional)</li>
+            <li><strong>Path:</strong> /path/page.html — which resource</li>
+            <li><strong>Query:</strong> ?id=5 — additional parameters</li>
+            <li><strong>Fragment:</strong> #section — specific section on page</li>
+          </ul>
+
+          <h4>2. HTTP — HyperText Transfer Protocol</h4>
+          <p>HTTP is the application-layer protocol used for transmitting hypermedia documents (HTML). It defines the rules for communication between clients (browsers) and web servers using request-response messaging.</p>
+
+          <h4>3. Web Server</h4>
+          <p>A web server is software (and/or hardware) that stores, processes, and delivers web pages to clients. It listens for HTTP requests and responds with the appropriate content.</p>
+          <ul>
+            <li>Examples: <strong>Apache HTTP Server</strong>, <strong>Nginx</strong>, <strong>IIS</strong> (Microsoft)</li>
+            <li>Serves static files (HTML, CSS, images) directly</li>
+            <li>Can pass dynamic requests to application servers (PHP, Node.js)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u1q4">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#c0392b">Q4</span>
+          <span class="q-text">Give the full form: WWW, HTTP, URL</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <table>
+            <tr><th>Acronym</th><th>Full Form</th><th>Description</th></tr>
+            <tr><td><strong>WWW</strong></td><td>World Wide Web</td><td>A system of interlinked hypertext documents accessed via the Internet, using HTTP. Created by Tim Berners-Lee in 1989.</td></tr>
+            <tr><td><strong>HTTP</strong></td><td>HyperText Transfer Protocol</td><td>The protocol used for transmitting web pages over the Internet between clients and servers.</td></tr>
+            <tr><td><strong>URL</strong></td><td>Uniform Resource Locator</td><td>The address used to locate a specific resource on the Internet (e.g., a webpage, image, or file).</td></tr>
+          </table>
+          <div class="note">💡 <strong>Tip:</strong> WWW is NOT the same as the Internet. The Internet is the global network infrastructure, while the WWW is a service that runs on top of it.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ UNIT 2 ═══════════════ -->
+    <section class="unit-section" id="unit2">
+      <div class="unit-header">
+        <span class="unit-number u2">Unit 2</span>
+        <h2>Web Design</h2>
+      </div>
+      <div class="unit-controls">
+        <button class="btn-sm" onclick="expandAll('unit2')">Expand All</button>
+        <button class="btn-sm" onclick="collapseAll('unit2')">Collapse All</button>
+      </div>
+
+      <div class="qa-card" id="u2q1">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#2980b9">Q1</span>
+          <span class="q-text">Explain points to consider for planning a website and design issues for an effective website.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <h4>Planning a Website — Key Considerations</h4>
+          <ol>
+            <li><strong>Define Purpose & Goals:</strong> What is the website for? (E-commerce, portfolio, blog, informational). Clear goals drive design decisions.</li>
+            <li><strong>Identify Target Audience:</strong> Age, technical literacy, devices used. Design for users, not designers.</li>
+            <li><strong>Content Planning:</strong> What pages are needed? What content goes on each? A content inventory before design prevents gaps.</li>
+            <li><strong>Site Structure / Information Architecture:</strong> How pages relate to each other. Use a hierarchical tree (sitemap) to organize.</li>
+            <li><strong>Technology Stack:</strong> Static HTML? CMS like WordPress? Dynamic PHP/MySQL? Choose based on requirements.</li>
+            <li><strong>Budget & Timeline:</strong> Resources determine scope. Prioritize features accordingly.</li>
+            <li><strong>Domain & Hosting:</strong> Domain name (brand identity) and reliable hosting infrastructure.</li>
+            <li><strong>SEO Strategy:</strong> Plan keywords, meta tags, and URL structure from day one.</li>
+          </ol>
+
+          <h4>Design Issues to Address</h4>
+          <ul>
+            <li><strong>Consistency:</strong> Uniform fonts, colors, button styles across all pages.</li>
+            <li><strong>Responsiveness:</strong> Works on desktop, tablet, and mobile screens.</li>
+            <li><strong>Load Speed:</strong> Compress images, minimize CSS/JS, use CDN.</li>
+            <li><strong>Accessibility (a11y):</strong> Alt text for images, keyboard navigation, contrast ratios.</li>
+            <li><strong>Cross-browser Compatibility:</strong> Test on Chrome, Firefox, Safari, Edge.</li>
+            <li><strong>Security:</strong> HTTPS, form validation, protect against XSS and SQL injection.</li>
+            <li><strong>Color & Typography:</strong> Readable fonts (min 16px body), accessible color contrast (4.5:1 ratio).</li>
+            <li><strong>White Space:</strong> Breathing room between elements prevents cognitive overload.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u2q2">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#2980b9">Q2</span>
+          <span class="q-text">What is navigation? List the characteristics of effective navigation.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <p><strong>Navigation</strong> refers to the system of links, menus, and interface elements that allow users to move between pages and sections of a website. Good navigation is the backbone of usability.</p>
+
+          <h4>Types of Navigation</h4>
+          <ul>
+            <li><strong>Primary Navigation:</strong> Main menu (usually in header) — links to major sections.</li>
+            <li><strong>Secondary Navigation:</strong> Sub-menus, sidebars — links within sections.</li>
+            <li><strong>Footer Navigation:</strong> Links to policies, contact, sitemap.</li>
+            <li><strong>Breadcrumb Navigation:</strong> Shows user's current path (Home > Products > Shoes).</li>
+            <li><strong>In-page Navigation:</strong> Jump links to sections on the same page (anchor links).</li>
+          </ul>
+
+          <h4>Characteristics of Effective Navigation</h4>
+          <ol>
+            <li><strong>Clarity:</strong> Links should use clear, descriptive labels. "Contact Us" beats "Click Here".</li>
+            <li><strong>Consistency:</strong> Navigation appears in the same location on every page.</li>
+            <li><strong>Simplicity:</strong> Limit to 5–7 primary items (Miller's Law). Avoid overwhelming users.</li>
+            <li><strong>Visibility:</strong> Active/current page should be highlighted so users know where they are.</li>
+            <li><strong>Accessibility:</strong> Keyboard-navigable, screen-reader friendly, sufficient tap targets on mobile.</li>
+            <li><strong>Feedback:</strong> Hover effects, active states give visual feedback on interaction.</li>
+            <li><strong>Responsiveness:</strong> Hamburger menus or slide-outs on mobile.</li>
+            <li><strong>Speed:</strong> Navigation should load fast — it's the first thing users interact with.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u2q3">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#2980b9">Q3</span>
+          <span class="q-text">Discuss website design principles in detail.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <h4>Core Website Design Principles</h4>
+          <ol>
+            <li>
+              <strong>Visual Hierarchy:</strong> Guide the user's eye using size, color, and position. Most important content first. Use headings (H1 &gt; H2 &gt; H3), larger text for emphasis, and contrasting colors for CTAs.
+            </li>
+            <li>
+              <strong>The F-Pattern / Z-Pattern:</strong> Eye-tracking studies show users scan in F-shape on text-heavy pages and Z-shape on minimal pages. Place key content along these natural scan paths.
+            </li>
+            <li>
+              <strong>Rule of Thirds:</strong> Divide the layout into a 3×3 grid and place important elements at intersection points for visual balance.
+            </li>
+            <li>
+              <strong>White Space (Negative Space):</strong> Empty space is not wasted space — it improves readability, focuses attention, and conveys elegance.
+            </li>
+            <li>
+              <strong>Color Theory:</strong> Use a consistent palette (primary, secondary, accent). Consider color psychology: blue = trust, red = urgency, green = success.
+            </li>
+            <li>
+              <strong>Typography:</strong> Pair a display font (headings) with a legible body font. Maintain 16px+ body size, 1.5–1.75 line-height, ~65 chars per line.
+            </li>
+            <li>
+              <strong>Consistency:</strong> Same colors, fonts, button styles, icon sets throughout. Creates trust and professionalism.
+            </li>
+            <li>
+              <strong>Mobile-First Design:</strong> Design for smallest screens first, then scale up. Ensures usability on all devices.
+            </li>
+            <li>
+              <strong>Fitts's Law:</strong> Interactive elements (buttons, links) should be large enough and close enough to be clicked easily, especially on mobile.
+            </li>
+            <li>
+              <strong>Hick's Law:</strong> The more choices, the longer decisions take. Minimize options to speed up user decisions.
+            </li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u2q4">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#2980b9">Q4</span>
+          <span class="q-text">Differentiate GET and POST methods.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <table>
+            <tr><th>Feature</th><th>GET</th><th>POST</th></tr>
+            <tr><td>Purpose</td><td>Retrieve/fetch data</td><td>Submit/send data</td></tr>
+            <tr><td>Data Location</td><td>In URL (query string)<br><code>?name=John&age=21</code></td><td>In request body (hidden)</td></tr>
+            <tr><td>Visibility</td><td>Data visible in browser URL bar</td><td>Data NOT visible in URL</td></tr>
+            <tr><td>Security</td><td>Less secure (data in URL)</td><td>More secure (not cached)</td></tr>
+            <tr><td>Data Length</td><td>Limited (~2048 chars)</td><td>No limit (large files OK)</td></tr>
+            <tr><td>Caching</td><td>Can be cached by browser</td><td>Not cached</td></tr>
+            <tr><td>Bookmarkable</td><td>Yes</td><td>No</td></tr>
+            <tr><td>Idempotent</td><td>Yes (same result each time)</td><td>No (each request may differ)</td></tr>
+            <tr><td>Use Case</td><td>Search queries, page navigation</td><td>Login forms, file uploads, payments</td></tr>
+            <tr><td>HTML Example</td><td><code>&lt;form method="GET"&gt;</code></td><td><code>&lt;form method="POST"&gt;</code></td></tr>
+          </table>
+
+          <pre><span class="cm"><!-- GET: data in URL --></span>
+<span class="tag">&lt;form</span> <span class="attr">method=</span><span class="val">"GET"</span> <span class="attr">action=</span><span class="val">"search.php"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"text"</span> <span class="attr">name=</span><span class="val">"q"</span> <span class="attr">placeholder=</span><span class="val">"Search..."</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;button&gt;</span>Search<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/form&gt;</span>
+<span class="cm"><!-- URL becomes: search.php?q=webprogramming --></span>
+
+<span class="cm"><!-- POST: data in body --></span>
+<span class="tag">&lt;form</span> <span class="attr">method=</span><span class="val">"POST"</span> <span class="attr">action=</span><span class="val">"login.php"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"password"</span> <span class="attr">name=</span><span class="val">"pwd"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;button&gt;</span>Login<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/form&gt;</span>
+<span class="code-lang">HTML</span></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ UNIT 3 ═══════════════ -->
+    <section class="unit-section" id="unit3">
+      <div class="unit-header">
+        <span class="unit-number u3">Unit 3</span>
+        <h2>Basics of HTML and CSS</h2>
+      </div>
+      <div class="unit-controls">
+        <button class="btn-sm" onclick="expandAll('unit3')">Expand All</button>
+        <button class="btn-sm" onclick="collapseAll('unit3')">Collapse All</button>
+      </div>
+
+      <div class="qa-card" id="u3q1">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#27ae60">Q1</span>
+          <span class="q-text">Explain &lt;img&gt; and &lt;frameset&gt; tags with proper examples.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <h4>1. &lt;img&gt; Tag</h4>
+          <p>The <code>&lt;img&gt;</code> tag is used to embed images in an HTML page. It is a self-closing (void) element — it has no closing tag.</p>
+          <h4>Attributes</h4>
+          <table>
+            <tr><th>Attribute</th><th>Description</th></tr>
+            <tr><td>src</td><td>Path to the image file (required)</td></tr>
+            <tr><td>alt</td><td>Alternative text if image can't load (required for accessibility)</td></tr>
+            <tr><td>width / height</td><td>Dimensions in pixels or percent</td></tr>
+            <tr><td>title</td><td>Tooltip text on hover</td></tr>
+            <tr><td>loading</td><td>"lazy" — defers loading until visible</td></tr>
+          </table>
+          <pre><span class="cm">&lt;!-- Basic image --&gt;</span>
+<span class="tag">&lt;img</span> <span class="attr">src=</span><span class="val">"photo.jpg"</span> <span class="attr">alt=</span><span class="val">"A landscape photo"</span> <span class="attr">width=</span><span class="val">"400"</span> <span class="attr">height=</span><span class="val">"300"</span><span class="tag">&gt;</span>
+
+<span class="cm">&lt;!-- Image with link --&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">href=</span><span class="val">"page.html"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;img</span> <span class="attr">src=</span><span class="val">"logo.png"</span> <span class="attr">alt=</span><span class="val">"Company Logo"</span> <span class="attr">title=</span><span class="val">"Click to go home"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/a&gt;</span>
+
+<span class="cm">&lt;!-- Responsive image (fits container) --&gt;</span>
+<span class="tag">&lt;img</span> <span class="attr">src=</span><span class="val">"banner.jpg"</span> <span class="attr">alt=</span><span class="val">"Banner"</span> <span class="attr">style=</span><span class="val">"max-width:100%; height:auto;"</span><span class="tag">&gt;</span>
+<span class="code-lang">HTML</span></pre>
+
+          <h4>2. &lt;frameset&gt; Tag</h4>
+          <p>The <code>&lt;frameset&gt;</code> tag divides the browser window into multiple sections (frames), each displaying a different HTML document. <strong>Note:</strong> Frames are deprecated in HTML5 — use CSS or iframes instead for modern development.</p>
+          <pre><span class="cm">&lt;!-- index.html (frameset page) --&gt;</span>
+<span class="tag">&lt;html&gt;</span>
+<span class="tag">&lt;head&gt;</span><span class="tag">&lt;title&gt;</span>Frames Example<span class="tag">&lt;/title&gt;&lt;/head&gt;</span>
+
+<span class="cm">&lt;!-- cols: split into 30% left, 70% right --&gt;</span>
+<span class="tag">&lt;frameset</span> <span class="attr">cols=</span><span class="val">"30%,70%"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;frame</span> <span class="attr">src=</span><span class="val">"menu.html"</span> <span class="attr">name=</span><span class="val">"menuFrame"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;frame</span> <span class="attr">src=</span><span class="val">"content.html"</span> <span class="attr">name=</span><span class="val">"contentFrame"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/frameset&gt;</span>
+
+<span class="cm">&lt;!-- Rows: split top 20%, bottom 80% --&gt;</span>
+<span class="tag">&lt;frameset</span> <span class="attr">rows=</span><span class="val">"20%,80%"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;frame</span> <span class="attr">src=</span><span class="val">"header.html"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;frame</span> <span class="attr">src=</span><span class="val">"body.html"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/frameset&gt;</span>
+<span class="tag">&lt;/html&gt;</span>
+<span class="code-lang">HTML</span></pre>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u3q2">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#27ae60">Q2</span>
+          <span class="q-text">Explain different ways to write CSS with example.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <p>CSS (Cascading Style Sheets) can be applied to HTML in three ways:</p>
+
+          <h4>1. Inline CSS</h4>
+          <p>Styles applied directly on a specific HTML element using the <code>style</code> attribute. Highest specificity but hardest to maintain.</p>
+          <pre><span class="tag">&lt;p</span> <span class="attr">style=</span><span class="val">"color: red; font-size: 18px; font-weight: bold;"</span><span class="tag">&gt;</span>
+  This paragraph is red and bold.
+<span class="tag">&lt;/p&gt;</span>
+
+<span class="tag">&lt;h1</span> <span class="attr">style=</span><span class="val">"background: navy; color: white; padding: 10px;"</span><span class="tag">&gt;</span>
+  Styled Heading
+<span class="tag">&lt;/h1&gt;</span>
+<span class="code-lang">HTML</span></pre>
+
+          <h4>2. Internal (Embedded) CSS</h4>
+          <p>Styles placed inside a <code>&lt;style&gt;</code> tag within the <code>&lt;head&gt;</code> section. Applies to that single HTML document.</p>
+          <pre><span class="tag">&lt;html&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+  <span class="tag">&lt;style&gt;</span>
+    <span class="fn">body</span> {
+      <span class="attr">background-color:</span> <span class="val">#f0f0f0</span>;
+      <span class="attr">font-family:</span> <span class="val">Arial, sans-serif</span>;
+    }
+    <span class="fn">h1</span> { <span class="attr">color:</span> <span class="val">darkblue</span>; <span class="attr">text-align:</span> <span class="val">center</span>; }
+    <span class="fn">p</span>  { <span class="attr">font-size:</span> <span class="val">16px</span>; <span class="attr">line-height:</span> <span class="val">1.6</span>; }
+  <span class="tag">&lt;/style&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+  <span class="tag">&lt;h1&gt;</span>Hello World<span class="tag">&lt;/h1&gt;</span>
+  <span class="tag">&lt;p&gt;</span>This paragraph uses internal CSS.<span class="tag">&lt;/p&gt;</span>
+<span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span>
+<span class="code-lang">HTML</span></pre>
+
+          <h4>3. External CSS</h4>
+          <p>Styles in a separate <code>.css</code> file, linked using <code>&lt;link&gt;</code>. Best practice for large projects — one file styles many pages.</p>
+          <pre><span class="cm">/* styles.css */</span>
+<span class="fn">body</span> {
+  <span class="attr">margin:</span> <span class="val">0</span>;
+  <span class="attr">padding:</span> <span class="val">0</span>;
+  <span class="attr">font-family:</span> <span class="val">Georgia, serif</span>;
+  <span class="attr">background:</span> <span class="val">#fff</span>;
+}
+
+<span class="fn">h1</span> { <span class="attr">color:</span> <span class="val">#333</span>; }
+<span class="fn">.container</span> { <span class="attr">max-width:</span> <span class="val">1100px</span>; <span class="attr">margin:</span> <span class="val">0 auto</span>; }
+<span class="code-lang">CSS</span></pre>
+          <pre><span class="cm">&lt;!-- Link in HTML head --&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+  <span class="tag">&lt;link</span> <span class="attr">rel=</span><span class="val">"stylesheet"</span> <span class="attr">href=</span><span class="val">"styles.css"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="code-lang">HTML</span></pre>
+
+          <h4>Comparison</h4>
+          <table>
+            <tr><th>Type</th><th>Scope</th><th>Reusability</th><th>Priority</th></tr>
+            <tr><td>Inline</td><td>Single element</td><td>None</td><td>Highest</td></tr>
+            <tr><td>Internal</td><td>Single page</td><td>Page only</td><td>Medium</td></tr>
+            <tr><td>External</td><td>Multiple pages</td><td>Site-wide</td><td>Lowest</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u3q3">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#27ae60">Q3</span>
+          <span class="q-text">What is HTML form tag? Explain form attributes and design a student registration form.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <p>The <code>&lt;form&gt;</code> tag is used to create an HTML form for collecting user input. Data entered in the form is sent to a server for processing.</p>
+
+          <h4>Form Attributes</h4>
+          <table>
+            <tr><th>Attribute</th><th>Description</th></tr>
+            <tr><td>action</td><td>URL where form data is sent (e.g., "submit.php")</td></tr>
+            <tr><td>method</td><td>HTTP method: GET or POST</td></tr>
+            <tr><td>enctype</td><td>Encoding type for file uploads: "multipart/form-data"</td></tr>
+            <tr><td>name</td><td>Name of the form</td></tr>
+            <tr><td>target</td><td>Where to display response (_blank, _self)</td></tr>
+            <tr><td>autocomplete</td><td>Enable/disable browser autocomplete (on/off)</td></tr>
+            <tr><td>novalidate</td><td>Skip browser validation</td></tr>
+          </table>
+
+          <h4>Student Registration Form</h4>
+          <pre><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+  <span class="tag">&lt;title&gt;</span>Student Registration<span class="tag">&lt;/title&gt;</span>
+  <span class="tag">&lt;style&gt;</span>
+    <span class="fn">body</span> { <span class="attr">font-family:</span> <span class="val">Arial</span>; <span class="attr">padding:</span> <span class="val">20px</span>; }
+    <span class="fn">label</span> { <span class="attr">display:</span> <span class="val">block</span>; <span class="attr">margin-top:</span> <span class="val">10px</span>; <span class="attr">font-weight:</span> <span class="val">bold</span>; }
+    <span class="fn">input, select, textarea</span> { <span class="attr">width:</span> <span class="val">300px</span>; <span class="attr">padding:</span> <span class="val">6px</span>; <span class="attr">margin-top:</span> <span class="val">4px</span>; }
+    <span class="fn">button</span> { <span class="attr">margin:</span> <span class="val">14px 5px 0 0</span>; <span class="attr">padding:</span> <span class="val">8px 20px</span>; }
+  <span class="tag">&lt;/style&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+<span class="tag">&lt;h2&gt;</span>Student Registration Form<span class="tag">&lt;/h2&gt;</span>
+
+<span class="tag">&lt;form</span> <span class="attr">action=</span><span class="val">"register.php"</span> <span class="attr">method=</span><span class="val">"POST"</span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;label&gt;</span>Name:<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"text"</span> <span class="attr">name=</span><span class="val">"name"</span> <span class="attr">placeholder=</span><span class="val">"Full Name"</span> <span class="attr">required</span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;label&gt;</span>Roll No:<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"text"</span> <span class="attr">name=</span><span class="val">"rollno"</span> <span class="attr">placeholder=</span><span class="val">"e.g. CE001"</span> <span class="attr">required</span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;label&gt;</span>Semester:<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;select</span> <span class="attr">name=</span><span class="val">"semester"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;option&gt;</span>1st<span class="tag">&lt;/option&gt;&lt;option&gt;</span>2nd<span class="tag">&lt;/option&gt;</span>
+    <span class="tag">&lt;option&gt;</span>3rd<span class="tag">&lt;/option&gt;&lt;option</span> <span class="attr">selected</span><span class="tag">&gt;</span>6th<span class="tag">&lt;/option&gt;</span>
+  <span class="tag">&lt;/select&gt;</span>
+
+  <span class="tag">&lt;label&gt;</span>Email:<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"email"</span> <span class="attr">name=</span><span class="val">"email"</span> <span class="attr">required</span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;label&gt;</span>Mobile Number:<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"tel"</span> <span class="attr">name=</span><span class="val">"mobile"</span> <span class="attr">pattern=</span><span class="val">"[0-9]{10}"</span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;label&gt;</span>Gender:<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"radio"</span> <span class="attr">name=</span><span class="val">"gender"</span> <span class="attr">value=</span><span class="val">"male"</span><span class="tag">&gt;</span> Male
+  <span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"radio"</span> <span class="attr">name=</span><span class="val">"gender"</span> <span class="attr">value=</span><span class="val">"female"</span><span class="tag">&gt;</span> Female
+  <span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"radio"</span> <span class="attr">name=</span><span class="val">"gender"</span> <span class="attr">value=</span><span class="val">"other"</span><span class="tag">&gt;</span> Other
+
+  <span class="tag">&lt;label&gt;</span>Hobbies:<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"checkbox"</span> <span class="attr">name=</span><span class="val">"hobbies"</span> <span class="attr">value=</span><span class="val">"reading"</span><span class="tag">&gt;</span> Reading
+  <span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"checkbox"</span> <span class="attr">name=</span><span class="val">"hobbies"</span> <span class="attr">value=</span><span class="val">"coding"</span><span class="tag">&gt;</span> Coding
+  <span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"checkbox"</span> <span class="attr">name=</span><span class="val">"hobbies"</span> <span class="attr">value=</span><span class="val">"sports"</span><span class="tag">&gt;</span> Sports
+
+  <span class="tag">&lt;label&gt;</span>Feedback:<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;textarea</span> <span class="attr">name=</span><span class="val">"feedback"</span> <span class="attr">rows=</span><span class="val">"4"</span> <span class="attr">cols=</span><span class="val">"40"</span><span class="tag">&gt;&lt;/textarea&gt;</span>
+
+  <span class="tag">&lt;br&gt;</span>
+  <span class="tag">&lt;button</span> <span class="attr">type=</span><span class="val">"submit"</span><span class="tag">&gt;</span>Submit<span class="tag">&lt;/button&gt;</span>
+  <span class="tag">&lt;button</span> <span class="attr">type=</span><span class="val">"reset"</span><span class="tag">&gt;</span>Reset<span class="tag">&lt;/button&gt;</span>
+
+<span class="tag">&lt;/form&gt;</span>
+<span class="tag">&lt;/body&gt;&lt;/html&gt;</span>
+<span class="code-lang">HTML</span></pre>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u3q4">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#27ae60">Q4</span>
+          <span class="q-text">Enlist and explain various formatting-related tags available in HTML.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <table>
+            <tr><th>Tag</th><th>Purpose</th><th>Output Example</th></tr>
+            <tr><td><code>&lt;b&gt;</code></td><td>Bold text (visual only)</td><td><strong>Bold text</strong></td></tr>
+            <tr><td><code>&lt;strong&gt;</code></td><td>Important text (semantic bold)</td><td><strong>Important</strong></td></tr>
+            <tr><td><code>&lt;i&gt;</code></td><td>Italic text (visual only)</td><td><em>Italic text</em></td></tr>
+            <tr><td><code>&lt;em&gt;</code></td><td>Emphasized text (semantic italic)</td><td><em>Emphasized</em></td></tr>
+            <tr><td><code>&lt;u&gt;</code></td><td>Underlined text</td><td><u>Underlined</u></td></tr>
+            <tr><td><code>&lt;s&gt; / &lt;del&gt;</code></td><td>Strikethrough (deleted text)</td><td><s>Deleted</s></td></tr>
+            <tr><td><code>&lt;sup&gt;</code></td><td>Superscript (e.g., powers)</td><td>x<sup>2</sup></td></tr>
+            <tr><td><code>&lt;sub&gt;</code></td><td>Subscript (e.g., chemical formulas)</td><td>H<sub>2</sub>O</td></tr>
+            <tr><td><code>&lt;mark&gt;</code></td><td>Highlighted text</td><td><mark>Highlighted</mark></td></tr>
+            <tr><td><code>&lt;small&gt;</code></td><td>Smaller text (fine print)</td><td><small>Fine print</small></td></tr>
+            <tr><td><code>&lt;big&gt;</code></td><td>Larger text (deprecated in HTML5)</td><td>Bigger text</td></tr>
+            <tr><td><code>&lt;pre&gt;</code></td><td>Preformatted text (preserves spaces)</td><td>Fixed-width font</td></tr>
+            <tr><td><code>&lt;code&gt;</code></td><td>Inline code snippet</td><td><code>console.log()</code></td></tr>
+            <tr><td><code>&lt;blockquote&gt;</code></td><td>Long quotation (indented block)</td><td>Indented quote</td></tr>
+            <tr><td><code>&lt;q&gt;</code></td><td>Short inline quotation</td><td>"Inline quote"</td></tr>
+            <tr><td><code>&lt;abbr&gt;</code></td><td>Abbreviation with tooltip</td><td><abbr title="HyperText Markup Language">HTML</abbr></td></tr>
+            <tr><td><code>&lt;hr&gt;</code></td><td>Horizontal rule (divider line)</td><td>──────────────</td></tr>
+            <tr><td><code>&lt;br&gt;</code></td><td>Line break</td><td>New line</td></tr>
+          </table>
+
+          <pre><span class="tag">&lt;p&gt;</span>
+  This is <span class="tag">&lt;b&gt;</span>bold<span class="tag">&lt;/b&gt;</span>, <span class="tag">&lt;i&gt;</span>italic<span class="tag">&lt;/i&gt;</span>,
+  <span class="tag">&lt;strong&gt;</span>important<span class="tag">&lt;/strong&gt;</span>, and <span class="tag">&lt;em&gt;</span>emphasized<span class="tag">&lt;/em&gt;</span> text.
+<span class="tag">&lt;/p&gt;</span>
+<span class="tag">&lt;p&gt;</span>Formula: H<span class="tag">&lt;sub&gt;</span>2<span class="tag">&lt;/sub&gt;</span>O &nbsp; Area = πr<span class="tag">&lt;sup&gt;</span>2<span class="tag">&lt;/sup&gt;</span><span class="tag">&lt;/p&gt;</span>
+<span class="tag">&lt;p&gt;</span><span class="tag">&lt;mark&gt;</span>Highlighted<span class="tag">&lt;/mark&gt;</span> and <span class="tag">&lt;s&gt;</span>strikethrough<span class="tag">&lt;/s&gt;</span><span class="tag">&lt;/p&gt;</span>
+<span class="code-lang">HTML</span></pre>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u3q5">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#27ae60">Q5</span>
+          <span class="q-text">State different usages of &lt;meta&gt; tags.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <p>The <code>&lt;meta&gt;</code> tag provides <strong>metadata</strong> about an HTML document — information that is not displayed on the page but is used by browsers, search engines, and social media platforms.</p>
+
+          <h4>Common Meta Tags</h4>
+          <pre><span class="tag">&lt;head&gt;</span>
+<span class="cm">&lt;!-- 1. Character Encoding --&gt;</span>
+<span class="tag">&lt;meta</span> <span class="attr">charset=</span><span class="val">"UTF-8"</span><span class="tag">&gt;</span>
+
+<span class="cm">&lt;!-- 2. Responsive viewport --&gt;</span>
+<span class="tag">&lt;meta</span> <span class="attr">name=</span><span class="val">"viewport"</span> <span class="attr">content=</span><span class="val">"width=device-width, initial-scale=1.0"</span><span class="tag">&gt;</span>
+
+<span class="cm">&lt;!-- 3. Page description (shown in search results) --&gt;</span>
+<span class="tag">&lt;meta</span> <span class="attr">name=</span><span class="val">"description"</span> <span class="attr">content=</span><span class="val">"Learn Web Programming at SVBIT"</span><span class="tag">&gt;</span>
+
+<span class="cm">&lt;!-- 4. Keywords (SEO - less important now) --&gt;</span>
+<span class="tag">&lt;meta</span> <span class="attr">name=</span><span class="val">"keywords"</span> <span class="attr">content=</span><span class="val">"HTML, CSS, JavaScript, PHP"</span><span class="tag">&gt;</span>
+
+<span class="cm">&lt;!-- 5. Author --&gt;</span>
+<span class="tag">&lt;meta</span> <span class="attr">name=</span><span class="val">"author"</span> <span class="attr">content=</span><span class="val">"Prof. SVBIT"</span><span class="tag">&gt;</span>
+
+<span class="cm">&lt;!-- 6. Auto-refresh (redirect after 5 seconds) --&gt;</span>
+<span class="tag">&lt;meta</span> <span class="attr">http-equiv=</span><span class="val">"refresh"</span> <span class="attr">content=</span><span class="val">"5; url=https://example.com"</span><span class="tag">&gt;</span>
+
+<span class="cm">&lt;!-- 7. Set expiry date --&gt;</span>
+<span class="tag">&lt;meta</span> <span class="attr">http-equiv=</span><span class="val">"expires"</span> <span class="attr">content=</span><span class="val">"Mon, 01 Jan 2025 00:00:00 GMT"</span><span class="tag">&gt;</span>
+
+<span class="cm">&lt;!-- 8. Stop browser from caching --&gt;</span>
+<span class="tag">&lt;meta</span> <span class="attr">http-equiv=</span><span class="val">"cache-control"</span> <span class="attr">content=</span><span class="val">"no-cache"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;meta</span> <span class="attr">http-equiv=</span><span class="val">"pragma"</span> <span class="attr">content=</span><span class="val">"no-cache"</span><span class="tag">&gt;</span>
+
+<span class="cm">&lt;!-- 9. Open Graph (for social media previews) --&gt;</span>
+<span class="tag">&lt;meta</span> <span class="attr">property=</span><span class="val">"og:title"</span> <span class="attr">content=</span><span class="val">"Web Programming Guide"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;meta</span> <span class="attr">property=</span><span class="val">"og:image"</span> <span class="attr">content=</span><span class="val">"preview.jpg"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="code-lang">HTML</span></pre>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u3q6">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#27ae60">Q6</span>
+          <span class="q-text">Briefly discuss various tags available in HTML5.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <p>HTML5 introduced many new <strong>semantic</strong> and <strong>multimedia</strong> tags that improve structure, accessibility, and built-in functionality.</p>
+
+          <h4>Semantic / Structural Tags</h4>
+          <table>
+            <tr><th>Tag</th><th>Purpose</th></tr>
+            <tr><td><code>&lt;header&gt;</code></td><td>Page or section header (logo, nav)</td></tr>
+            <tr><td><code>&lt;footer&gt;</code></td><td>Page or section footer</td></tr>
+            <tr><td><code>&lt;nav&gt;</code></td><td>Navigation links block</td></tr>
+            <tr><td><code>&lt;main&gt;</code></td><td>Primary content of the page (one per page)</td></tr>
+            <tr><td><code>&lt;section&gt;</code></td><td>Thematic group of content with a heading</td></tr>
+            <tr><td><code>&lt;article&gt;</code></td><td>Self-contained content (blog post, news item)</td></tr>
+            <tr><td><code>&lt;aside&gt;</code></td><td>Sidebar / supplementary content</td></tr>
+            <tr><td><code>&lt;figure&gt;</code></td><td>Self-contained media (image with caption)</td></tr>
+            <tr><td><code>&lt;figcaption&gt;</code></td><td>Caption for a &lt;figure&gt;</td></tr>
+            <tr><td><code>&lt;details&gt;</code></td><td>Expandable/collapsible section</td></tr>
+            <tr><td><code>&lt;summary&gt;</code></td><td>Visible heading for &lt;details&gt;</td></tr>
+            <tr><td><code>&lt;mark&gt;</code></td><td>Highlighted text</td></tr>
+            <tr><td><code>&lt;time&gt;</code></td><td>Machine-readable date/time</td></tr>
+          </table>
+
+          <h4>Multimedia Tags</h4>
+          <table>
+            <tr><th>Tag</th><th>Purpose</th></tr>
+            <tr><td><code>&lt;audio&gt;</code></td><td>Embed audio player</td></tr>
+            <tr><td><code>&lt;video&gt;</code></td><td>Embed video player</td></tr>
+            <tr><td><code>&lt;source&gt;</code></td><td>Multiple media sources for audio/video</td></tr>
+            <tr><td><code>&lt;canvas&gt;</code></td><td>2D drawing via JavaScript</td></tr>
+            <tr><td><code>&lt;svg&gt;</code></td><td>Scalable Vector Graphics inline</td></tr>
+          </table>
+
+          <h4>New Form Input Types (HTML5)</h4>
+          <pre><span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"email"</span><span class="tag">&gt;</span>   <span class="cm">&lt;!-- validates email --&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"date"</span><span class="tag">&gt;</span>    <span class="cm">&lt;!-- date picker --&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"range"</span><span class="tag">&gt;</span>   <span class="cm">&lt;!-- slider --&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"color"</span><span class="tag">&gt;</span>   <span class="cm">&lt;!-- color picker --&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"number"</span><span class="tag">&gt;</span>  <span class="cm">&lt;!-- numeric only --&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"search"</span><span class="tag">&gt;</span>  <span class="cm">&lt;!-- search field --&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"url"</span><span class="tag">&gt;</span>     <span class="cm">&lt;!-- validates URL --&gt;</span>
+<span class="code-lang">HTML</span></pre>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u3q7">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#27ae60">Q7</span>
+          <span class="q-text">Differentiate between class and id in CSS.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <table>
+            <tr><th>Feature</th><th>id</th><th>class</th></tr>
+            <tr><td>Selector Symbol</td><td><code>#idName</code></td><td><code>.className</code></td></tr>
+            <tr><td>Uniqueness</td><td>Must be <strong>unique</strong> per page (one element only)</td><td>Can be used on <strong>multiple elements</strong></td></tr>
+            <tr><td>Multiple Values</td><td>Only one id per element</td><td>An element can have multiple classes</td></tr>
+            <tr><td>Specificity</td><td>Higher (0,1,0,0)</td><td>Lower (0,0,1,0)</td></tr>
+            <tr><td>JavaScript Access</td><td><code>document.getElementById()</code></td><td><code>document.getElementsByClassName()</code></td></tr>
+            <tr><td>Use Case</td><td>Unique sections (header, footer), JS targets, anchor links</td><td>Reusable styles (buttons, cards, text styles)</td></tr>
+          </table>
+
+          <pre><span class="cm">/* CSS */</span>
+<span class="fn">#main-header</span> { <span class="attr">background:</span> <span class="val">navy</span>; <span class="attr">color:</span> <span class="val">white</span>; }
+<span class="fn">.card</span>          { <span class="attr">border:</span> <span class="val">1px solid #ccc</span>; <span class="attr">padding:</span> <span class="val">16px</span>; }
+<span class="fn">.btn</span>           { <span class="attr">padding:</span> <span class="val">8px 16px</span>; <span class="attr">background:</span> <span class="val">blue</span>; }
+<span class="code-lang">CSS</span></pre>
+          <pre><span class="cm">&lt;!-- HTML --&gt;</span>
+<span class="tag">&lt;header</span> <span class="attr">id=</span><span class="val">"main-header"</span><span class="tag">&gt;</span>My Site<span class="tag">&lt;/header&gt;</span>
+
+<span class="cm">&lt;!-- Multiple elements with same class --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"card"</span><span class="tag">&gt;</span>Card 1<span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"card"</span><span class="tag">&gt;</span>Card 2<span class="tag">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- Multiple classes on one element --&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">class=</span><span class="val">"btn btn-primary large"</span><span class="tag">&gt;</span>Click<span class="tag">&lt;/button&gt;</span>
+<span class="code-lang">HTML</span></pre>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u3q8">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#27ae60">Q8</span>
+          <span class="q-text">Create an animation using CSS to rotate a rectangle by 360° in 8 seconds.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <pre><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+<span class="tag">&lt;style&gt;</span>
+  <span class="fn">body</span> { <span class="attr">display:</span> <span class="val">flex</span>; <span class="attr">justify-content:</span> <span class="val">center</span>; <span class="attr">padding:</span> <span class="val">60px</span>; }
+
+  <span class="fn">.rectangle</span> {
+    <span class="attr">width:</span>  <span class="val">200px</span>;
+    <span class="attr">height:</span> <span class="val">100px</span>;
+    <span class="attr">background-color:</span> <span class="val">#2980b9</span>;
+    <span class="attr">border-radius:</span> <span class="val">8px</span>;
+    
+    <span class="cm">/* Apply animation */</span>
+    <span class="attr">animation-name:</span>      <span class="val">spin</span>;
+    <span class="attr">animation-duration:</span>  <span class="val">8s</span>;
+    <span class="attr">animation-timing-function:</span> <span class="val">linear</span>;
+    <span class="attr">animation-iteration-count:</span> <span class="val">infinite</span>;
+    
+    <span class="cm">/* Shorthand: */</span>
+    <span class="cm">/* animation: spin 8s linear infinite; */</span>
+  }
+
+  <span class="cm">/* Keyframes: define what happens at 0% and 100% */</span>
+  <span class="fn">@keyframes spin</span> {
+    <span class="fn">0%</span>   { <span class="attr">transform:</span> <span class="val">rotate(0deg)</span>;   }
+    <span class="fn">100%</span> { <span class="attr">transform:</span> <span class="val">rotate(360deg)</span>; }
+  }
+<span class="tag">&lt;/style&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"rectangle"</span><span class="tag">&gt;&lt;/div&gt;</span>
+<span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span>
+<span class="code-lang">HTML + CSS</span></pre>
+          <div class="tip">✅ <strong>Key properties:</strong> <code>animation-name</code> links to <code>@keyframes</code>. <code>transform: rotate()</code> rotates around the element's center by default. <code>linear</code> ensures constant speed. <code>infinite</code> keeps it spinning forever.</div>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u3q9">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#27ae60">Q9</span>
+          <span class="q-text">What is CSS? Compare inline, embedded and external style sheets.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <p><strong>CSS (Cascading Style Sheets)</strong> is a stylesheet language used to control the presentation and layout of HTML documents. It separates content (HTML) from design (CSS), making websites easier to maintain and update.</p>
+          <p>The term <strong>"Cascading"</strong> means styles are applied based on a specific order of priority (specificity, source order, inheritance).</p>
+          <h4>Why CSS?</h4>
+          <ul>
+            <li>One CSS file can style hundreds of HTML pages</li>
+            <li>Enables responsive, accessible, animated interfaces</li>
+            <li>Separates concerns: designers handle CSS, developers handle HTML/JS</li>
+          </ul>
+          <table>
+            <tr><th>Feature</th><th>Inline</th><th>Internal / Embedded</th><th>External</th></tr>
+            <tr><td>Where written</td><td>Inside HTML element tag</td><td>Inside &lt;style&gt; in &lt;head&gt;</td><td>Separate .css file</td></tr>
+            <tr><td>Syntax</td><td><code>style="..."</code></td><td><code>&lt;style&gt; p{} &lt;/style&gt;</code></td><td><code>&lt;link rel="stylesheet" href="..."&gt;</code></td></tr>
+            <tr><td>Scope</td><td>Single element</td><td>Single HTML page</td><td>Entire website</td></tr>
+            <tr><td>Reusability</td><td>None</td><td>Page-level only</td><td>High — shared across pages</td></tr>
+            <tr><td>Maintenance</td><td>Very hard</td><td>Moderate</td><td>Easy (change once, updates everywhere)</td></tr>
+            <tr><td>Page Load</td><td>No extra requests</td><td>No extra requests</td><td>1 extra HTTP request (then cached)</td></tr>
+            <tr><td>Best For</td><td>Quick overrides, email HTML</td><td>Single-page demos</td><td>Production websites</td></tr>
+            <tr><td>Priority</td><td>Highest (overrides all)</td><td>Medium</td><td>Lowest</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u3q10">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#27ae60">Q10</span>
+          <span class="q-text">List and explain CSS selectors.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <p>CSS selectors determine which HTML elements a CSS rule applies to.</p>
+          <table>
+            <tr><th>Selector</th><th>Syntax</th><th>Example</th><th>Targets</th></tr>
+            <tr><td>Universal</td><td><code>*</code></td><td><code>* { margin: 0; }</code></td><td>All elements</td></tr>
+            <tr><td>Element / Type</td><td><code>tag</code></td><td><code>p { color: red; }</code></td><td>All &lt;p&gt; elements</td></tr>
+            <tr><td>Class</td><td><code>.className</code></td><td><code>.btn { padding: 8px; }</code></td><td>Elements with class="btn"</td></tr>
+            <tr><td>ID</td><td><code>#idName</code></td><td><code>#header { height: 60px; }</code></td><td>Element with id="header"</td></tr>
+            <tr><td>Attribute</td><td><code>[attr]</code></td><td><code>[type="text"] { border: 1px solid; }</code></td><td>Elements with attribute</td></tr>
+            <tr><td>Descendant</td><td><code>A B</code></td><td><code>div p { color: blue; }</code></td><td>&lt;p&gt; inside any &lt;div&gt;</td></tr>
+            <tr><td>Child</td><td><code>A &gt; B</code></td><td><code>ul &gt; li { list-style: none; }</code></td><td>Direct child &lt;li&gt; of &lt;ul&gt;</td></tr>
+            <tr><td>Adjacent Sibling</td><td><code>A + B</code></td><td><code>h2 + p { margin-top: 0; }</code></td><td>First &lt;p&gt; right after &lt;h2&gt;</td></tr>
+            <tr><td>General Sibling</td><td><code>A ~ B</code></td><td><code>h2 ~ p { color: gray; }</code></td><td>All &lt;p&gt; siblings after &lt;h2&gt;</td></tr>
+            <tr><td>Group</td><td><code>A, B, C</code></td><td><code>h1, h2, h3 { font-family: serif; }</code></td><td>Multiple elements</td></tr>
+            <tr><td>Pseudo-class</td><td><code>:state</code></td><td><code>a:hover { color: red; }</code></td><td>Element in a specific state</td></tr>
+            <tr><td>Pseudo-element</td><td><code>::part</code></td><td><code>p::first-line { font-weight: bold; }</code></td><td>Part of element</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u3q11">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#27ae60">Q11</span>
+          <span class="q-text">Explain rowspan and colspan attributes in HTML Table.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <p>These attributes allow table cells to span multiple rows or columns, enabling complex table layouts.</p>
+
+          <h4>colspan — Merge columns horizontally</h4>
+          <p><code>colspan="n"</code> makes a cell span <code>n</code> columns.</p>
+
+          <h4>rowspan — Merge rows vertically</h4>
+          <p><code>rowspan="n"</code> makes a cell span <code>n</code> rows.</p>
+
+          <pre><span class="tag">&lt;table</span> <span class="attr">border=</span><span class="val">"1"</span> <span class="attr">cellpadding=</span><span class="val">"8"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;tr&gt;</span>
+    <span class="cm">&lt;!-- colspan="3" spans all 3 columns --&gt;</span>
+    <span class="tag">&lt;th</span> <span class="attr">colspan=</span><span class="val">"3"</span><span class="tag">&gt;</span>Student Results<span class="tag">&lt;/th&gt;</span>
+  <span class="tag">&lt;/tr&gt;</span>
+  <span class="tag">&lt;tr&gt;</span>
+    <span class="tag">&lt;th&gt;</span>Name<span class="tag">&lt;/th&gt;</span>
+    <span class="tag">&lt;th&gt;</span>Subject<span class="tag">&lt;/th&gt;</span>
+    <span class="tag">&lt;th&gt;</span>Marks<span class="tag">&lt;/th&gt;</span>
+  <span class="tag">&lt;/tr&gt;</span>
+  <span class="tag">&lt;tr&gt;</span>
+    <span class="cm">&lt;!-- rowspan="2" — spans 2 rows vertically --&gt;</span>
+    <span class="tag">&lt;td</span> <span class="attr">rowspan=</span><span class="val">"2"</span><span class="tag">&gt;</span>Ravi<span class="tag">&lt;/td&gt;</span>
+    <span class="tag">&lt;td&gt;</span>WP<span class="tag">&lt;/td&gt;</span>
+    <span class="tag">&lt;td&gt;</span>85<span class="tag">&lt;/td&gt;</span>
+  <span class="tag">&lt;/tr&gt;</span>
+  <span class="tag">&lt;tr&gt;</span>
+    <span class="cm">&lt;!-- no &lt;td&gt; for Name here due to rowspan --&gt;</span>
+    <span class="tag">&lt;td&gt;</span>DBMS<span class="tag">&lt;/td&gt;</span>
+    <span class="tag">&lt;td&gt;</span>90<span class="tag">&lt;/td&gt;</span>
+  <span class="tag">&lt;/tr&gt;</span>
+<span class="tag">&lt;/table&gt;</span>
+<span class="code-lang">HTML</span></pre>
+          <div class="diagram" style="text-align:left;">
+            <pre style="background:transparent; color:var(--ink); font-size:13px;">
+┌───────────────────────┐
+│   Student Results     │  ← colspan="3"
+├────────┬────────┬─────┤
+│ Name   │Subject │Marks│
+├────────┼────────┼─────┤
+│        │  WP    │ 85  │
+│  Ravi  ├────────┼─────┤  ← rowspan="2"
+│        │  DBMS  │ 90  │
+└────────┴────────┴─────┘</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u3q12">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#27ae60">Q12</span>
+          <span class="q-text">What is Pseudo-Elements in CSS? Explain through example.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <p>A <strong>CSS pseudo-element</strong> is a keyword added to a selector that lets you style a <em>specific part</em> of the selected element, without adding extra HTML markup.</p>
+          <p>Syntax: <code>selector::pseudo-element { properties }</code> (double colon <code>::</code> for CSS3)</p>
+
+          <h4>Common Pseudo-Elements</h4>
+          <table>
+            <tr><th>Pseudo-element</th><th>What it targets</th></tr>
+            <tr><td><code>::before</code></td><td>Inserts content BEFORE the element's content</td></tr>
+            <tr><td><code>::after</code></td><td>Inserts content AFTER the element's content</td></tr>
+            <tr><td><code>::first-line</code></td><td>First line of block text</td></tr>
+            <tr><td><code>::first-letter</code></td><td>First letter of block text (drop caps!)</td></tr>
+            <tr><td><code>::selection</code></td><td>Text highlighted/selected by user</td></tr>
+            <tr><td><code>::placeholder</code></td><td>Placeholder text in input fields</td></tr>
+          </table>
+
+          <pre><span class="cm">/* Drop cap on first letter */</span>
+<span class="fn">p::first-letter</span> {
+  <span class="attr">font-size:</span>   <span class="val">3em</span>;
+  <span class="attr">font-weight:</span> <span class="val">bold</span>;
+  <span class="attr">float:</span>       <span class="val">left</span>;
+  <span class="attr">margin-right:</span><span class="val">6px</span>;
+  <span class="attr">color:</span>       <span class="val">#c0392b</span>;
+}
+
+<span class="cm">/* Decorative quote before blockquote */</span>
+<span class="fn">blockquote::before</span> {
+  <span class="attr">content:</span>   <span class="val">'"'</span>;
+  <span class="attr">font-size:</span> <span class="val">4em</span>;
+  <span class="attr">color:</span>     <span class="val">#ccc</span>;
+  <span class="attr">display:</span>   <span class="val">block</span>;
+  <span class="attr">height:</span>    <span class="val">30px</span>;
+}
+
+<span class="cm">/* Custom text selection color */</span>
+<span class="fn">::selection</span> {
+  <span class="attr">background:</span> <span class="val">#2980b9</span>;
+  <span class="attr">color:</span>      <span class="val">white</span>;
+}
+
+<span class="cm">/* Add "Required" badge after required fields */</span>
+<span class="fn">input[required]::placeholder</span> { <span class="attr">color:</span> <span class="val">#c0392b</span>; }
+<span class="code-lang">CSS</span></pre>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u3q13">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#27ae60">Q13</span>
+          <span class="q-text">What is Bootstrap? Why do we use it?</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <p><strong>Bootstrap</strong> is the world's most popular open-source CSS framework for building responsive, mobile-first websites quickly. It was created by Twitter engineers and released in 2011.</p>
+          <h4>How to Include Bootstrap</h4>
+          <pre><span class="cm">&lt;!-- Via CDN in &lt;head&gt; --&gt;</span>
+<span class="tag">&lt;link</span> <span class="attr">rel=</span><span class="val">"stylesheet"</span> <span class="attr">href=</span><span class="val">"https://cdn.jsdelivr.net/npm/bootstrap@5/dist/css/bootstrap.min.css"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;script</span> <span class="attr">src=</span><span class="val">"https://cdn.jsdelivr.net/npm/bootstrap@5/dist/js/bootstrap.bundle.min.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="code-lang">HTML</span></pre>
+
+          <h4>Why Use Bootstrap?</h4>
+          <ul>
+            <li><strong>Responsive Grid System:</strong> 12-column grid adapts to any screen size automatically.</li>
+            <li><strong>Pre-styled Components:</strong> Buttons, cards, modals, navbars, forms, tables — all ready to use.</li>
+            <li><strong>Cross-browser Compatible:</strong> Works consistently in Chrome, Firefox, Safari, Edge.</li>
+            <li><strong>Saves Time:</strong> Build a professional layout in minutes instead of hours writing CSS from scratch.</li>
+            <li><strong>Large Community:</strong> Extensive documentation, tutorials, and third-party themes.</li>
+            <li><strong>JavaScript Plugins:</strong> Dropdowns, modals, carousels, tooltips built in.</li>
+          </ul>
+
+          <pre><span class="cm">&lt;!-- Bootstrap grid example --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"container"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"row"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"col-md-4"</span><span class="tag">&gt;</span>Column 1<span class="tag">&lt;/div&gt;</span>
+    <span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"col-md-4"</span><span class="tag">&gt;</span>Column 2<span class="tag">&lt;/div&gt;</span>
+    <span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"col-md-4"</span><span class="tag">&gt;</span>Column 3<span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- Bootstrap button --&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">class=</span><span class="val">"btn btn-primary"</span><span class="tag">&gt;</span>Click Me<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">class=</span><span class="val">"btn btn-danger btn-lg"</span><span class="tag">&gt;</span>Delete<span class="tag">&lt;/button&gt;</span>
+<span class="code-lang">HTML</span></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ UNIT 4 ═══════════════ -->
+    <section class="unit-section" id="unit4">
+      <div class="unit-header">
+        <span class="unit-number u4">Unit 4</span>
+        <h2>Client Side Scripting — JavaScript</h2>
+      </div>
+      <div class="unit-controls">
+        <button class="btn-sm" onclick="expandAll('unit4')">Expand All</button>
+        <button class="btn-sm" onclick="collapseAll('unit4')">Collapse All</button>
+      </div>
+
+      <div class="qa-card" id="u4q1">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#8e44ad">Q1</span>
+          <span class="q-text">Explain pop-up boxes in JavaScript with example.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <p>JavaScript provides three built-in dialog boxes for interacting with users:</p>
+
+          <h4>1. alert() — Information Box</h4>
+          <p>Displays a message with an OK button. Used for simple notifications.</p>
+          <pre><span class="fn">alert</span>(<span class="str">"Welcome to Web Programming!"</span>);
+<span class="cm">// Returns: undefined</span>
+<span class="code-lang">JS</span></pre>
+
+          <h4>2. confirm() — Confirmation Box</h4>
+          <p>Displays a message with OK and Cancel buttons. Returns <code>true</code> (OK) or <code>false</code> (Cancel).</p>
+          <pre><span class="kw">let</span> result = <span class="fn">confirm</span>(<span class="str">"Do you want to delete this record?"</span>);
+<span class="kw">if</span> (result === <span class="kw">true</span>) {
+  <span class="fn">alert</span>(<span class="str">"Record deleted!"</span>);
+} <span class="kw">else</span> {
+  <span class="fn">alert</span>(<span class="str">"Deletion cancelled."</span>);
+}
+<span class="code-lang">JS</span></pre>
+
+          <h4>3. prompt() — Input Box</h4>
+          <p>Displays a message with a text input. Returns the user's input string, or <code>null</code> if cancelled.</p>
+          <pre><span class="kw">let</span> name = <span class="fn">prompt</span>(<span class="str">"Enter your name:"</span>, <span class="str">"Guest"</span>);
+<span class="cm">// 2nd parameter is default value</span>
+<span class="kw">if</span> (name !== <span class="kw">null</span> && name !== <span class="str">""</span>) {
+  <span class="fn">alert</span>(<span class="str">"Hello, "</span> + name + <span class="str">"!"</span>);
+} <span class="kw">else</span> {
+  <span class="fn">alert</span>(<span class="str">"No name entered."</span>);
+}
+<span class="code-lang">JS</span></pre>
+
+          <h4>Full Example</h4>
+          <pre><span class="tag">&lt;button</span> <span class="attr">onclick=</span><span class="val">"showDialogs()"</span><span class="tag">&gt;</span>Demo Dialogs<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;script&gt;</span>
+<span class="kw">function</span> <span class="fn">showDialogs</span>() {
+  <span class="kw">let</span> age = <span class="fn">prompt</span>(<span class="str">"Enter your age:"</span>);
+  <span class="kw">let</span> confirmed = <span class="fn">confirm</span>(<span class="str">"Are you "</span> + age + <span class="str">" years old?"</span>);
+  <span class="kw">if</span> (confirmed) {
+    <span class="fn">alert</span>(<span class="str">"Age confirmed: "</span> + age);
+  }
+}
+<span class="tag">&lt;/script&gt;</span>
+<span class="code-lang">HTML + JS</span></pre>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u4q2">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#8e44ad">Q2</span>
+          <span class="q-text">Write JavaScript to validate Mobile Number (numeric + 10 digits).</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <pre><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html&gt;</span>
+<span class="tag">&lt;head&gt;&lt;title&gt;</span>Mobile Validation<span class="tag">&lt;/title&gt;&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+
+<span class="tag">&lt;h3&gt;</span>Mobile Number Validation<span class="tag">&lt;/h3&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"text"</span> <span class="attr">id=</span><span class="val">"mobile"</span> <span class="attr">placeholder=</span><span class="val">"Enter 10-digit mobile number"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">onclick=</span><span class="val">"validate()"</span><span class="tag">&gt;</span>Validate<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;p</span> <span class="attr">id=</span><span class="val">"msg"</span><span class="tag">&gt;&lt;/p&gt;</span>
+
+<span class="tag">&lt;script&gt;</span>
+<span class="kw">function</span> <span class="fn">validate</span>() {
+  <span class="kw">let</span> mob = document.<span class="fn">getElementById</span>(<span class="str">"mobile"</span>).value;
+  <span class="kw">let</span> msg = document.<span class="fn">getElementById</span>(<span class="str">"msg"</span>);
+
+  <span class="cm">// Rule 1: Must not be empty</span>
+  <span class="kw">if</span> (mob === <span class="str">""</span>) {
+    msg.innerHTML = <span class="str">"❌ Mobile number is required!"</span>;
+    msg.style.color = <span class="str">"red"</span>;
+    <span class="kw">return</span>;
+  }
+
+  <span class="cm">// Rule 2: Must be numeric (no letters/symbols)</span>
+  <span class="kw">if</span> (<span class="fn">isNaN</span>(mob)) {
+    msg.innerHTML = <span class="str">"❌ Must contain digits only!"</span>;
+    msg.style.color = <span class="str">"red"</span>;
+    <span class="kw">return</span>;
+  }
+
+  <span class="cm">// Rule 3: Must be exactly 10 digits</span>
+  <span class="kw">if</span> (mob.length !== <span class="num">10</span>) {
+    msg.innerHTML = <span class="str">"❌ Must be exactly 10 digits!"</span>;
+    msg.style.color = <span class="str">"red"</span>;
+    <span class="kw">return</span>;
+  }
+
+  <span class="cm">// All rules passed</span>
+  msg.innerHTML = <span class="str">"✅ Valid mobile number!"</span>;
+  msg.style.color = <span class="str">"green"</span>;
+}
+
+<span class="cm">// Alternative using Regular Expression (one line):</span>
+<span class="kw">function</span> <span class="fn">validateWithRegex</span>() {
+  <span class="kw">let</span> mob = document.<span class="fn">getElementById</span>(<span class="str">"mobile"</span>).value;
+  <span class="kw">let</span> pattern = <span class="val">/^[0-9]{10}$/</span>;  <span class="cm">// ^ start, [0-9] digit, {10} exactly 10, $ end</span>
+  <span class="kw">if</span> (pattern.<span class="fn">test</span>(mob)) {
+    <span class="fn">alert</span>(<span class="str">"Valid!"</span>);
+  } <span class="kw">else</span> {
+    <span class="fn">alert</span>(<span class="str">"Invalid!"</span>);
+  }
+}
+<span class="tag">&lt;/script&gt;</span>
+<span class="tag">&lt;/body&gt;&lt;/html&gt;</span>
+<span class="code-lang">HTML + JS</span></pre>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u4q3">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#8e44ad">Q3</span>
+          <span class="q-text">What is JavaScript event handling? List major events and show use of at least one.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <p><strong>Event handling</strong> in JavaScript is the mechanism by which JavaScript responds to user actions or browser events. Events are actions that occur in the browser — clicking a button, pressing a key, resizing the window, etc.</p>
+
+          <h4>Ways to Attach Event Handlers</h4>
+          <ol>
+            <li><strong>Inline:</strong> <code>&lt;button onclick="fn()"&gt;</code></li>
+            <li><strong>HTML attribute:</strong> <code>element.onclick = function() {}</code></li>
+            <li><strong>addEventListener (best):</strong> <code>element.addEventListener("click", fn)</code></li>
+          </ol>
+
+          <h4>Major JavaScript Events</h4>
+          <table>
+            <tr><th>Category</th><th>Event</th><th>Triggered When</th></tr>
+            <tr><td rowspan="4">Mouse</td><td>click</td><td>Element is clicked</td></tr>
+            <tr><td>dblclick</td><td>Element is double-clicked</td></tr>
+            <tr><td>mouseover</td><td>Mouse enters element</td></tr>
+            <tr><td>mouseout</td><td>Mouse leaves element</td></tr>
+            <tr><td rowspan="3">Keyboard</td><td>keydown</td><td>Key is pressed down</td></tr>
+            <tr><td>keyup</td><td>Key is released</td></tr>
+            <tr><td>keypress</td><td>Key is pressed (deprecated)</td></tr>
+            <tr><td rowspan="3">Form</td><td>submit</td><td>Form is submitted</td></tr>
+            <tr><td>change</td><td>Input value changes</td></tr>
+            <tr><td>focus / blur</td><td>Element gains/loses focus</td></tr>
+            <tr><td rowspan="2">Window</td><td>load</td><td>Page finishes loading</td></tr>
+            <tr><td>resize</td><td>Browser window is resized</td></tr>
+          </table>
+
+          <h4>Example — Click & Keyboard Events</h4>
+          <pre><span class="tag">&lt;button</span> <span class="attr">id=</span><span class="val">"myBtn"</span><span class="tag">&gt;</span>Click Me<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">id=</span><span class="val">"myInput"</span> <span class="attr">placeholder=</span><span class="val">"Type something..."</span><span class="tag">&gt;</span>
+<span class="tag">&lt;p</span> <span class="attr">id=</span><span class="val">"output"</span><span class="tag">&gt;&lt;/p&gt;</span>
+
+<span class="tag">&lt;script&gt;</span>
+<span class="cm">// Click event</span>
+document.<span class="fn">getElementById</span>(<span class="str">"myBtn"</span>)
+        .<span class="fn">addEventListener</span>(<span class="str">"click"</span>, <span class="kw">function</span>() {
+  document.<span class="fn">getElementById</span>(<span class="str">"output"</span>).textContent = <span class="str">"Button was clicked!"</span>;
+});
+
+<span class="cm">// Keyup event — show what user typed</span>
+document.<span class="fn">getElementById</span>(<span class="str">"myInput"</span>)
+        .<span class="fn">addEventListener</span>(<span class="str">"keyup"</span>, <span class="kw">function</span>(e) {
+  document.<span class="fn">getElementById</span>(<span class="str">"output"</span>).textContent =
+    <span class="str">"You typed: "</span> + e.target.value;
+});
+
+<span class="cm">// Mouseover event</span>
+document.<span class="fn">getElementById</span>(<span class="str">"myBtn"</span>)
+        .<span class="fn">addEventListener</span>(<span class="str">"mouseover"</span>, <span class="kw">function</span>() {
+  <span class="kw">this</span>.style.backgroundColor = <span class="str">"green"</span>;
+});
+<span class="tag">&lt;/script&gt;</span>
+<span class="code-lang">HTML + JS</span></pre>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u4q4">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#8e44ad">Q4</span>
+          <span class="q-text">Write HTML and JavaScript to check if N is odd or even.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <pre><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+  <span class="tag">&lt;title&gt;</span>Odd or Even<span class="tag">&lt;/title&gt;</span>
+  <span class="tag">&lt;style&gt;</span>
+    <span class="fn">body</span> { <span class="attr">font-family:</span><span class="val">Arial</span>; <span class="attr">padding:</span><span class="val">30px</span>; }
+    <span class="fn">#result</span> { <span class="attr">font-size:</span><span class="val">20px</span>; <span class="attr">margin-top:</span><span class="val">12px</span>; <span class="attr">font-weight:</span><span class="val">bold</span>; }
+  <span class="tag">&lt;/style&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+  <span class="tag">&lt;h2&gt;</span>Odd or Even Checker<span class="tag">&lt;/h2&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"number"</span> <span class="attr">id=</span><span class="val">"num"</span> <span class="attr">placeholder=</span><span class="val">"Enter number N"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;button</span> <span class="attr">onclick=</span><span class="val">"checkOddEven()"</span><span class="tag">&gt;</span>Check<span class="tag">&lt;/button&gt;</span>
+  <span class="tag">&lt;p</span> <span class="attr">id=</span><span class="val">"result"</span><span class="tag">&gt;&lt;/p&gt;</span>
+
+<span class="tag">&lt;script&gt;</span>
+<span class="kw">function</span> <span class="fn">checkOddEven</span>() {
+  <span class="kw">let</span> n = <span class="fn">parseInt</span>(document.<span class="fn">getElementById</span>(<span class="str">"num"</span>).value);
+  <span class="kw">let</span> result = document.<span class="fn">getElementById</span>(<span class="str">"result"</span>);
+
+  <span class="kw">if</span> (<span class="fn">isNaN</span>(n)) {
+    result.textContent = <span class="str">"Please enter a valid number."</span>;
+    result.style.color = <span class="str">"red"</span>;
+    <span class="kw">return</span>;
+  }
+
+  <span class="cm">// Modulus operator: n % 2 gives remainder when divided by 2</span>
+  <span class="kw">if</span> (n % <span class="num">2</span> === <span class="num">0</span>) {
+    result.textContent = n + <span class="str">" is EVEN"</span>;
+    result.style.color = <span class="str">"blue"</span>;
+  } <span class="kw">else</span> {
+    result.textContent = n + <span class="str">" is ODD"</span>;
+    result.style.color = <span class="str">"orange"</span>;
+  }
+}
+<span class="tag">&lt;/script&gt;</span>
+<span class="tag">&lt;/body&gt;&lt;/html&gt;</span>
+<span class="code-lang">HTML + JS</span></pre>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u4q5">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#8e44ad">Q5</span>
+          <span class="q-text">What is Document Object Model (DOM)? Explain any two objects with example.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <p>The <strong>Document Object Model (DOM)</strong> is a programming interface for HTML and XML documents. It represents the page as a <strong>tree of objects</strong>, where every HTML element, attribute, and text node is an object that JavaScript can access and manipulate.</p>
+
+          <div class="svg-wrap">
+            <svg width="540" height="260" viewBox="0 0 540 260">
+              <!-- window -->
+              <rect x="210" y="10" width="120" height="36" rx="6" fill="#fdecea" stroke="#c0392b" stroke-width="1.5"/>
+              <text x="270" y="33" text-anchor="middle" font-size="13" font-weight="bold" fill="#c0392b">window</text>
+              <!-- document -->
+              <rect x="210" y="70" width="120" height="36" rx="6" fill="#e8f4fd" stroke="#2980b9" stroke-width="1.5"/>
+              <text x="270" y="93" text-anchor="middle" font-size="13" font-weight="bold" fill="#2980b9">document</text>
+              <!-- html -->
+              <rect x="210" y="130" width="120" height="36" rx="6" fill="#e8f5e9" stroke="#27ae60" stroke-width="1.5"/>
+              <text x="270" y="153" text-anchor="middle" font-size="13" font-weight="bold" fill="#27ae60">&lt;html&gt;</text>
+              <!-- head, body -->
+              <rect x="100" y="190" width="100" height="36" rx="6" fill="#f3e5f5" stroke="#8e44ad" stroke-width="1.5"/>
+              <text x="150" y="213" text-anchor="middle" font-size="13" fill="#8e44ad">&lt;head&gt;</text>
+              <rect x="330" y="190" width="100" height="36" rx="6" fill="#f3e5f5" stroke="#8e44ad" stroke-width="1.5"/>
+              <text x="380" y="213" text-anchor="middle" font-size="13" fill="#8e44ad">&lt;body&gt;</text>
+              <!-- connecting lines -->
+              <line x1="270" y1="46" x2="270" y2="70" stroke="#aaa" stroke-width="1.5"/>
+              <line x1="270" y1="106" x2="270" y2="130" stroke="#aaa" stroke-width="1.5"/>
+              <line x1="270" y1="166" x2="270" y2="180" stroke="#aaa" stroke-width="1.5"/>
+              <line x1="270" y1="180" x2="150" y2="190" stroke="#aaa" stroke-width="1.5"/>
+              <line x1="270" y1="180" x2="380" y2="190" stroke="#aaa" stroke-width="1.5"/>
+            </svg>
+          </div>
+
+          <h4>1. document Object</h4>
+          <p>The <code>document</code> object represents the entire HTML page. It is the entry point to accessing all HTML elements.</p>
+          <pre><span class="cm">// Access elements</span>
+document.<span class="fn">getElementById</span>(<span class="str">"title"</span>)       <span class="cm">// by ID</span>
+document.<span class="fn">getElementsByClassName</span>(<span class="str">"btn"</span>) <span class="cm">// by class (array-like)</span>
+document.<span class="fn">querySelector</span>(<span class="str">"p.intro"</span>)     <span class="cm">// CSS selector (first match)</span>
+document.<span class="fn">querySelectorAll</span>(<span class="str">"li"</span>)       <span class="cm">// all matches</span>
+
+<span class="cm">// Modify content</span>
+document.<span class="fn">getElementById</span>(<span class="str">"title"</span>).textContent = <span class="str">"New Title"</span>;
+document.<span class="fn">getElementById</span>(<span class="str">"box"</span>).style.color = <span class="str">"red"</span>;
+document.<span class="fn">getElementById</span>(<span class="str">"box"</span>).innerHTML = <span class="str">"&lt;b&gt;Bold text&lt;/b&gt;"</span>;
+
+<span class="cm">// Create new elements</span>
+<span class="kw">let</span> p = document.<span class="fn">createElement</span>(<span class="str">"p"</span>);
+p.textContent = <span class="str">"New paragraph"</span>;
+document.body.<span class="fn">appendChild</span>(p);
+<span class="code-lang">JS</span></pre>
+
+          <h4>2. window Object</h4>
+          <p>The <code>window</code> object represents the browser window/tab. It is the global object in JavaScript — all global variables and functions are properties of <code>window</code>.</p>
+          <pre><span class="cm">// Window dimensions</span>
+<span class="kw">let</span> w = window.innerWidth;   <span class="cm">// visible width in px</span>
+<span class="kw">let</span> h = window.innerHeight;  <span class="cm">// visible height in px</span>
+
+<span class="cm">// Navigation</span>
+window.location.href = <span class="str">"https://example.com"</span>; <span class="cm">// redirect</span>
+window.location.<span class="fn">reload</span>();                     <span class="cm">// reload page</span>
+
+<span class="cm">// Timers</span>
+window.<span class="fn">setTimeout</span>(<span class="kw">function</span>() {
+  <span class="fn">alert</span>(<span class="str">"3 seconds passed!"</span>);
+}, <span class="num">3000</span>);
+
+window.<span class="fn">setInterval</span>(<span class="kw">function</span>() {
+  console.<span class="fn">log</span>(<span class="str">"Runs every 1 second"</span>);
+}, <span class="num">1000</span>);
+
+<span class="cm">// Window methods (window. prefix is optional)</span>
+<span class="fn">alert</span>(<span class="str">"Hello"</span>);       <span class="cm">// same as window.alert()</span>
+<span class="fn">confirm</span>(<span class="str">"Sure?"</span>);    <span class="cm">// same as window.confirm()</span>
+<span class="code-lang">JS</span></pre>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u4q6">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#8e44ad">Q6</span>
+          <span class="q-text">Briefly discuss the types of JavaScript that can be used in HTML pages.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <p>JavaScript can be included in HTML pages in three ways (analogous to CSS):</p>
+
+          <h4>1. Inline JavaScript</h4>
+          <p>JavaScript written directly inside an HTML element's event attribute. Best for very simple, one-off actions.</p>
+          <pre><span class="tag">&lt;button</span> <span class="attr">onclick=</span><span class="val">"alert('Hello!')"</span><span class="tag">&gt;</span>Click Me<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"text"</span> <span class="attr">onkeyup=</span><span class="val">"console.log(this.value)"</span><span class="tag">&gt;</span>
+<span class="code-lang">HTML</span></pre>
+
+          <h4>2. Internal JavaScript</h4>
+          <p>JavaScript written inside a <code>&lt;script&gt;</code> tag within the HTML file. Can be placed in <code>&lt;head&gt;</code> or before <code>&lt;/body&gt;</code> (recommended).</p>
+          <pre><span class="tag">&lt;head&gt;</span>
+  <span class="tag">&lt;script&gt;</span>
+    <span class="kw">function</span> <span class="fn">greet</span>() {
+      <span class="fn">alert</span>(<span class="str">"Good morning!"</span>);
+    }
+  <span class="tag">&lt;/script&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+  <span class="tag">&lt;button</span> <span class="attr">onclick=</span><span class="val">"greet()"</span><span class="tag">&gt;</span>Greet<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/body&gt;</span>
+<span class="code-lang">HTML</span></pre>
+
+          <h4>3. External JavaScript</h4>
+          <p>JavaScript in a separate <code>.js</code> file, linked using <code>&lt;script src="..."&gt;</code>. Best practice — separates concerns, enables caching, reusable across pages.</p>
+          <pre><span class="cm">// script.js</span>
+<span class="kw">function</span> <span class="fn">validateForm</span>() {
+  <span class="cm">// validation logic</span>
+}
+<span class="kw">document</span>.<span class="fn">addEventListener</span>(<span class="str">"DOMContentLoaded"</span>, <span class="kw">function</span>() {
+  console.<span class="fn">log</span>(<span class="str">"Page loaded!"</span>);
+});
+<span class="code-lang">JS (script.js)</span></pre>
+          <pre><span class="cm">&lt;!-- Link in HTML, before &lt;/body&gt; --&gt;</span>
+<span class="tag">&lt;script</span> <span class="attr">src=</span><span class="val">"script.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="attr">src=</span><span class="val">"script.js"</span> <span class="attr">defer</span><span class="tag">&gt;&lt;/script&gt;</span>  <span class="cm">&lt;!-- defer: loads after HTML --&gt;</span>
+<span class="tag">&lt;script</span> <span class="attr">src=</span><span class="val">"script.js"</span> <span class="attr">async</span><span class="tag">&gt;&lt;/script&gt;</span>  <span class="cm">&lt;!-- async: loads in parallel --&gt;</span>
+<span class="code-lang">HTML</span></pre>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u4q7">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#8e44ad">Q7</span>
+          <span class="q-text">Write a JavaScript function to validate an email address using Regular Expression.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <pre><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html&gt;</span>
+<span class="tag">&lt;head&gt;&lt;title&gt;</span>Email Validation<span class="tag">&lt;/title&gt;&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+  <span class="tag">&lt;h3&gt;</span>Email Validator<span class="tag">&lt;/h3&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"text"</span> <span class="attr">id=</span><span class="val">"email"</span> <span class="attr">placeholder=</span><span class="val">"Enter email"</span> <span class="attr">size=</span><span class="val">"30"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;button</span> <span class="attr">onclick=</span><span class="val">"validateEmail()"</span><span class="tag">&gt;</span>Validate<span class="tag">&lt;/button&gt;</span>
+  <span class="tag">&lt;p</span> <span class="attr">id=</span><span class="val">"msg"</span><span class="tag">&gt;&lt;/p&gt;</span>
+
+<span class="tag">&lt;script&gt;</span>
+<span class="kw">function</span> <span class="fn">validateEmail</span>() {
+  <span class="kw">let</span> email = document.<span class="fn">getElementById</span>(<span class="str">"email"</span>).value;
+  <span class="kw">let</span> msg   = document.<span class="fn">getElementById</span>(<span class="str">"msg"</span>);
+
+  <span class="cm">/*
+    Regex breakdown:
+    ^         — start of string
+    [a-zA-Z0-9._%+\-]+ — one or more valid username chars
+    @         — literal @ symbol
+    [a-zA-Z0-9.\-]+    — domain name
+    \.        — literal dot
+    [a-zA-Z]{2,}$      — TLD (2+ letters) at end
+  */</span>
+  <span class="kw">let</span> pattern = <span class="val">/^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/</span>;
+
+  <span class="kw">if</span> (pattern.<span class="fn">test</span>(email)) {
+    msg.textContent = <span class="str">"✅ Valid email: "</span> + email;
+    msg.style.color = <span class="str">"green"</span>;
+  } <span class="kw">else</span> {
+    msg.textContent = <span class="str">"❌ Invalid email address!"</span>;
+    msg.style.color = <span class="str">"red"</span>;
+  }
+}
+<span class="tag">&lt;/script&gt;</span>
+<span class="tag">&lt;/body&gt;&lt;/html&gt;</span>
+<span class="code-lang">HTML + JS</span></pre>
+          <div class="tip">
+            <strong>Valid:</strong> test@example.com, user.name+tag@domain.org<br>
+            <strong>Invalid:</strong> test@, @domain.com, testexample.com
+          </div>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u4q8">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#8e44ad">Q8</span>
+          <span class="q-text">Define a JavaScript function to check if a number is a Palindrome.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <p>A <strong>palindrome number</strong> reads the same forwards and backwards. Example: 121, 1331, 12321.</p>
+          <pre><span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"number"</span> <span class="attr">id=</span><span class="val">"num"</span> <span class="attr">placeholder=</span><span class="val">"Enter number"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">onclick=</span><span class="val">"checkPalindrome()"</span><span class="tag">&gt;</span>Check<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;p</span> <span class="attr">id=</span><span class="val">"result"</span><span class="tag">&gt;&lt;/p&gt;</span>
+
+<span class="tag">&lt;script&gt;</span>
+<span class="kw">function</span> <span class="fn">checkPalindrome</span>() {
+  <span class="kw">let</span> num = document.<span class="fn">getElementById</span>(<span class="str">"num"</span>).value;
+  <span class="kw">let</span> result = document.<span class="fn">getElementById</span>(<span class="str">"result"</span>);
+
+  <span class="cm">// Method: Convert to string, reverse, compare</span>
+  <span class="kw">let</span> original = num.<span class="fn">toString</span>();
+  <span class="kw">let</span> reversed  = original.<span class="fn">split</span>(<span class="str">""</span>).<span class="fn">reverse</span>().<span class="fn">join</span>(<span class="str">""</span>);
+
+  <span class="kw">if</span> (original === reversed) {
+    result.textContent = num + <span class="str">" is a PALINDROME ✅"</span>;
+    result.style.color = <span class="str">"green"</span>;
+  } <span class="kw">else</span> {
+    result.textContent = num + <span class="str">" is NOT a palindrome ❌"</span>;
+    result.style.color = <span class="str">"red"</span>;
+  }
+}
+
+<span class="cm">// Alternative: using loop (reverse the number mathematically)</span>
+<span class="kw">function</span> <span class="fn">isPalindromeLoop</span>(n) {
+  <span class="kw">let</span> original = n;
+  <span class="kw">let</span> reversed  = <span class="num">0</span>;
+  <span class="kw">while</span> (n > <span class="num">0</span>) {
+    reversed = reversed * <span class="num">10</span> + n % <span class="num">10</span>;
+    n = <span class="fn">Math.floor</span>(n / <span class="num">10</span>);
+  }
+  <span class="kw">return</span> original === reversed;
+}
+<span class="tag">&lt;/script&gt;</span>
+<span class="code-lang">HTML + JS</span></pre>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u4q9">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#8e44ad">Q9</span>
+          <span class="q-text">Write a short note on error handling in JavaScript.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <p>Error handling in JavaScript allows programs to <strong>gracefully handle runtime errors</strong> instead of crashing. JavaScript provides the <code>try...catch...finally</code> statement for this purpose.</p>
+
+          <h4>Syntax</h4>
+          <pre><span class="kw">try</span> {
+  <span class="cm">// Code that might throw an error</span>
+  <span class="kw">let</span> result = riskOperation();
+} <span class="kw">catch</span> (error) {
+  <span class="cm">// Runs if an error occurs in try block</span>
+  console.<span class="fn">log</span>(<span class="str">"Error caught: "</span> + error.message);
+} <span class="kw">finally</span> {
+  <span class="cm">// ALWAYS runs (error or not) — cleanup code</span>
+  console.<span class="fn">log</span>(<span class="str">"This always executes"</span>);
+}
+<span class="code-lang">JS</span></pre>
+
+          <h4>Throwing Custom Errors</h4>
+          <pre><span class="kw">function</span> <span class="fn">divide</span>(a, b) {
+  <span class="kw">if</span> (b === <span class="num">0</span>) {
+    <span class="kw">throw new</span> <span class="fn">Error</span>(<span class="str">"Division by zero is not allowed!"</span>);
+  }
+  <span class="kw">return</span> a / b;
+}
+
+<span class="kw">try</span> {
+  <span class="kw">let</span> result = <span class="fn">divide</span>(<span class="num">10</span>, <span class="num">0</span>);
+  console.<span class="fn">log</span>(result);
+} <span class="kw">catch</span> (e) {
+  console.<span class="fn">log</span>(<span class="str">"Caught: "</span> + e.message); <span class="cm">// "Caught: Division by zero..."</span>
+}
+<span class="code-lang">JS</span></pre>
+
+          <h4>Error Object Properties</h4>
+          <table>
+            <tr><th>Property</th><th>Description</th></tr>
+            <tr><td><code>error.name</code></td><td>Type of error (e.g., "TypeError", "RangeError")</td></tr>
+            <tr><td><code>error.message</code></td><td>Human-readable error description</td></tr>
+            <tr><td><code>error.stack</code></td><td>Stack trace (for debugging)</td></tr>
+          </table>
+
+          <h4>Built-in Error Types</h4>
+          <ul>
+            <li><strong>SyntaxError:</strong> Code syntax is wrong</li>
+            <li><strong>TypeError:</strong> Wrong data type used</li>
+            <li><strong>RangeError:</strong> Value out of valid range</li>
+            <li><strong>ReferenceError:</strong> Variable not defined</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u4q10">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#8e44ad">Q10</span>
+          <span class="q-text">Write JavaScript to find whether a number entered by the user is prime or not.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <pre><span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"number"</span> <span class="attr">id=</span><span class="val">"num"</span> <span class="attr">placeholder=</span><span class="val">"Enter number"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">onclick=</span><span class="val">"checkPrime()"</span><span class="tag">&gt;</span>Check Prime<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;p</span> <span class="attr">id=</span><span class="val">"result"</span><span class="tag">&gt;&lt;/p&gt;</span>
+
+<span class="tag">&lt;script&gt;</span>
+<span class="kw">function</span> <span class="fn">checkPrime</span>() {
+  <span class="kw">let</span> n      = <span class="fn">parseInt</span>(document.<span class="fn">getElementById</span>(<span class="str">"num"</span>).value);
+  <span class="kw">let</span> result = document.<span class="fn">getElementById</span>(<span class="str">"result"</span>);
+
+  <span class="kw">if</span> (<span class="fn">isNaN</span>(n) || n < <span class="num">1</span>) {
+    result.textContent = <span class="str">"Please enter a positive number."</span>;
+    <span class="kw">return</span>;
+  }
+
+  <span class="kw">if</span> (n === <span class="num">1</span>) {
+    result.textContent = <span class="str">"1 is neither prime nor composite."</span>;
+    <span class="kw">return</span>;
+  }
+
+  <span class="kw">let</span> isPrime = <span class="kw">true</span>;
+
+  <span class="cm">// Check divisibility from 2 to √n</span>
+  <span class="kw">for</span> (<span class="kw">let</span> i = <span class="num">2</span>; i <= <span class="fn">Math.sqrt</span>(n); i++) {
+    <span class="kw">if</span> (n % i === <span class="num">0</span>) {
+      isPrime = <span class="kw">false</span>;
+      <span class="kw">break</span>;
+    }
+  }
+
+  <span class="kw">if</span> (isPrime) {
+    result.textContent = n + <span class="str">" is a PRIME number ✅"</span>;
+    result.style.color = <span class="str">"green"</span>;
+  } <span class="kw">else</span> {
+    result.textContent = n + <span class="str">" is NOT a prime number ❌"</span>;
+    result.style.color = <span class="str">"red"</span>;
+  }
+}
+<span class="tag">&lt;/script&gt;</span>
+<span class="code-lang">HTML + JS</span></pre>
+          <div class="note">💡 We only check divisors up to <strong>√n</strong> for efficiency. If n has no divisors from 2 to √n, it must be prime.</div>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u4q11">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#8e44ad">Q11</span>
+          <span class="q-text">Briefly discuss JSON.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <p><strong>JSON (JavaScript Object Notation)</strong> is a lightweight, text-based format for storing and exchanging data. It is easy for humans to read/write and easy for machines to parse/generate. JSON is language-independent but uses JavaScript syntax.</p>
+
+          <h4>JSON Data Types</h4>
+          <table>
+            <tr><th>Type</th><th>Example</th></tr>
+            <tr><td>String</td><td><code>"Hello World"</code></td></tr>
+            <tr><td>Number</td><td><code>42, 3.14</code></td></tr>
+            <tr><td>Boolean</td><td><code>true, false</code></td></tr>
+            <tr><td>null</td><td><code>null</code></td></tr>
+            <tr><td>Array</td><td><code>[1, 2, 3]</code></td></tr>
+            <tr><td>Object</td><td><code>{"key": "value"}</code></td></tr>
+          </table>
+
+          <h4>JSON Example</h4>
+          <pre>{
+  <span class="attr">"student"</span>: {
+    <span class="attr">"name"</span>:       <span class="str">"Ravi Patel"</span>,
+    <span class="attr">"rollno"</span>:     <span class="str">"CE001"</span>,
+    <span class="attr">"semester"</span>:   <span class="num">6</span>,
+    <span class="attr">"active"</span>:     <span class="kw">true</span>,
+    <span class="attr">"hobbies"</span>:    [<span class="str">"coding"</span>, <span class="str">"reading"</span>],
+    <span class="attr">"address"</span>:    <span class="kw">null</span>
+  }
+}
+<span class="code-lang">JSON</span></pre>
+
+          <h4>JSON Methods in JavaScript</h4>
+          <pre><span class="cm">// JS Object → JSON String (stringify)</span>
+<span class="kw">let</span> obj = { name: <span class="str">"Ravi"</span>, age: <span class="num">21</span> };
+<span class="kw">let</span> jsonStr = JSON.<span class="fn">stringify</span>(obj);
+<span class="cm">// → '{"name":"Ravi","age":21}'</span>
+
+<span class="cm">// JSON String → JS Object (parse)</span>
+<span class="kw">let</span> parsed = JSON.<span class="fn">parse</span>(jsonStr);
+console.<span class="fn">log</span>(parsed.name);  <span class="cm">// → "Ravi"</span>
+
+<span class="cm">// Pretty print with indentation</span>
+<span class="kw">let</span> pretty = JSON.<span class="fn">stringify</span>(obj, <span class="kw">null</span>, <span class="num">2</span>);
+<span class="code-lang">JS</span></pre>
+
+          <h4>Why JSON?</h4>
+          <ul>
+            <li>Universal data exchange format for APIs</li>
+            <li>Replaces XML — more compact, easier to read</li>
+            <li>Natively supported in JavaScript</li>
+            <li>Used in REST APIs, config files, databases (MongoDB)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u4q12">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#8e44ad">Q12</span>
+          <span class="q-text">Demonstrate: substring, slice, getDate, charAt methods.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <h4>1. substring(start, end)</h4>
+          <p>Extracts characters from a string between two indexes (end not included). Cannot accept negative indexes.</p>
+          <pre><span class="kw">let</span> str = <span class="str">"Web Programming"</span>;
+str.<span class="fn">substring</span>(<span class="num">0</span>, <span class="num">3</span>);   <span class="cm">// "Web"</span>
+str.<span class="fn">substring</span>(<span class="num">4</span>);      <span class="cm">// "Programming"</span>
+str.<span class="fn">substring</span>(<span class="num">4</span>, <span class="num">7</span>);   <span class="cm">// "Pro"</span>
+<span class="code-lang">JS</span></pre>
+
+          <h4>2. slice(start, end)</h4>
+          <p>Similar to <code>substring</code> but also accepts <strong>negative indexes</strong> (count from end).</p>
+          <pre><span class="kw">let</span> str = <span class="str">"Web Programming"</span>;
+str.<span class="fn">slice</span>(<span class="num">0</span>, <span class="num">3</span>);     <span class="cm">// "Web"</span>
+str.<span class="fn">slice</span>(<span class="num">-11</span>);      <span class="cm">// "Programming" (11 from end)</span>
+str.<span class="fn">slice</span>(<span class="num">4</span>, <span class="num">7</span>);     <span class="cm">// "Pro"</span>
+str.<span class="fn">slice</span>(-<span class="num">3</span>);       <span class="cm">// "ing"</span>
+<span class="code-lang">JS</span></pre>
+
+          <h4>3. getDate() — Date Object Method</h4>
+          <p>Returns the day of the month (1–31) from a Date object.</p>
+          <pre><span class="kw">let</span> today = <span class="kw">new</span> <span class="fn">Date</span>();
+today.<span class="fn">getDate</span>();      <span class="cm">// e.g., 25</span>
+today.<span class="fn">getMonth</span>();     <span class="cm">// 0-11 (0=Jan, 11=Dec)</span>
+today.<span class="fn">getFullYear</span>(); <span class="cm">// e.g., 2026</span>
+today.<span class="fn">getDay</span>();       <span class="cm">// 0-6 (0=Sun, 6=Sat)</span>
+today.<span class="fn">getHours</span>();     <span class="cm">// 0-23</span>
+
+<span class="cm">// Specific date</span>
+<span class="kw">let</span> d = <span class="kw">new</span> <span class="fn">Date</span>(<span class="str">"2024-01-15"</span>);
+d.<span class="fn">getDate</span>();  <span class="cm">// 15</span>
+<span class="code-lang">JS</span></pre>
+
+          <h4>4. charAt(index)</h4>
+          <p>Returns the character at a specified index in a string (0-based).</p>
+          <pre><span class="kw">let</span> str = <span class="str">"Hello"</span>;
+str.<span class="fn">charAt</span>(<span class="num">0</span>);   <span class="cm">// "H"</span>
+str.<span class="fn">charAt</span>(<span class="num">4</span>);   <span class="cm">// "o"</span>
+str.<span class="fn">charAt</span>(<span class="num">10</span>);  <span class="cm">// "" (empty if out of range)</span>
+
+<span class="cm">// Alternative with bracket notation:</span>
+str[<span class="num">0</span>];          <span class="cm">// "H" (same result)</span>
+
+<span class="cm">// Use case: print each character</span>
+<span class="kw">for</span> (<span class="kw">let</span> i = <span class="num">0</span>; i < str.length; i++) {
+  console.<span class="fn">log</span>(str.<span class="fn">charAt</span>(i));
+}
+<span class="code-lang">JS</span></pre>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u4q13">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#8e44ad">Q13</span>
+          <span class="q-text">Write JavaScript that prints first N odd numbers.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <pre><span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"number"</span> <span class="attr">id=</span><span class="val">"n"</span> <span class="attr">placeholder=</span><span class="val">"Enter N"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">onclick=</span><span class="val">"printOdds()"</span><span class="tag">&gt;</span>Print Odd Numbers<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">id=</span><span class="val">"output"</span><span class="tag">&gt;&lt;/div&gt;</span>
+
+<span class="tag">&lt;script&gt;</span>
+<span class="kw">function</span> <span class="fn">printOdds</span>() {
+  <span class="kw">let</span> n      = <span class="fn">parseInt</span>(document.<span class="fn">getElementById</span>(<span class="str">"n"</span>).value);
+  <span class="kw">let</span> output = document.<span class="fn">getElementById</span>(<span class="str">"output"</span>);
+
+  <span class="kw">if</span> (<span class="fn">isNaN</span>(n) || n <= <span class="num">0</span>) {
+    output.innerHTML = <span class="str">"&lt;p style='color:red'&gt;Enter a positive number!&lt;/p&gt;"</span>;
+    <span class="kw">return</span>;
+  }
+
+  <span class="kw">let</span> count = <span class="num">0</span>;
+  <span class="kw">let</span> num   = <span class="num">1</span>;
+  <span class="kw">let</span> result = <span class="str">"&lt;p&gt;First "</span> + n + <span class="str">" odd numbers: &lt;/p&gt;&lt;ul&gt;"</span>;
+
+  <span class="kw">while</span> (count < n) {
+    result += <span class="str">"&lt;li&gt;"</span> + num + <span class="str">"&lt;/li&gt;"</span>;
+    num += <span class="num">2</span>;    <span class="cm">// jump by 2 to get next odd</span>
+    count++;
+  }
+
+  result += <span class="str">"&lt;/ul&gt;"</span>;
+  output.innerHTML = result;
+}
+<span class="tag">&lt;/script&gt;</span>
+<span class="code-lang">HTML + JS</span></pre>
+          <div class="note">💡 Odd numbers start at 1 and differ by 2: 1, 3, 5, 7, 9 ... So we start at 1 and add 2 each iteration.</div>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u4q14">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#8e44ad">Q14</span>
+          <span class="q-text">Write HTML and JS to validate mobile number and email address using Regular Expression.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <pre><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+<span class="tag">&lt;style&gt;</span>
+  <span class="fn">.valid</span>   { <span class="attr">color:</span> <span class="val">green</span>; }
+  <span class="fn">.invalid</span> { <span class="attr">color:</span> <span class="val">red</span>;   }
+  <span class="fn">input</span>    { <span class="attr">display:</span> <span class="val">block</span>; <span class="attr">margin:</span> <span class="val">6px 0</span>; <span class="attr">padding:</span> <span class="val">6px</span>; <span class="attr">width:</span> <span class="val">280px</span>; }
+<span class="tag">&lt;/style&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+<span class="tag">&lt;h2&gt;</span>Form Validation<span class="tag">&lt;/h2&gt;</span>
+
+<span class="tag">&lt;label&gt;</span>Mobile Number:<span class="tag">&lt;/label&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"text"</span> <span class="attr">id=</span><span class="val">"mobile"</span> <span class="attr">placeholder=</span><span class="val">"10-digit number"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;span</span> <span class="attr">id=</span><span class="val">"mMsg"</span><span class="tag">&gt;&lt;/span&gt;</span>
+
+<span class="tag">&lt;label&gt;</span>Email Address:<span class="tag">&lt;/label&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"text"</span> <span class="attr">id=</span><span class="val">"email"</span> <span class="attr">placeholder=</span><span class="val">"user@domain.com"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;span</span> <span class="attr">id=</span><span class="val">"eMsg"</span><span class="tag">&gt;&lt;/span&gt;</span>
+
+<span class="tag">&lt;button</span> <span class="attr">onclick=</span><span class="val">"validateAll()"</span> <span class="attr">style=</span><span class="val">"margin-top:10px;padding:8px 20px"</span><span class="tag">&gt;</span>
+  Validate
+<span class="tag">&lt;/button&gt;</span>
+
+<span class="tag">&lt;script&gt;</span>
+<span class="kw">function</span> <span class="fn">validateAll</span>() {
+  <span class="kw">let</span> mobile    = document.<span class="fn">getElementById</span>(<span class="str">"mobile"</span>).value;
+  <span class="kw">let</span> email     = document.<span class="fn">getElementById</span>(<span class="str">"email"</span>).value;
+  <span class="kw">let</span> mMsg      = document.<span class="fn">getElementById</span>(<span class="str">"mMsg"</span>);
+  <span class="kw">let</span> eMsg      = document.<span class="fn">getElementById</span>(<span class="str">"eMsg"</span>);
+
+  <span class="cm">// Mobile: exactly 10 digits, optionally starting with [6-9]</span>
+  <span class="kw">let</span> mPattern = <span class="val">/^[6-9][0-9]{9}$/</span>;
+  <span class="kw">if</span> (mPattern.<span class="fn">test</span>(mobile)) {
+    mMsg.textContent = <span class="str">" ✅ Valid"</span>;
+    mMsg.className = <span class="str">"valid"</span>;
+  } <span class="kw">else</span> {
+    mMsg.textContent = <span class="str">" ❌ Must be 10 digits starting with 6-9"</span>;
+    mMsg.className = <span class="str">"invalid"</span>;
+  }
+
+  <span class="cm">// Email: standard email pattern</span>
+  <span class="kw">let</span> ePattern = <span class="val">/^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/</span>;
+  <span class="kw">if</span> (ePattern.<span class="fn">test</span>(email)) {
+    eMsg.textContent = <span class="str">" ✅ Valid"</span>;
+    eMsg.className = <span class="str">"valid"</span>;
+  } <span class="kw">else</span> {
+    eMsg.textContent = <span class="str">" ❌ Invalid email format"</span>;
+    eMsg.className = <span class="str">"invalid"</span>;
+  }
+}
+<span class="tag">&lt;/script&gt;</span>
+<span class="tag">&lt;/body&gt;&lt;/html&gt;</span>
+<span class="code-lang">HTML + JS</span></pre>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u4q15">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#8e44ad">Q15</span>
+          <span class="q-text">Design Student Registration form with JS validation (all fields, password length, mobile digits).</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <pre><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+<span class="tag">&lt;style&gt;</span>
+  <span class="fn">body</span>   { <span class="attr">font-family:</span><span class="val">Arial</span>; <span class="attr">padding:</span><span class="val">24px</span>; <span class="attr">max-width:</span><span class="val">400px</span>; }
+  <span class="fn">label</span>  { <span class="attr">display:</span><span class="val">block</span>; <span class="attr">margin-top:</span><span class="val">14px</span>; <span class="attr">font-weight:</span><span class="val">bold</span>; }
+  <span class="fn">input</span>  { <span class="attr">width:</span><span class="val">100%</span>; <span class="attr">padding:</span><span class="val">8px</span>; <span class="attr">margin-top:</span><span class="val">4px</span>; <span class="attr">box-sizing:</span><span class="val">border-box</span>; }
+  <span class="fn">.err</span>   { <span class="attr">color:</span><span class="val">red</span>; <span class="attr">font-size:</span><span class="val">12px</span>; }
+  <span class="fn">button</span> { <span class="attr">margin-top:</span><span class="val">16px</span>; <span class="attr">padding:</span><span class="val">10px 28px</span>; <span class="attr">background:</span><span class="val">#2980b9</span>; <span class="attr">color:</span><span class="val">white</span>; <span class="attr">border:</span><span class="val">none</span>; <span class="attr">cursor:</span><span class="val">pointer</span>; }
+<span class="tag">&lt;/style&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+<span class="tag">&lt;h2&gt;</span>Student Registration<span class="tag">&lt;/h2&gt;</span>
+
+<span class="tag">&lt;label&gt;</span>Roll No:<span class="tag">&lt;/label&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"text"</span> <span class="attr">id=</span><span class="val">"rollno"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;span</span> <span class="attr">class=</span><span class="val">"err"</span> <span class="attr">id=</span><span class="val">"rErr"</span><span class="tag">&gt;&lt;/span&gt;</span>
+
+<span class="tag">&lt;label&gt;</span>Name:<span class="tag">&lt;/label&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"text"</span> <span class="attr">id=</span><span class="val">"name"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;span</span> <span class="attr">class=</span><span class="val">"err"</span> <span class="attr">id=</span><span class="val">"nErr"</span><span class="tag">&gt;&lt;/span&gt;</span>
+
+<span class="tag">&lt;label&gt;</span>Password (6–8 chars):<span class="tag">&lt;/label&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"password"</span> <span class="attr">id=</span><span class="val">"pwd"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;span</span> <span class="attr">class=</span><span class="val">"err"</span> <span class="attr">id=</span><span class="val">"pErr"</span><span class="tag">&gt;&lt;/span&gt;</span>
+
+<span class="tag">&lt;label&gt;</span>Mobile (10 digits):<span class="tag">&lt;/label&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">type=</span><span class="val">"text"</span> <span class="attr">id=</span><span class="val">"mob"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;span</span> <span class="attr">class=</span><span class="val">"err"</span> <span class="attr">id=</span><span class="val">"mErr"</span><span class="tag">&gt;&lt;/span&gt;</span>
+
+<span class="tag">&lt;button</span> <span class="attr">onclick=</span><span class="val">"validate()"</span><span class="tag">&gt;</span>Register<span class="tag">&lt;/button&gt;</span>
+
+<span class="tag">&lt;script&gt;</span>
+<span class="kw">function</span> <span class="fn">validate</span>() {
+  <span class="kw">let</span> ok = <span class="kw">true</span>;
+
+  <span class="kw">let</span> rollno = document.<span class="fn">getElementById</span>(<span class="str">"rollno"</span>).value.trim();
+  <span class="kw">let</span> name   = document.<span class="fn">getElementById</span>(<span class="str">"name"</span>).value.trim();
+  <span class="kw">let</span> pwd    = document.<span class="fn">getElementById</span>(<span class="str">"pwd"</span>).value;
+  <span class="kw">let</span> mob    = document.<span class="fn">getElementById</span>(<span class="str">"mob"</span>).value.trim();
+
+  <span class="cm">// Rule 1: All fields compulsory</span>
+  document.<span class="fn">getElementById</span>(<span class="str">"rErr"</span>).textContent =
+    rollno === <span class="str">""</span> ? (ok=<span class="kw">false</span>, <span class="str">"Roll No required"</span>) : <span class="str">""</span>;
+  document.<span class="fn">getElementById</span>(<span class="str">"nErr"</span>).textContent =
+    name === <span class="str">""</span>   ? (ok=<span class="kw">false</span>, <span class="str">"Name required"</span>)    : <span class="str">""</span>;
+
+  <span class="cm">// Rule 2: Password 6–8 characters</span>
+  <span class="kw">if</span> (pwd === <span class="str">""</span>) {
+    document.<span class="fn">getElementById</span>(<span class="str">"pErr"</span>).textContent = <span class="str">"Password required"</span>; ok = <span class="kw">false</span>;
+  } <span class="kw">else if</span> (pwd.length < <span class="num">6</span> || pwd.length > <span class="num">8</span>) {
+    document.<span class="fn">getElementById</span>(<span class="str">"pErr"</span>).textContent = <span class="str">"Password: 6–8 chars"</span>; ok = <span class="kw">false</span>;
+  } <span class="kw">else</span> {
+    document.<span class="fn">getElementById</span>(<span class="str">"pErr"</span>).textContent = <span class="str">""</span>;
+  }
+
+  <span class="cm">// Rule 3: Mobile exactly 10 digits</span>
+  <span class="kw">let</span> mPattern = <span class="val">/^[0-9]{10}$/</span>;
+  <span class="kw">if</span> (!mPattern.<span class="fn">test</span>(mob)) {
+    document.<span class="fn">getElementById</span>(<span class="str">"mErr"</span>).textContent = <span class="str">"Must be 10 digits"</span>; ok = <span class="kw">false</span>;
+  } <span class="kw">else</span> {
+    document.<span class="fn">getElementById</span>(<span class="str">"mErr"</span>).textContent = <span class="str">""</span>;
+  }
+
+  <span class="kw">if</span> (ok) { <span class="fn">alert</span>(<span class="str">"✅ Registration Successful!"</span>); }
+}
+<span class="tag">&lt;/script&gt;</span>
+<span class="tag">&lt;/body&gt;&lt;/html&gt;</span>
+<span class="code-lang">HTML + JS</span></pre>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u4q16">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#8e44ad">Q16</span>
+          <span class="q-text">JavaScript that handles mouse events — mouseover changes heading to green, mouseout to red.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <pre><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html&gt;</span>
+<span class="tag">&lt;head&gt;&lt;title&gt;</span>Mouse Events<span class="tag">&lt;/title&gt;&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+
+<span class="tag">&lt;h1</span> <span class="attr">id=</span><span class="val">"heading"</span> <span class="attr">style=</span><span class="val">"cursor:pointer; color:red;"</span><span class="tag">&gt;</span>
+  Hover over me!
+<span class="tag">&lt;/h1&gt;</span>
+
+<span class="tag">&lt;script&gt;</span>
+<span class="kw">let</span> h = document.<span class="fn">getElementById</span>(<span class="str">"heading"</span>);
+
+<span class="cm">// mouseover: mouse enters the heading</span>
+h.<span class="fn">addEventListener</span>(<span class="str">"mouseover"</span>, <span class="kw">function</span>() {
+  h.style.color = <span class="str">"green"</span>;
+});
+
+<span class="cm">// mouseout: mouse leaves the heading</span>
+h.<span class="fn">addEventListener</span>(<span class="str">"mouseout"</span>, <span class="kw">function</span>() {
+  h.style.color = <span class="str">"red"</span>;
+});
+<span class="tag">&lt;/script&gt;</span>
+
+<span class="tag">&lt;/body&gt;&lt;/html&gt;</span>
+<span class="code-lang">HTML + JS</span></pre>
+          <div class="tip">✅ <strong>Inline version (alternative):</strong><br>
+          <code>&lt;h1 onmouseover="this.style.color='green'" onmouseout="this.style.color='red'"&gt;</code></div>
+        </div>
+      </div>
+
+      <div class="qa-card" id="u4q17">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-index" style="background:#8e44ad">Q17</span>
+          <span class="q-text">Explain callbacks in JavaScript.</span>
+          <span class="q-chevron">▾</span>
+        </div>
+        <div class="qa-answer">
+          <p>A <strong>callback</strong> is a function that is passed as an argument to another function, and is <strong>called (invoked) later</strong> — usually when an operation completes or an event occurs.</p>
+          <p>Callbacks are fundamental to JavaScript's asynchronous programming model.</p>
+
+          <h4>Simple Callback Example</h4>
+          <pre><span class="cm">// Function that accepts a callback</span>
+<span class="kw">function</span> <span class="fn">greet</span>(name, <span class="fn">callback</span>) {
+  console.<span class="fn">log</span>(<span class="str">"Hello, "</span> + name);
+  <span class="fn">callback</span>();  <span class="cm">// call the passed function</span>
+}
+
+<span class="kw">function</span> <span class="fn">sayBye</span>() {
+  console.<span class="fn">log</span>(<span class="str">"Goodbye!"</span>);
+}
+
+<span class="fn">greet</span>(<span class="str">"Ravi"</span>, sayBye);
+<span class="cm">// Output:</span>
+<span class="cm">// Hello, Ravi</span>
+<span class="cm">// Goodbye!</span>
+<span class="code-lang">JS</span></pre>
+
+          <h4>Asynchronous Callback — setTimeout</h4>
+          <pre><span class="cm">// Without callback: code runs in order</span>
+console.<span class="fn">log</span>(<span class="str">"Step 1"</span>);
+
+<span class="fn">setTimeout</span>(<span class="kw">function</span>() {   <span class="cm">// this function is a CALLBACK</span>
+  console.<span class="fn">log</span>(<span class="str">"Step 2 (after 2s)"</span>);
+}, <span class="num">2000</span>);
+
+console.<span class="fn">log</span>(<span class="str">"Step 3"</span>);
+
+<span class="cm">// Output order:</span>
+<span class="cm">// Step 1</span>
+<span class="cm">// Step 3   ← runs immediately</span>
+<span class="cm">// Step 2   ← runs after 2 seconds</span>
+<span class="code-lang">JS</span></pre>
+
+          <h4>Callback in Array Methods</h4>
+          <pre><span class="kw">let</span> nums = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>];
+
+<span class="cm">// forEach uses a callback for each element</span>
+nums.<span class="fn">forEach</span>(<span class="kw">function</span>(n) {
+  console.<span class="fn">log</span>(n * <span class="num">2</span>);  <span class="cm">// 2, 4, 6, 8, 10</span>
+});
+
+<span class="cm">// filter uses a callback to test each element</span>
+<span class="kw">let</span> evens = nums.<span class="fn">filter</span>(n => n % <span class="num">2</span> === <span class="num">0</span>);  <span class="cm">// [2, 4]</span>
+<span class="code-lang">JS</span></pre>
+
+          <div class="note">⚠️ <strong>Callback Hell:</strong> Nesting too many callbacks creates hard-to-read "pyramid" code. Modern JavaScript uses <strong>Promises</strong> and <strong>async/await</strong> to solve this.</div>
+        </div>
+      </div>
+
+    </section>
+
+  </div><!-- end content -->
+</div><!-- end main -->
+
+<script>
+// ── DATA for sidebar nav ──
+const structure = [
+  { unit: "unit1", label: "Unit 1 — Introduction to Web", color: "#c0392b", class: "unit-1",
+    qs: ["What is HTTP? Request & Response", "Client Server Architecture", "Define: URL, HTTP, Web Server", "Full forms: WWW, HTTP, URL"] },
+  { unit: "unit2", label: "Unit 2 — Web Design", color: "#2980b9", class: "unit-2",
+    qs: ["Planning a website & design issues", "Navigation: definition & characteristics", "Website design principles", "Differentiate GET and POST methods"] },
+  { unit: "unit3", label: "Unit 3 — HTML & CSS", color: "#27ae60", class: "unit-3",
+    qs: ["<img> and <frameset> tags", "Ways to write CSS", "HTML form tag & student form", "HTML formatting tags", "Meta tags usages", "HTML5 new tags", "class vs id in CSS", "CSS animation: rotate rectangle", "What is CSS? Inline vs Embedded vs External", "CSS selectors", "rowspan and colspan", "Pseudo-elements in CSS", "What is Bootstrap?"] },
+  { unit: "unit4", label: "Unit 4 — JavaScript", color: "#8e44ad", class: "unit-4",
+    qs: ["Pop-up boxes in JS", "Validate mobile number", "Event handling in JS", "Odd or Even check", "Document Object Model (DOM)", "Types of JS in HTML", "Validate email with RegEx", "Palindrome number check", "Error handling in JS", "Prime number check", "JSON basics", "substring, slice, getDate, charAt", "Print first N odd numbers", "Validate mobile & email (RegEx)", "Student registration + validation", "Mouse events: heading color", "Callbacks in JavaScript"] }
+];
+
+// Build sidebar
+const nav = document.getElementById("sidebarNav");
+structure.forEach(unit => {
+  const group = document.createElement("div");
+  group.className = "unit-nav-group " + unit.class;
+  let html = `<div class="unit-nav-label"><span class="unit-badge"></span>${unit.label}</div><div class="unit-questions">`;
+  unit.qs.forEach((q, i) => {
+    html += `<a class="sidebar-link" href="#${unit.unit}q${i+1}" onclick="closeSidebarMobile()">
+      <span class="q-num">Q${i+1}</span>${q}</a>`;
+  });
+  html += "</div>";
+  group.innerHTML = html;
+  nav.appendChild(group);
+});
+
+// ── Toggle Q&A ──
+function toggle(el) {
+  el.parentElement.classList.toggle("open");
+}
+
+// ── Expand / Collapse All ──
+function expandAll(unitId) {
+  document.querySelectorAll(`#${unitId} .qa-card`).forEach(c => c.classList.add("open"));
+}
+function collapseAll(unitId) {
+  document.querySelectorAll(`#${unitId} .qa-card`).forEach(c => c.classList.remove("open"));
+}
+
+// ── Progress bar ──
+window.addEventListener("scroll", () => {
+  const doc = document.documentElement;
+  const scrolled = doc.scrollTop / (doc.scrollHeight - doc.clientHeight);
+  document.getElementById("progress").style.width = (scrolled * 100) + "%";
+});
+
+// ── Search ──
+function searchQuestions(query) {
+  const q = query.toLowerCase().trim();
+  document.querySelectorAll(".qa-card").forEach(card => {
+    const text = card.textContent.toLowerCase();
+    card.classList.toggle("hidden", q && !text.includes(q));
+  });
+  document.querySelectorAll(".sidebar-link").forEach(link => {
+    const text = link.textContent.toLowerCase();
+    link.style.display = (q && !text.includes(q)) ? "none" : "block";
+  });
+}
+
+// ── Mobile sidebar ──
+function toggleSidebar() {
+  document.getElementById("sidebar").classList.toggle("open");
+}
+function closeSidebarMobile() {
+  if (window.innerWidth < 768) {
+    document.getElementById("sidebar").classList.remove("open");
+  }
+}
+
+// ── Active link on scroll ──
+const allCards = document.querySelectorAll(".qa-card");
+const allLinks = document.querySelectorAll(".sidebar-link");
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      allLinks.forEach(l => {
+        l.classList.toggle("active", l.getAttribute("href") === "#" + id);
+      });
+    }
+  });
+}, { rootMargin: "-40% 0px -55% 0px" });
+
+allCards.forEach(card => observer.observe(card));
+</script>
+</body>
+</html>
