@@ -1,1905 +1,1455 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aryan Patel — The Developer's Journey</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
-  <style>
-    /* ═══════════════════════════════════════════
-       CSS CUSTOM PROPERTIES
-    ═══════════════════════════════════════════ */
-    :root {
-      --bg-dark: #0a0a0f;
-      --bg-chapter: #0f0f1a;
-      --bg-card: #161625;
-      --bg-card-hover: #1e1e32;
-      --accent-primary: #6c63ff;
-      --accent-secondary: #00d4aa;
-      --accent-warm: #ff6b6b;
-      --accent-gold: #ffd700;
-      --accent-cyan: #00e5ff;
-      --text-primary: #e8e8f0;
-      --text-secondary: #a0a0b8;
-      --text-muted: #6a6a80;
-      --border-subtle: rgba(108, 99, 255, 0.15);
-      --glow-primary: rgba(108, 99, 255, 0.4);
-      --glow-secondary: rgba(0, 212, 170, 0.3);
-      --font-display: 'Playfair Display', serif;
-      --font-body: 'Inter', sans-serif;
-      --font-code: 'Fira Code', monospace;
-    }
-
-    /* ═══════════════════════════════════════════
-       RESET & BASE
-    ═══════════════════════════════════════════ */
-    *, *::before, *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-      scrollbar-width: thin;
-      scrollbar-color: var(--accent-primary) var(--bg-dark);
-    }
-
-    html::-webkit-scrollbar { width: 6px; }
-    html::-webkit-scrollbar-track { background: var(--bg-dark); }
-    html::-webkit-scrollbar-thumb {
-      background: var(--accent-primary);
-      border-radius: 3px;
-    }
-
-    body {
-      font-family: var(--font-body);
-      background: var(--bg-dark);
-      color: var(--text-primary);
-      overflow-x: hidden;
-      line-height: 1.7;
-    }
-
-    a {
-      color: var(--accent-primary);
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
-    a:hover { color: var(--accent-secondary); }
-
-    /* ═══════════════════════════════════════════
-       PROGRESS BAR (Story Progress)
-    ═══════════════════════════════════════════ */
-    .story-progress {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary), var(--accent-cyan));
-      z-index: 10000;
-      transition: width 0.1s linear;
-      box-shadow: 0 0 10px var(--glow-primary);
-    }
-
-    /* ═══════════════════════════════════════════
-       NAVIGATION — Chapter Dots
-    ═══════════════════════════════════════════ */
-    .chapter-nav {
-      position: fixed;
-      right: 24px;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .chapter-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: var(--text-muted);
-      border: 2px solid transparent;
-      cursor: pointer;
-      transition: all 0.4s ease;
-      position: relative;
-    }
-
-    .chapter-dot.active {
-      background: var(--accent-primary);
-      border-color: var(--accent-primary);
-      box-shadow: 0 0 12px var(--glow-primary);
-      transform: scale(1.3);
-    }
-
-    .chapter-dot .tooltip {
-      position: absolute;
-      right: 24px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: var(--bg-card);
-      color: var(--text-primary);
-      padding: 6px 14px;
-      border-radius: 6px;
-      font-size: 0.72rem;
-      white-space: nowrap;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-      border: 1px solid var(--border-subtle);
-    }
-
-    .chapter-dot:hover .tooltip { opacity: 1; }
-
-    /* ═══════════════════════════════════════════
-       FLOATING PARTICLES (Background)
-    ═══════════════════════════════════════════ */
-    .particles {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      pointer-events: none;
-      z-index: 0;
-      overflow: hidden;
-    }
-
-    .particle {
-      position: absolute;
-      border-radius: 50%;
-      opacity: 0.15;
-      animation: floatParticle linear infinite;
-    }
-
-    @keyframes floatParticle {
-      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-      10% { opacity: 0.15; }
-      90% { opacity: 0.15; }
-      100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
-    }
-
-    /* ═══════════════════════════════════════════
-       CHAPTER LAYOUT
-    ═══════════════════════════════════════════ */
-    .chapter {
-      min-height: 100vh;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 80px 5%;
-      overflow: hidden;
-    }
-
-    .chapter-content {
-      max-width: 1100px;
-      width: 100%;
-      position: relative;
-      z-index: 2;
-    }
-
-    .chapter-number {
-      font-family: var(--font-display);
-      font-size: clamp(4rem, 12vw, 10rem);
-      font-weight: 900;
-      color: transparent;
-      -webkit-text-stroke: 1px var(--border-subtle);
-      position: absolute;
-      top: -30px;
-      left: -20px;
-      z-index: 0;
-      user-select: none;
-      opacity: 0.3;
-    }
-
-    .chapter-label {
-      font-family: var(--font-code);
-      font-size: 0.75rem;
-      color: var(--accent-secondary);
-      text-transform: uppercase;
-      letter-spacing: 4px;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .chapter-label::before {
-      content: '';
-      width: 30px;
-      height: 1px;
-      background: var(--accent-secondary);
-    }
-
-    .chapter-title {
-      font-family: var(--font-display);
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      font-weight: 700;
-      line-height: 1.2;
-      margin-bottom: 20px;
-      background: linear-gradient(135deg, var(--text-primary), var(--accent-primary));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .chapter-subtitle {
-      font-size: 1.1rem;
-      color: var(--text-secondary);
-      max-width: 650px;
-      margin-bottom: 40px;
-      line-height: 1.8;
-    }
-
-    /* ═══════════════════════════════════════════
-       SCROLL ANIMATIONS
-    ═══════════════════════════════════════════ */
-    .reveal {
-      opacity: 0;
-      transform: translateY(50px);
-      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .reveal-left {
-      opacity: 0;
-      transform: translateX(-60px);
-      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .reveal-left.visible {
-      opacity: 1;
-      transform: translateX(0);
-    }
-
-    .reveal-right {
-      opacity: 0;
-      transform: translateX(60px);
-      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .reveal-right.visible {
-      opacity: 1;
-      transform: translateX(0);
-    }
-
-    .reveal-scale {
-      opacity: 0;
-      transform: scale(0.85);
-      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .reveal-scale.visible {
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    /* ═══════════════════════════════════════════
-       CHAPTER 0: HERO / PROLOGUE
-    ═══════════════════════════════════════════ */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      position: relative;
-      background: radial-gradient(ellipse at 50% 50%, rgba(108, 99, 255, 0.08) 0%, transparent 70%);
-    }
-
-    .hero-inner { position: relative; z-index: 2; }
-
-    .hero-greeting {
-      font-family: var(--font-code);
-      font-size: 0.85rem;
-      color: var(--accent-secondary);
-      letter-spacing: 5px;
-      text-transform: uppercase;
-      margin-bottom: 20px;
-      opacity: 0;
-      animation: fadeInUp 1s 0.3s forwards;
-    }
-
-    .hero-name {
-      font-family: var(--font-display);
-      font-size: clamp(3rem, 8vw, 6.5rem);
-      font-weight: 900;
-      line-height: 1.05;
-      margin-bottom: 16px;
-      opacity: 0;
-      animation: fadeInUp 1s 0.6s forwards;
-    }
-
-    .hero-name .highlight {
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-cyan));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .hero-tagline {
-      font-size: clamp(1rem, 2vw, 1.3rem);
-      color: var(--text-secondary);
-      max-width: 600px;
-      margin: 0 auto 30px;
-      opacity: 0;
-      animation: fadeInUp 1s 0.9s forwards;
-    }
-
-    .hero-cta {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
-      opacity: 0;
-      animation: fadeInUp 1s 1.2s forwards;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 14px 32px;
-      border-radius: 50px;
-      font-family: var(--font-body);
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.4s ease;
-      border: none;
-      text-decoration: none;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--accent-primary), #8b7dff);
-      color: #fff;
-      box-shadow: 0 4px 20px var(--glow-primary);
-    }
-    .btn-primary:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 30px var(--glow-primary);
-      color: #fff;
-    }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--text-primary);
-      border: 1.5px solid var(--border-subtle);
-    }
-    .btn-outline:hover {
-      border-color: var(--accent-primary);
-      background: rgba(108, 99, 255, 0.08);
-      transform: translateY(-3px);
-      color: var(--text-primary);
-    }
-
-    .scroll-indicator {
-      position: absolute;
-      bottom: 40px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      color: var(--text-muted);
-      font-size: 0.7rem;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      animation: bounce 2s infinite;
-    }
-
-    .scroll-indicator .mouse {
-      width: 22px;
-      height: 34px;
-      border: 2px solid var(--text-muted);
-      border-radius: 11px;
-      position: relative;
-    }
-
-    .scroll-indicator .mouse::after {
-      content: '';
-      width: 3px;
-      height: 8px;
-      background: var(--accent-primary);
-      border-radius: 2px;
-      position: absolute;
-      top: 6px;
-      left: 50%;
-      transform: translateX(-50%);
-      animation: scrollWheel 1.5s infinite;
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes bounce {
-      0%, 100% { transform: translateX(-50%) translateY(0); }
-      50% { transform: translateX(-50%) translateY(10px); }
-    }
-
-    @keyframes scrollWheel {
-      0% { opacity: 1; top: 6px; }
-      100% { opacity: 0; top: 18px; }
-    }
-
-    /* ═══════════════════════════════════════════
-       HERO BACKGROUND GRID
-    ═══════════════════════════════════════════ */
-    .hero-grid {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background-image:
-        linear-gradient(rgba(108,99,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(108,99,255,0.03) 1px, transparent 1px);
-      background-size: 60px 60px;
-      z-index: 0;
-    }
-
-    /* ═══════════════════════════════════════════
-       CODE BLOCK ACCENT (Hero)
-    ═══════════════════════════════════════════ */
-    .code-block-accent {
-      position: absolute;
-      top: 15%;
-      right: 5%;
-      font-family: var(--font-code);
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      opacity: 0.3;
-      text-align: left;
-      pointer-events: none;
-      display: none;
-    }
-
-    @media(min-width:768px) {
-      .code-block-accent { display: block; }
-    }
-
-    /* ═══════════════════════════════════════════
-       CHAPTER 1: THE ORIGIN — About / Education
-    ═══════════════════════════════════════════ */
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 40px;
-    }
-
-    @media(min-width:768px) {
-      .about-grid { grid-template-columns: 1fr 1fr; }
-    }
-
-    .about-text p {
-      color: var(--text-secondary);
-      margin-bottom: 16px;
-      font-size: 1rem;
-    }
-
-    .about-text p strong {
-      color: var(--text-primary);
-    }
-
-    .stat-row {
-      display: flex;
-      gap: 24px;
-      flex-wrap: wrap;
-      margin-top: 24px;
-    }
-
-    .stat-item {
-      text-align: center;
-      padding: 16px 24px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 12px;
-      min-width: 100px;
-    }
-
-    .stat-number {
-      font-family: var(--font-display);
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--accent-primary);
-    }
-
-    .stat-label {
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-top: 4px;
-    }
-
-    /* Education Timeline */
-    .edu-timeline {
-      position: relative;
-      padding-left: 30px;
-    }
-
-    .edu-timeline::before {
-      content: '';
-      position: absolute;
-      left: 6px;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary), transparent);
-    }
-
-    .edu-item {
-      position: relative;
-      margin-bottom: 32px;
-      padding: 20px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 12px;
-      transition: all 0.3s ease;
-    }
-
-    .edu-item:hover {
-      border-color: var(--accent-primary);
-      background: var(--bg-card-hover);
-      transform: translateX(6px);
-    }
-
-    .edu-item::before {
-      content: '';
-      position: absolute;
-      left: -27px;
-      top: 26px;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: var(--accent-primary);
-      border: 3px solid var(--bg-dark);
-      box-shadow: 0 0 8px var(--glow-primary);
-    }
-
-    .edu-degree {
-      font-weight: 700;
-      font-size: 1rem;
-      margin-bottom: 4px;
-    }
-
-    .edu-school {
-      color: var(--text-secondary);
-      font-size: 0.88rem;
-    }
-
-    .edu-meta {
-      display: flex;
-      gap: 16px;
-      margin-top: 8px;
-      font-size: 0.78rem;
-      color: var(--text-muted);
-    }
-
-    .edu-badge {
-      display: inline-block;
-      padding: 2px 10px;
-      background: rgba(108, 99, 255, 0.12);
-      color: var(--accent-primary);
-      border-radius: 20px;
-      font-size: 0.7rem;
-      font-weight: 600;
-    }
-
-    /* ═══════════════════════════════════════════
-       CHAPTER 2: THE ARSENAL — Skills
-    ═══════════════════════════════════════════ */
-    .skills-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 24px;
-    }
-
-    .skill-category {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 16px;
-      padding: 28px;
-      transition: all 0.4s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .skill-category::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 3px;
-      background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
-      opacity: 0;
-      transition: opacity 0.4s ease;
-    }
-
-    .skill-category:hover {
-      border-color: var(--accent-primary);
-      transform: translateY(-5px);
-      box-shadow: 0 10px 40px rgba(108, 99, 255, 0.1);
-    }
-    .skill-category:hover::before { opacity: 1; }
-
-    .skill-category-icon {
-      font-size: 2rem;
-      margin-bottom: 12px;
-    }
-
-    .skill-category-title {
-      font-family: var(--font-display);
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin-bottom: 16px;
-    }
-
-    .skill-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .skill-tag {
-      padding: 6px 14px;
-      background: rgba(108, 99, 255, 0.08);
-      border: 1px solid var(--border-subtle);
-      border-radius: 20px;
-      font-size: 0.8rem;
-      color: var(--text-secondary);
-      transition: all 0.3s ease;
-      cursor: default;
-    }
-
-    .skill-tag:hover {
-      background: rgba(108, 99, 255, 0.18);
-      color: var(--accent-primary);
-      border-color: var(--accent-primary);
-    }
-
-    /* ═══════════════════════════════════════════
-       CHAPTER 3: THE BATTLES — Experience
-    ═══════════════════════════════════════════ */
-    .exp-timeline {
-      position: relative;
-      padding-left: 40px;
-    }
-
-    .exp-timeline::before {
-      content: '';
-      position: absolute;
-      left: 14px;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background: linear-gradient(180deg, var(--accent-warm), var(--accent-primary), var(--accent-secondary), transparent);
-    }
-
-    .exp-item {
-      position: relative;
-      margin-bottom: 40px;
-      padding: 24px 28px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 16px;
-      transition: all 0.4s ease;
-    }
-
-    .exp-item:hover {
-      border-color: var(--accent-primary);
-      transform: translateX(6px);
-      box-shadow: 0 8px 30px rgba(108, 99, 255, 0.08);
-    }
-
-    .exp-item::before {
-      content: '';
-      position: absolute;
-      left: -34px;
-      top: 30px;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: var(--bg-dark);
-      border: 3px solid var(--accent-primary);
-      box-shadow: 0 0 10px var(--glow-primary);
-    }
-
-    .exp-item:nth-child(1)::before { border-color: var(--accent-warm); box-shadow: 0 0 10px rgba(255,107,107,0.4); }
-    .exp-item:nth-child(2)::before { border-color: var(--accent-gold); box-shadow: 0 0 10px rgba(255,215,0,0.4); }
-    .exp-item:nth-child(3)::before { border-color: var(--accent-primary); }
-    .exp-item:nth-child(4)::before { border-color: var(--accent-secondary); box-shadow: 0 0 10px var(--glow-secondary); }
-
-    .exp-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-
-    .exp-role {
-      font-weight: 700;
-      font-size: 1.1rem;
-    }
-
-    .exp-company {
-      color: var(--accent-primary);
-      font-size: 0.9rem;
-    }
-
-    .exp-date {
-      font-family: var(--font-code);
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      background: rgba(108, 99, 255, 0.08);
-      padding: 4px 12px;
-      border-radius: 20px;
-    }
-
-    .exp-bullets {
-      list-style: none;
-      padding: 0;
-    }
-
-    .exp-bullets li {
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-      margin-bottom: 8px;
-      padding-left: 20px;
-      position: relative;
-    }
-
-    .exp-bullets li::before {
-      content: '▹';
-      color: var(--accent-secondary);
-      position: absolute;
-      left: 0;
-    }
-
-    /* ═══════════════════════════════════════════
-       CHAPTER 4: THE CREATIONS — Projects
-    ═══════════════════════════════════════════ */
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      gap: 24px;
-    }
-
-    .project-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 16px;
-      overflow: hidden;
-      transition: all 0.4s ease;
-      position: relative;
-    }
-
-    .project-card:hover {
-      border-color: var(--accent-primary);
-      transform: translateY(-8px);
-      box-shadow: 0 20px 50px rgba(108, 99, 255, 0.12);
-    }
-
-    .project-visual {
-      height: 180px;
-      background: linear-gradient(135deg, rgba(108,99,255,0.15), rgba(0,212,170,0.1));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .project-visual .project-icon {
-      font-size: 4rem;
-      z-index: 2;
-    }
-
-    .project-visual::after {
-      content: '';
-      position: absolute;
-      width: 200%;
-      height: 200%;
-      background: repeating-linear-gradient(
-        45deg,
-        transparent,
-        transparent 10px,
-        rgba(108,99,255,0.03) 10px,
-        rgba(108,99,255,0.03) 20px
-      );
-      animation: patternMove 20s linear infinite;
-    }
-
-    @keyframes patternMove {
-      0% { transform: translate(0, 0); }
-      100% { transform: translate(-50px, -50px); }
-    }
-
-    .project-info { padding: 24px; }
-
-    .project-name {
-      font-family: var(--font-display);
-      font-size: 1.3rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .project-desc {
-      color: var(--text-secondary);
-      font-size: 0.88rem;
-      margin-bottom: 16px;
-      line-height: 1.7;
-    }
-
-    .project-tech {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 16px;
-    }
-
-    .project-tech span {
-      font-family: var(--font-code);
-      font-size: 0.7rem;
-      padding: 4px 10px;
-      background: rgba(0, 212, 170, 0.08);
-      color: var(--accent-secondary);
-      border-radius: 4px;
-      border: 1px solid rgba(0, 212, 170, 0.15);
-    }
-
-    .project-impact {
-      font-size: 0.82rem;
-      color: var(--accent-gold);
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    /* Featured project — full width */
-    .project-card.featured {
-      grid-column: 1 / -1;
-    }
-
-    .project-card.featured .project-visual { height: 120px; }
-
-    @media(min-width:768px) {
-      .project-card.featured {
-        display: grid;
-        grid-template-columns: 300px 1fr;
-      }
-      .project-card.featured .project-visual { height: 100%; }
-    }
-
-    /* ═══════════════════════════════════════════
-       CHAPTER 5: THE TROPHIES — Achievements
-    ═══════════════════════════════════════════ */
-    .achievements-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 24px;
-    }
-
-    .achievement-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 16px;
-      padding: 28px;
-      text-align: center;
-      transition: all 0.4s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .achievement-card:hover {
-      transform: translateY(-5px);
-      border-color: var(--accent-gold);
-      box-shadow: 0 10px 40px rgba(255, 215, 0, 0.08);
-    }
-
-    .achievement-card .trophy-icon {
-      font-size: 3rem;
-      margin-bottom: 12px;
-    }
-
-    .achievement-card h3 {
-      font-family: var(--font-display);
-      font-size: 1.15rem;
-      margin-bottom: 8px;
-    }
-
-    .achievement-card p {
-      color: var(--text-secondary);
-      font-size: 0.88rem;
-    }
-
-    .achievement-card .prize {
-      display: inline-block;
-      margin-top: 12px;
-      padding: 6px 16px;
-      background: rgba(255, 215, 0, 0.1);
-      color: var(--accent-gold);
-      border-radius: 20px;
-      font-size: 0.85rem;
-      font-weight: 700;
-    }
-
-    /* ═══════════════════════════════════════════
-       CHAPTER 6: THE SCROLLS — Certifications
-    ═══════════════════════════════════════════ */
-    .certs-scroll {
-      display: flex;
-      gap: 20px;
-      overflow-x: auto;
-      padding-bottom: 16px;
-      scroll-snap-type: x mandatory;
-    }
-
-    .certs-scroll::-webkit-scrollbar { height: 4px; }
-    .certs-scroll::-webkit-scrollbar-thumb { background: var(--accent-primary); border-radius: 2px; }
-
-    .cert-card {
-      min-width: 280px;
-      flex-shrink: 0;
-      scroll-snap-align: start;
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 12px;
-      padding: 24px;
-      transition: all 0.3s ease;
-    }
-
-    .cert-card:hover {
-      border-color: var(--accent-primary);
-      transform: translateY(-3px);
-    }
-
-    .cert-card .cert-icon {
-      font-size: 1.8rem;
-      margin-bottom: 12px;
-    }
-
-    .cert-card h4 {
-      font-size: 0.95rem;
-      margin-bottom: 6px;
-    }
-
-    .cert-card p {
-      color: var(--text-muted);
-      font-size: 0.8rem;
-    }
-
-    /* ═══════════════════════════════════════════
-       CHAPTER 7: THE NEXT CHAPTER — Contact
-    ═══════════════════════════════════════════ */
-    .contact-section {
-      text-align: center;
-      background: radial-gradient(ellipse at 50% 80%, rgba(108, 99, 255, 0.1) 0%, transparent 60%);
-    }
-
-    .contact-links {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
-      margin-top: 32px;
-    }
-
-    .contact-link {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 14px 28px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 12px;
-      color: var(--text-primary);
-      transition: all 0.3s ease;
-      font-size: 0.9rem;
-    }
-
-    .contact-link:hover {
-      border-color: var(--accent-primary);
-      transform: translateY(-3px);
-      box-shadow: 0 8px 24px rgba(108, 99, 255, 0.1);
-      color: var(--text-primary);
-    }
-
-    .contact-link .link-icon { font-size: 1.3rem; }
-
-    /* Story ending */
-    .story-end {
-      margin-top: 60px;
-      padding-top: 40px;
-      border-top: 1px solid var(--border-subtle);
-    }
-
-    .story-end p {
-      color: var(--text-muted);
-      font-family: var(--font-code);
-      font-size: 0.8rem;
-    }
-
-    /* ═══════════════════════════════════════════
-       DIVIDERS
-    ═══════════════════════════════════════════ */
-    .chapter-divider {
-      width: 100%;
-      height: 120px;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .chapter-divider::before {
-      content: '';
-      width: 60px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
-    }
-
-    .chapter-divider .divider-symbol {
-      margin: 0 16px;
-      color: var(--accent-primary);
-      font-size: 1.2rem;
-    }
-
-    .chapter-divider::after {
-      content: '';
-      width: 60px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
-    }
-
-    /* ═══════════════════════════════════════════
-       TYPEWRITER EFFECT
-    ═══════════════════════════════════════════ */
-    .typewriter {
-      display: inline-block;
-      border-right: 2px solid var(--accent-primary);
-      animation: blink-caret 0.75s step-end infinite;
-    }
-
-    @keyframes blink-caret {
-      from, to { border-color: transparent; }
-      50% { border-color: var(--accent-primary); }
-    }
-
-    /* ═══════════════════════════════════════════
-       STARTUP CALLOUT
-    ═══════════════════════════════════════════ */
-    .startup-callout {
-      background: linear-gradient(135deg, rgba(108, 99, 255, 0.08), rgba(0, 212, 170, 0.05));
-      border: 1px solid var(--border-subtle);
-      border-left: 4px solid var(--accent-secondary);
-      border-radius: 12px;
-      padding: 24px 28px;
-      margin-top: 32px;
-    }
-
-    .startup-callout h3 {
-      font-family: var(--font-display);
-      font-size: 1.2rem;
-      margin-bottom: 8px;
-      color: var(--accent-secondary);
-    }
-
-    .startup-callout p {
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-    }
-
-    .startup-callout ul {
-      list-style: none;
-      padding: 0;
-      margin-top: 12px;
-    }
-
-    .startup-callout ul li {
-      color: var(--text-secondary);
-      font-size: 0.88rem;
-      padding-left: 20px;
-      position: relative;
-      margin-bottom: 6px;
-    }
-
-    .startup-callout ul li::before {
-      content: '✦';
-      color: var(--accent-secondary);
-      position: absolute;
-      left: 0;
-      font-size: 0.7rem;
-    }
-
-    /* ═══════════════════════════════════════════
-       RESPONSIVE
-    ═══════════════════════════════════════════ */
-    @media (max-width: 767px) {
-      .chapter { padding: 60px 6%; }
-      .chapter-nav { right: 10px; gap: 12px; }
-      .chapter-dot { width: 8px; height: 8px; }
-      .chapter-dot .tooltip { display: none; }
-      .chapter-number { font-size: 4rem; }
-      .projects-grid { grid-template-columns: 1fr; }
-      .achievements-grid { grid-template-columns: 1fr; }
-      .stat-row { justify-content: center; }
-      .exp-timeline { padding-left: 30px; }
-      .exp-item::before { left: -24px; width: 12px; height: 12px; }
-    }
-
-    /* ═══════════════════════════════════════════
-       FOOTER
-    ═══════════════════════════════════════════ */
-    footer {
-      text-align: center;
-      padding: 40px 20px;
-      color: var(--text-muted);
-      font-size: 0.78rem;
-      border-top: 1px solid var(--border-subtle);
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System Software 3160715 — Q&A Bank</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Fraunces:ital,wght@0,300;0,600;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #13161d;
+    --card: #1a1e28;
+    --border: #252a38;
+    --accent: #4fffb0;
+    --accent2: #ff6b6b;
+    --accent3: #ffd166;
+    --text: #e8eaf0;
+    --muted: #7a8099;
+    --code-bg: #0a0c11;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Fraunces', Georgia, serif;
+    min-height: 100vh;
+    line-height: 1.7;
+  }
+
+  /* ─── SIDEBAR ─── */
+  #sidebar {
+    position: fixed; top: 0; left: 0;
+    width: 280px; height: 100vh;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    z-index: 100;
+    display: flex; flex-direction: column;
+  }
+  #sidebar-header {
+    padding: 24px 20px 16px;
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0;
+    background: var(--surface);
+    z-index: 1;
+  }
+  #sidebar-header .subject-code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  #sidebar-header h2 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  #search-box {
+    margin: 12px 16px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    width: calc(100% - 32px);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  #search-box:focus { border-color: var(--accent); }
+  #search-box::placeholder { color: var(--muted); }
+
+  #q-list { padding: 8px 0 24px; flex: 1; }
+  .q-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 16px;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+    text-decoration: none;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    line-height: 1.4;
+  }
+  .q-item:hover { background: var(--card); color: var(--text); border-left-color: var(--accent); }
+  .q-item.active { background: rgba(79,255,176,0.07); color: var(--accent); border-left-color: var(--accent); }
+  .q-item .qnum {
+    flex-shrink: 0;
+    font-weight: 700;
+    color: var(--accent);
+    width: 22px;
+  }
+  .q-item.active .qnum { color: var(--accent); }
+
+  /* ─── MAIN CONTENT ─── */
+  #main {
+    margin-left: 280px;
+    padding: 48px 60px;
+    max-width: 960px;
+  }
+
+  .page-header {
+    margin-bottom: 56px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+  .page-header .badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(79,255,176,0.1);
+    border: 1px solid rgba(79,255,176,0.3);
+    border-radius: 4px;
+    padding: 3px 10px;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+  .page-header h1 {
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .page-header p {
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
+
+  /* ─── Q&A CARDS ─── */
+  .qa-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 32px;
+    overflow: hidden;
+    scroll-margin-top: 32px;
+    transition: border-color 0.3s;
+  }
+  .qa-card:target, .qa-card.highlight { border-color: var(--accent); }
+  .qa-card-header {
+    padding: 20px 28px;
+    background: rgba(255,255,255,0.02);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 16px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .qa-card-header .q-badge {
+    flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--bg);
+    background: var(--accent);
+    border-radius: 6px;
+    padding: 4px 10px;
+    letter-spacing: 1px;
+  }
+  .qa-card-header h3 {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.35;
+    flex: 1;
+  }
+  .toggle-icon {
+    color: var(--muted);
+    font-size: 18px;
+    transition: transform 0.3s;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .qa-card.open .toggle-icon { transform: rotate(180deg); color: var(--accent); }
+
+  .qa-body {
+    display: none;
+    padding: 28px 32px;
+  }
+  .qa-card.open .qa-body { display: block; }
+
+  /* ─── ANSWER CONTENT STYLES ─── */
+  .ans h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: var(--accent);
+    margin: 24px 0 12px;
+  }
+  .ans h4:first-child { margin-top: 0; }
+  .ans p { font-size: 15.5px; color: #c8cad8; margin-bottom: 14px; }
+  .ans ul, .ans ol { margin: 10px 0 16px 24px; color: #c8cad8; font-size: 15px; }
+  .ans li { margin-bottom: 6px; }
+  .ans strong { color: var(--accent3); font-weight: 600; }
+  .ans em { color: var(--accent2); font-style: italic; }
+
+  .ans table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0 20px;
+    font-size: 14px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .ans table th {
+    background: rgba(79,255,176,0.1);
+    color: var(--accent);
+    padding: 10px 14px;
+    text-align: left;
+    border: 1px solid var(--border);
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+  .ans table td {
+    padding: 9px 14px;
+    border: 1px solid var(--border);
+    color: #c0c2d0;
+    vertical-align: top;
+  }
+  .ans table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+  .code-block {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: #a8ffda;
+    overflow-x: auto;
+    margin: 14px 0 20px;
+    white-space: pre;
+    line-height: 1.6;
+  }
+
+  .diagram {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 16px 0 20px;
+    overflow-x: auto;
+    text-align: center;
+  }
+  .diagram svg { max-width: 100%; height: auto; }
+
+  .note-box {
+    background: rgba(255,209,102,0.07);
+    border: 1px solid rgba(255,209,102,0.3);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 14px;
+    color: var(--accent3);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .note-box::before { content: "💡 NOTE: "; font-weight: 700; }
+
+  .tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin: 0 3px 4px 0;
+    background: rgba(255,107,107,0.12);
+    color: var(--accent2);
+    border: 1px solid rgba(255,107,107,0.25);
+  }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+
+  /* Scroll to top */
+  #top-btn {
+    position: fixed;
+    bottom: 32px; right: 32px;
+    width: 44px; height: 44px;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    box-shadow: 0 4px 20px rgba(79,255,176,0.4);
+    z-index: 200;
+  }
+  #top-btn.show { display: flex; }
+
+  /* Progress bar */
+  #progress-bar {
+    position: fixed; top: 0; left: 280px; right: 0;
+    height: 2px; background: rgba(255,255,255,0.05);
+    z-index: 300;
+  }
+  #progress-fill {
+    height: 100%; width: 0%; background: var(--accent);
+    transition: width 0.1s;
+  }
+
+  @media (max-width: 768px) {
+    #sidebar { width: 100%; height: auto; position: relative; }
+    #main { margin-left: 0; padding: 24px 20px; }
+    #progress-bar { left: 0; }
+  }
+</style>
 </head>
 <body>
 
-  <!-- ═══ Story Progress Bar ═══ -->
-  <div class="story-progress" id="storyProgress"></div>
+<div id="progress-bar"><div id="progress-fill"></div></div>
 
-  <!-- ═══ Chapter Navigation Dots ═══ -->
-  <nav class="chapter-nav" id="chapterNav">
-    <div class="chapter-dot active" data-target="prologue">
-      <span class="tooltip">Prologue</span>
-    </div>
-    <div class="chapter-dot" data-target="origin">
-      <span class="tooltip">The Origin</span>
-    </div>
-    <div class="chapter-dot" data-target="arsenal">
-      <span class="tooltip">The Arsenal</span>
-    </div>
-    <div class="chapter-dot" data-target="battles">
-      <span class="tooltip">The Battles</span>
-    </div>
-    <div class="chapter-dot" data-target="creations">
-      <span class="tooltip">The Creations</span>
-    </div>
-    <div class="chapter-dot" data-target="trophies">
-      <span class="tooltip">The Trophies</span>
-    </div>
-    <div class="chapter-dot" data-target="scrolls">
-      <span class="tooltip">The Scrolls</span>
-    </div>
-    <div class="chapter-dot" data-target="nextchapter">
-      <span class="tooltip">Next Chapter</span>
-    </div>
-  </nav>
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div id="sidebar-header">
+    <div class="subject-code">3160715</div>
+    <h2>System Software<br>Question Bank</h2>
+  </div>
+  <input id="search-box" type="text" placeholder="Search questions..." oninput="filterQ(this.value)">
+  <div id="q-list">
+    <!-- populated by JS -->
+  </div>
+</nav>
 
-  <!-- ═══ Floating Particles ═══ -->
-  <div class="particles" id="particles"></div>
+<!-- MAIN -->
+<main id="main">
+  <div class="page-header">
+    <div class="badge">GTU · SEM 6 · CE</div>
+    <h1>System Software</h1>
+    <p>Subject Code: 3160715 &nbsp;·&nbsp; SVBIT Computer Engineering &nbsp;·&nbsp; 20 Questions</p>
+  </div>
 
-  <!-- ═══════════════════════════════════════════
-       PROLOGUE — HERO
-  ═══════════════════════════════════════════ -->
-  <section class="hero chapter" id="prologue">
-    <div class="hero-grid"></div>
-    <div class="code-block-accent">
-      <pre>
-const developer = {
-  name: "Aryan Patel",
-  role: "Full Stack Dev",
-  passion: "Building the future",
-  status: "Always learning..."
-};
-      </pre>
+  <!-- Q1 -->
+  <div class="qa-card open" id="q1">
+    <div class="qa-card-header" onclick="toggleCard(this)">
+      <span class="q-badge">Q 01</span>
+      <h3>Define system software. Give difference between System Software and Application software.</h3>
+      <span class="toggle-icon">▼</span>
     </div>
-    <div class="hero-inner">
-      <p class="hero-greeting">// Welcome to my story</p>
-      <h1 class="hero-name">
-        I'm <span class="highlight">Aryan Patel</span>
-      </h1>
-      <p class="hero-tagline">
-        A Computer Engineering student on a mission to build scalable web applications 
-        and leverage AI-driven solutions to solve real-world problems.
-      </p>
-      <div class="hero-cta">
-        <a href="#origin" class="btn btn-primary">📖 Read My Story</a>
-        <a href="#nextchapter" class="btn btn-outline">📬 Get In Touch</a>
+    <div class="qa-body">
+      <div class="ans">
+        <h4>Definition — System Software</h4>
+        <p><strong>System software</strong> is a collection of programs designed to operate, control, and extend the processing capabilities of a computer. It acts as an interface between the hardware and the application programs. It manages and controls hardware so that application software can perform a task.</p>
+        <p>Examples: Operating System, Compiler, Assembler, Linker, Loader, Device Drivers.</p>
+        <h4>Difference: System Software vs Application Software</h4>
+        <table>
+          <tr><th>Parameter</th><th>System Software</th><th>Application Software</th></tr>
+          <tr><td>Purpose</td><td>Manages hardware resources and provides platform for running apps</td><td>Performs specific tasks for the end user</td></tr>
+          <tr><td>Interaction</td><td>Interacts directly with hardware</td><td>Interacts with system software</td></tr>
+          <tr><td>Dependency</td><td>Can run independently</td><td>Depends on system software to run</td></tr>
+          <tr><td>Language</td><td>Written in low-level languages (C, Assembly)</td><td>Written in high-level languages (Java, Python)</td></tr>
+          <tr><td>User Interaction</td><td>Minimal direct interaction with user</td><td>Direct interaction with user</td></tr>
+          <tr><td>Examples</td><td>OS, Compiler, Loader, Linker</td><td>MS Word, Browser, VLC, Tally</td></tr>
+          <tr><td>Design</td><td>General purpose</td><td>Specific purpose</td></tr>
+          <tr><td>Developed by</td><td>System developers / Vendors</td><td>Software developers / Third parties</td></tr>
+        </table>
       </div>
     </div>
-    <div class="scroll-indicator">
-      <div class="mouse"></div>
-      <span>Scroll to begin</span>
+  </div>
+
+  <!-- Q2 -->
+  <div class="qa-card" id="q2">
+    <div class="qa-card-header" onclick="toggleCard(this)">
+      <span class="q-badge">Q 02</span>
+      <h3>Explain the various stages of the life cycle of a source program with a neat diagram.</h3>
+      <span class="toggle-icon">▼</span>
     </div>
-  </section>
+    <div class="qa-body">
+      <div class="ans">
+        <h4>Source Program Life Cycle</h4>
+        <p>A source program goes through several transformations before it becomes an executable program. The main stages are:</p>
+        <ol>
+          <li><strong>Source Program</strong> – Written by programmer in high-level language (C, Java, etc.)</li>
+          <li><strong>Preprocessor</strong> – Handles macros, file inclusions, conditional compilation (#include, #define)</li>
+          <li><strong>Compiler</strong> – Translates source code into assembly or object code, checks syntax & semantics</li>
+          <li><strong>Assembler</strong> – Converts assembly language code into relocatable machine code (object file)</li>
+          <li><strong>Linker</strong> – Combines multiple object files and library routines into a single relocatable module</li>
+          <li><strong>Loader</strong> – Loads the executable into main memory for execution</li>
+          <li><strong>Execution</strong> – CPU executes the program</li>
+        </ol>
+        <div class="diagram">
+          <svg viewBox="0 0 520 540" xmlns="http://www.w3.org/2000/svg" width="520" height="540">
+            <defs>
+              <marker id="arr" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+                <path d="M0,0 L8,4 L0,8 Z" fill="#4fffb0"/>
+              </marker>
+            </defs>
+            <style>
+              .box { rx:8; fill:#1a1e28; stroke:#4fffb0; stroke-width:1.5; }
+              .box2 { rx:8; fill:#1a1e28; stroke:#ffd166; stroke-width:1.5; }
+              .lbl { fill:#e8eaf0; font-family:'JetBrains Mono',monospace; font-size:13px; text-anchor:middle; }
+              .sub { fill:#7a8099; font-family:'JetBrains Mono',monospace; font-size:10px; text-anchor:middle; }
+              .arr-line { stroke:#4fffb0; stroke-width:1.5; marker-end:url(#arr); }
+              .side-lbl { fill:#ffd166; font-family:'JetBrains Mono',monospace; font-size:10px; }
+            </style>
+            <!-- Source Program -->
+            <rect class="box" x="165" y="10" width="190" height="44"/>
+            <text class="lbl" x="260" y="37">Source Program</text>
 
-  <div class="chapter-divider"><span class="divider-symbol">⟡</span></div>
+            <line class="arr-line" x1="260" y1="54" x2="260" y2="78"/>
 
-  <!-- ═══════════════════════════════════════════
-       CHAPTER 1: THE ORIGIN — About & Education
-  ═══════════════════════════════════════════ -->
-  <section class="chapter" id="origin" style="background: radial-gradient(ellipse at 20% 80%, rgba(0,212,170,0.05) 0%, transparent 50%);">
-    <div class="chapter-content">
-      <span class="chapter-number reveal">01</span>
-      <div class="chapter-label reveal">Chapter One</div>
-      <h2 class="chapter-title reveal">The Origin Story</h2>
-      <p class="chapter-subtitle reveal">
-        Every great journey begins with a single step. Mine started in a small town, 
-        fueled by curiosity and a laptop full of dreams...
-      </p>
+            <!-- Preprocessor -->
+            <rect class="box" x="165" y="78" width="190" height="44"/>
+            <text class="lbl" x="260" y="105">Preprocessor</text>
 
-      <div class="about-grid">
-        <!-- Left — Story Text -->
-        <div class="about-text reveal-left" style="transition-delay: 0.2s;">
-          <p>
-            Growing up in <strong>Gujarat, India</strong>, I discovered my love for technology early.
-            What started as tinkering with HTML pages in a school computer lab evolved into a 
-            <strong>full-blown passion for full-stack web development</strong>.
-          </p>
-          <p>
-            I earned <strong>University Rank 1</strong> in my Diploma with a CGPA of 9.02, 
-            proving that dedication beats talent every time. Now pursuing my B.E. at SVBIT 
-            Gandhinagar, I'm in the <strong>top 10</strong> of my university while juggling 
-            internships, hackathons, and building my own <strong>AI startup — Wispa AI</strong>.
-          </p>
-          <p>
-            I believe code is a superpower — and I'm here to use mine for good.
-          </p>
+            <line class="arr-line" x1="260" y1="122" x2="260" y2="146"/>
+            <text class="sub" x="300" y="138">Modified source</text>
 
-          <div class="stat-row">
-            <div class="stat-item reveal-scale" style="transition-delay: 0.4s;">
-              <div class="stat-number" data-count="15">0</div>
-              <div class="stat-label">Projects Built</div>
-            </div>
-            <div class="stat-item reveal-scale" style="transition-delay: 0.5s;">
-              <div class="stat-number" data-count="5">0</div>
-              <div class="stat-label">Internships</div>
-            </div>
-            <div class="stat-item reveal-scale" style="transition-delay: 0.6s;">
-              <div class="stat-number" data-count="7">0</div>
-              <div class="stat-label">Certificates</div>
-            </div>
-            <div class="stat-item reveal-scale" style="transition-delay: 0.7s;">
-              <div class="stat-number" data-count="1">0</div>
-              <div class="stat-label">Startup</div>
-            </div>
-          </div>
+            <!-- Compiler -->
+            <rect class="box" x="165" y="146" width="190" height="44"/>
+            <text class="lbl" x="260" y="173">Compiler</text>
+
+            <line class="arr-line" x1="260" y1="190" x2="260" y2="214"/>
+            <text class="sub" x="305" y="206">Assembly code</text>
+
+            <!-- Assembler -->
+            <rect class="box" x="165" y="214" width="190" height="44"/>
+            <text class="lbl" x="260" y="241">Assembler</text>
+
+            <line class="arr-line" x1="260" y1="258" x2="260" y2="282"/>
+            <text class="sub" x="305" y="274">Object code</text>
+
+            <!-- Library/Object files side -->
+            <rect class="box2" x="390" y="278" width="120" height="44"/>
+            <text class="lbl" x="450" y="298" fill="#ffd166">Library &amp;</text>
+            <text class="lbl" x="450" y="314" fill="#ffd166">Object Files</text>
+            <line x1="390" y1="300" x2="355" y2="300" stroke="#ffd166" stroke-width="1" stroke-dasharray="4" marker-end="url(#arr)"/>
+
+            <!-- Linker -->
+            <rect class="box" x="165" y="282" width="190" height="44"/>
+            <text class="lbl" x="260" y="309">Linker</text>
+
+            <line class="arr-line" x1="260" y1="326" x2="260" y2="350"/>
+            <text class="sub" x="310" y="342">Relocatable machine code</text>
+
+            <!-- Loader -->
+            <rect class="box" x="165" y="350" width="190" height="44"/>
+            <text class="lbl" x="260" y="377">Loader</text>
+
+            <line class="arr-line" x1="260" y1="394" x2="260" y2="418"/>
+            <text class="sub" x="300" y="410">Load into memory</text>
+
+            <!-- Execution -->
+            <rect x="165" y="418" width="190" height="44" rx="8" fill="rgba(79,255,176,0.1)" stroke="#4fffb0" stroke-width="2"/>
+            <text class="lbl" x="260" y="444" fill="#4fffb0">▶  Execution</text>
+          </svg>
         </div>
-
-        <!-- Right — Education Timeline -->
-        <div class="reveal-right" style="transition-delay: 0.3s;">
-          <h3 style="font-family: var(--font-display); margin-bottom: 24px; font-size: 1.3rem;">
-            🎓 Education Journey
-          </h3>
-          <div class="edu-timeline">
-            <div class="edu-item">
-              <div class="edu-degree">B.E. in Computer Engineering</div>
-              <div class="edu-school">SVBIT, Gandhinagar</div>
-              <div class="edu-meta">
-                <span>📅 2023 – Present (6th Sem)</span>
-                <span class="edu-badge">University Top 10</span>
-              </div>
-            </div>
-            <div class="edu-item">
-              <div class="edu-degree">Diploma in Computer Engineering</div>
-              <div class="edu-school">Atul Polytechnic, Khadat</div>
-              <div class="edu-meta">
-                <span>📅 2019 – 2022</span>
-                <span class="edu-badge">🏆 University Rank 1 — 9.02 CGPA</span>
-              </div>
-            </div>
-            <div class="edu-item">
-              <div class="edu-degree">Class 10th — SSC</div>
-              <div class="edu-school">Rameshwar Higher Secondary School</div>
-              <div class="edu-meta">
-                <span>📅 2017</span>
-                <span>75%</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <p>Each stage produces an intermediate form of the program which is fed as input to the next stage.</p>
       </div>
     </div>
-  </section>
+  </div>
 
-  <div class="chapter-divider"><span class="divider-symbol">⟡</span></div>
-
-  <!-- ═══════════════════════════════════════════
-       CHAPTER 2: THE ARSENAL — Skills
-  ═══════════════════════════════════════════ -->
-  <section class="chapter" id="arsenal" style="background: radial-gradient(ellipse at 80% 20%, rgba(108,99,255,0.06) 0%, transparent 50%);">
-    <div class="chapter-content">
-      <span class="chapter-number reveal">02</span>
-      <div class="chapter-label reveal">Chapter Two</div>
-      <h2 class="chapter-title reveal">The Arsenal</h2>
-      <p class="chapter-subtitle reveal">
-        Every hero needs their tools. Over years of learning, building, and breaking things, 
-        I've forged an arsenal of technologies that power my creations.
-      </p>
-
-      <div class="skills-container">
-        <div class="skill-category reveal" style="transition-delay: 0.1s;">
-          <div class="skill-category-icon">⚡</div>
-          <div class="skill-category-title">Languages & Frameworks</div>
-          <div class="skill-tags">
-            <span class="skill-tag">PHP</span>
-            <span class="skill-tag">React.js</span>
-            <span class="skill-tag">JavaScript</span>
-            <span class="skill-tag">HTML5</span>
-            <span class="skill-tag">CSS3</span>
-            <span class="skill-tag">MySQL</span>
-            <span class="skill-tag">WordPress</span>
-            <span class="skill-tag">REST APIs</span>
-          </div>
-        </div>
-
-        <div class="skill-category reveal" style="transition-delay: 0.2s;">
-          <div class="skill-category-icon">🛠️</div>
-          <div class="skill-category-title">Tools & Technologies</div>
-          <div class="skill-tags">
-            <span class="skill-tag">Git & GitHub</span>
-            <span class="skill-tag">VS Code</span>
-            <span class="skill-tag">ChatGPT</span>
-            <span class="skill-tag">Prompt Engineering</span>
-            <span class="skill-tag">Canva</span>
-            <span class="skill-tag">Excel</span>
-          </div>
-        </div>
-
-        <div class="skill-category reveal" style="transition-delay: 0.3s;">
-          <div class="skill-category-icon">🎯</div>
-          <div class="skill-category-title">Superpowers</div>
-          <div class="skill-tags">
-            <span class="skill-tag">Responsive Design</span>
-            <span class="skill-tag">Version Control</span>
-            <span class="skill-tag">Cross-Browser Compatibility</span>
-            <span class="skill-tag">Basic SEO</span>
-            <span class="skill-tag">Debugging</span>
-            <span class="skill-tag">AI Integration</span>
-          </div>
-        </div>
+  <!-- Q3 -->
+  <div class="qa-card" id="q3">
+    <div class="qa-card-header" onclick="toggleCard(this)">
+      <span class="q-badge">Q 03</span>
+      <h3>Define: System Software, Semantic Gap, Execution Gap, Specification Gap, Token</h3>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="qa-body">
+      <div class="ans">
+        <h4>1. System Software</h4>
+        <p><strong>System Software</strong> is a set of programs designed to control and manage the computer hardware and provide services to application programs. It acts as an intermediary between hardware and user applications. Examples: OS, Compiler, Assembler, Loader.</p>
+        <h4>2. Semantic Gap</h4>
+        <p><strong>Semantic Gap</strong> is the difference between the meaning/functionality provided by a high-level language and the actual instructions available in the machine language (ISA). It represents the conceptual distance between what a programmer wants to express and what the hardware can directly execute. A larger semantic gap means more complex translation required.</p>
+        <h4>3. Execution Gap</h4>
+        <p><strong>Execution Gap</strong> is the difference between the form of a program that a programmer writes (source code) and the form actually executed by the hardware (machine code). It represents the gap that compilers, assemblers, and loaders bridge.</p>
+        <h4>4. Specification Gap</h4>
+        <p><strong>Specification Gap</strong> is the difference between the user's requirements/specification and the actual implementation in code. It refers to the mismatch between what the user wants and what the system actually does — often filled by requirements engineering and software design tools.</p>
+        <h4>5. Token</h4>
+        <p><strong>Token</strong> is the smallest meaningful unit of a program that the lexical analyzer (scanner) recognizes. It is a sequence of characters that represents a single, logically cohesive unit.</p>
+        <p>Token types include: <strong>Keywords</strong> (if, while, int), <strong>Identifiers</strong> (variable names), <strong>Literals</strong> (numbers, strings), <strong>Operators</strong> (+, -, *), <strong>Punctuation</strong> ({, ;, }).</p>
+        <div class="code-block">Source: int a = 10;
+Tokens: &lt;keyword, int&gt;  &lt;id, a&gt;  &lt;op, =&gt;  &lt;literal, 10&gt;  &lt;punct, ;&gt;</div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <div class="chapter-divider"><span class="divider-symbol">⟡</span></div>
-
-  <!-- ═══════════════════════════════════════════
-       CHAPTER 3: THE BATTLES — Experience
-  ═══════════════════════════════════════════ -->
-  <section class="chapter" id="battles" style="background: radial-gradient(ellipse at 30% 50%, rgba(255,107,107,0.04) 0%, transparent 50%);">
-    <div class="chapter-content">
-      <span class="chapter-number reveal">03</span>
-      <div class="chapter-label reveal">Chapter Three</div>
-      <h2 class="chapter-title reveal">The Battles</h2>
-      <p class="chapter-subtitle reveal">
-        The real world tested me. From debugging production code under pressure to delivering 
-        client projects solo — each internship was a battle that made me stronger.
-      </p>
-
-      <div class="exp-timeline">
-        <!-- Experience 1 -->
-        <div class="exp-item reveal" style="transition-delay: 0.1s;">
-          <div class="exp-header">
-            <div>
-              <div class="exp-role">IT Support Intern</div>
-              <div class="exp-company">Ascendant Globalcredit Group (Virtual)</div>
-            </div>
-            <span class="exp-date">Jan 2026 – Feb 2026</span>
-          </div>
-          <ul class="exp-bullets">
-            <li>Completed 178 hours of virtual internship in IT support & technical troubleshooting</li>
-            <li>Assisted in resolving technical issues and supporting system operations remotely</li>
-            <li>Collaborated with team members on project-based tasks and presentations</li>
-          </ul>
-        </div>
-
-        <!-- Experience 2 -->
-        <div class="exp-item reveal" style="transition-delay: 0.2s;">
-          <div class="exp-header">
-            <div>
-              <div class="exp-role">Intern — Google Student Ambassador</div>
-              <div class="exp-company">Ping Digital Broadcast Pvt Ltd</div>
-            </div>
-            <span class="exp-date">Dec 2025 – Present</span>
-          </div>
-          <ul class="exp-bullets">
-            <li>Assisted in operational and coordination tasks during the internship program</li>
-            <li>Delivered real-world web solutions to clients while gaining practical experience</li>
-            <li>Successfully completed internship and received an official experience letter</li>
-          </ul>
-        </div>
-
-        <!-- Experience 3 -->
-        <div class="exp-item reveal" style="transition-delay: 0.3s;">
-          <div class="exp-header">
-            <div>
-              <div class="exp-role">Frontend Developer Intern & Network Engineer</div>
-              <div class="exp-company">Webito Infotech</div>
-            </div>
-            <span class="exp-date">Jan 2024 – Apr 2024</span>
-          </div>
-          <ul class="exp-bullets">
-            <li>Built responsive interfaces using HTML, CSS, JavaScript & React.js</li>
-            <li>Collaborated with senior developers to implement dynamic UI/UX components</li>
-            <li>Integrated APIs and optimized code for performance and reusability</li>
-            <li>Implemented backup and recovery strategies to prevent data loss</li>
-          </ul>
-        </div>
-
-        <!-- Experience 4 -->
-        <div class="exp-item reveal" style="transition-delay: 0.4s;">
-          <div class="exp-header">
-            <div>
-              <div class="exp-role">Junior PHP Developer</div>
-              <div class="exp-company">Iclerisy Technologies</div>
-            </div>
-            <span class="exp-date">Sep 2023 – Dec 2023</span>
-          </div>
-          <ul class="exp-bullets">
-            <li>Developed client web pages using WordPress, HTML/CSS, and PHP</li>
-            <li>Built a billing system for dynamic invoice generation, tax calculations & inventory management</li>
-            <li>Gained 1 year of real-world project experience, developed and delivered to clients</li>
-          </ul>
-        </div>
-
-        <!-- Experience 5 -->
-        <div class="exp-item reveal" style="transition-delay: 0.5s;">
-          <div class="exp-header">
-            <div>
-              <div class="exp-role">Public Relations & R&D Intern</div>
-              <div class="exp-company">Talrop, Kerala (Remote)</div>
-            </div>
-            <span class="exp-date">Feb 2025 – Mar 2025</span>
-          </div>
-          <ul class="exp-bullets">
-            <li>Leading public relations & asset management activities</li>
-            <li>Contributed to tech innovation through research and automation strategies</li>
-            <li>Completed 16-day on-site training in Kerala and 7 days of Xchange program</li>
-          </ul>
-        </div>
+  <!-- Q4 -->
+  <div class="qa-card" id="q4">
+    <div class="qa-card-header" onclick="toggleCard(this)">
+      <span class="q-badge">Q 04</span>
+      <h3>Differentiate between passes and phases of compiler.</h3>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="qa-body">
+      <div class="ans">
+        <table>
+          <tr><th>Parameter</th><th>Phases of Compiler</th><th>Passes of Compiler</th></tr>
+          <tr><td>Definition</td><td>A phase is a logically distinct stage of compilation that transforms the program from one representation to another</td><td>A pass is a complete scan/traversal of the entire source (or intermediate) program</td></tr>
+          <tr><td>Nature</td><td>Logical/conceptual division</td><td>Physical division (actual traversal of input)</td></tr>
+          <tr><td>Number</td><td>Fixed — 6 standard phases</td><td>Varies — 1, 2 or more passes possible</td></tr>
+          <tr><td>Combination</td><td>Multiple phases can be combined in a single pass</td><td>A single pass may include several phases</td></tr>
+          <tr><td>Examples</td><td>Lexical Analysis, Syntax Analysis, Semantic Analysis, IR Generation, Optimization, Code Generation</td><td>Pass 1: Lexical + Syntax + Semantic; Pass 2: Optimization + Code Gen</td></tr>
+          <tr><td>Memory</td><td>Phases may hold partial data</td><td>Each pass reads from file/memory, writes result</td></tr>
+        </table>
+        <h4>6 Phases of a Compiler</h4>
+        <ol>
+          <li>Lexical Analysis (Scanner)</li>
+          <li>Syntax Analysis (Parser)</li>
+          <li>Semantic Analysis</li>
+          <li>Intermediate Code Generation</li>
+          <li>Code Optimization</li>
+          <li>Code Generation</li>
+        </ol>
+        <div class="note-box">Multiple phases can be grouped into fewer passes to reduce I/O overhead and improve compiler speed.</div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <div class="chapter-divider"><span class="divider-symbol">⟡</span></div>
-
-  <!-- ═══════════════════════════════════════════
-       CHAPTER 4: THE CREATIONS — Projects
-  ═══════════════════════════════════════════ -->
-  <section class="chapter" id="creations" style="background: radial-gradient(ellipse at 70% 70%, rgba(0,229,255,0.04) 0%, transparent 50%);">
-    <div class="chapter-content">
-      <span class="chapter-number reveal">04</span>
-      <div class="chapter-label reveal">Chapter Four</div>
-      <h2 class="chapter-title reveal">The Creations</h2>
-      <p class="chapter-subtitle reveal">
-        Ideas are nothing without execution. Here are the projects where I turned 
-        lines of code into real-world solutions that make a difference.
-      </p>
-
-      <div class="projects-grid">
-        <!-- Project 1 — Featured -->
-        <div class="project-card featured reveal-scale" style="transition-delay: 0.1s;">
-          <div class="project-visual">
-            <span class="project-icon">🏙️</span>
-          </div>
-          <div class="project-info">
-            <div class="project-name">Smart City Citizen Portal</div>
-            <div class="project-desc">
-              A full-stack civic issue reporting platform with User, Admin, and Worker modules. 
-              Features real-time task tracking and an issue resolution dashboard that brought 
-              order to chaos.
-            </div>
-            <div class="project-tech">
-              <span>PHP</span>
-              <span>MySQL</span>
-              <span>HTML/CSS</span>
-              <span>Full Stack</span>
-            </div>
-            <div class="project-impact">⚡ Reduced issue resolution time by 30%</div>
-          </div>
-        </div>
-
-        <!-- Project 2 -->
-        <div class="project-card reveal-scale" style="transition-delay: 0.2s;">
-          <div class="project-visual" style="background: linear-gradient(135deg, rgba(255,107,107,0.12), rgba(255,215,0,0.08));">
-            <span class="project-icon">💪</span>
-          </div>
-          <div class="project-info">
-            <div class="project-name">Life Fitness Membership System</div>
-            <div class="project-desc">
-              Full-stack Gym Management platform with member management, plan subscriptions, 
-              trainer assignment, and payment tracking.
-            </div>
-            <div class="project-tech">
-              <span>PHP</span>
-              <span>MySQL</span>
-              <span>CRUD</span>
-            </div>
-            <div class="project-impact">⚡ Improved daily operational efficiency of a local gym</div>
-          </div>
-        </div>
-
-        <!-- Project 3 -->
-        <div class="project-card reveal-scale" style="transition-delay: 0.3s;">
-          <div class="project-visual" style="background: linear-gradient(135deg, rgba(0,212,170,0.12), rgba(108,99,255,0.08));">
-            <span class="project-icon">🤖</span>
-          </div>
-          <div class="project-info">
-            <div class="project-name">Wispa AI — Startup Device</div>
-            <div class="project-desc">
-              An AI-powered startup project currently in development. Phase 1 completed, 
-              applied for SSIP Government funding. Building the prototype for a device that 
-              merges AI with real-world utility.
-            </div>
-            <div class="project-tech">
-              <span>AI/ML</span>
-              <span>Prototype</span>
-              <span>SSIP Funded</span>
-            </div>
-            <div class="project-impact">🚀 Active Startup — Government Funding Applied</div>
-          </div>
-        </div>
+  <!-- Q5 -->
+  <div class="qa-card" id="q5">
+    <div class="qa-card-header" onclick="toggleCard(this)">
+      <span class="q-badge">Q 05</span>
+      <h3>Define: Linker, Loader, Parser, Assembler, Compiler</h3>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="qa-body">
+      <div class="ans">
+        <h4>1. Linker</h4>
+        <p>A <strong>Linker</strong> is a system program that combines one or more object files (generated by assembler/compiler) along with library files into a single executable file. It resolves external references and assigns final addresses. Types: Static Linker, Dynamic Linker.</p>
+        <h4>2. Loader</h4>
+        <p>A <strong>Loader</strong> is a system program that loads the executable program into main memory (RAM) for execution. It allocates memory, performs address relocation, and transfers control to the program's entry point. Types: Absolute Loader, Relocating Loader, Direct Linking Loader.</p>
+        <h4>3. Parser</h4>
+        <p>A <strong>Parser</strong> is a component of the compiler (Phase 2 – Syntax Analysis) that reads a stream of tokens produced by the lexer and checks them against the grammar rules of the language. It builds a parse tree (syntax tree). Types: Top-down Parser, Bottom-up Parser.</p>
+        <h4>4. Assembler</h4>
+        <p>An <strong>Assembler</strong> is a translator that converts assembly language programs into machine language (object code). It converts mnemonics (ADD, MOV, etc.) to their binary opcode equivalents. Types: Single-pass Assembler, Two-pass Assembler.</p>
+        <h4>5. Compiler</h4>
+        <p>A <strong>Compiler</strong> is a program that translates the entire source code written in a high-level language into machine code (or assembly language) at once, reporting all errors after complete translation. Output is an executable or object file.</p>
+        <table>
+          <tr><th>Tool</th><th>Input</th><th>Output</th></tr>
+          <tr><td>Compiler</td><td>High-level source code</td><td>Object/Assembly code</td></tr>
+          <tr><td>Assembler</td><td>Assembly language</td><td>Machine code (object file)</td></tr>
+          <tr><td>Linker</td><td>Object files + Libraries</td><td>Single executable</td></tr>
+          <tr><td>Loader</td><td>Executable file</td><td>Program in memory</td></tr>
+          <tr><td>Parser</td><td>Token stream</td><td>Parse/Syntax tree</td></tr>
+        </table>
       </div>
+    </div>
+  </div>
 
-      <!-- Startup Callout -->
-      <div class="startup-callout reveal" style="transition-delay: 0.4s;">
-        <h3>🚀 The Startup Dream</h3>
-        <p>Beyond projects, I'm building something bigger:</p>
+  <!-- Q6 -->
+  <div class="qa-card" id="q6">
+    <div class="qa-card-header" onclick="toggleCard(this)">
+      <span class="q-badge">Q 06</span>
+      <h3>List various phases of language processor. Explain any one phase in detail. Also explain Symbol Table.</h3>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="qa-body">
+      <div class="ans">
+        <h4>Phases of a Language Processor (Compiler)</h4>
+        <ol>
+          <li>Lexical Analysis</li>
+          <li>Syntax Analysis (Parsing)</li>
+          <li>Semantic Analysis</li>
+          <li>Intermediate Code Generation</li>
+          <li>Code Optimization</li>
+          <li>Code Generation</li>
+        </ol>
+        <h4>Detailed Explanation: Lexical Analysis</h4>
+        <p>The <strong>Lexical Analyzer</strong> (also called Scanner) is the first phase of the compiler. It reads the source program character by character and groups them into meaningful sequences called <em>lexemes</em>, then converts them to <em>tokens</em>.</p>
+        <p><strong>Tasks performed:</strong></p>
         <ul>
-          <li>Applied for funding under SSIP, Government of India</li>
-          <li>Completed Phase 1 of Wispa AI — an innovative startup device</li>
-          <li>Participated in Google Gen AI Exchange Hackathon under Google Cloud</li>
-          <li>15+ real-world web projects developed and multiple small-scale web apps</li>
+          <li>Remove whitespace and comments</li>
+          <li>Identify tokens (keywords, identifiers, operators, literals)</li>
+          <li>Enter identifiers into the symbol table</li>
+          <li>Report lexical errors (invalid characters)</li>
         </ul>
+        <div class="code-block">Source: x = a + b * 2;
+
+Tokens produced:
+&lt;id, x&gt;  &lt;op, =&gt;  &lt;id, a&gt;  &lt;op, +&gt;  &lt;id, b&gt;  &lt;op, *&gt;  &lt;num, 2&gt;  &lt;punct, ;&gt;</div>
+        <h4>Symbol Table</h4>
+        <p>A <strong>Symbol Table</strong> is a data structure maintained throughout the compilation process to store information about identifiers (variables, functions, objects) declared in the program.</p>
+        <p><strong>Information stored in Symbol Table:</strong></p>
+        <ul>
+          <li>Name of the identifier</li>
+          <li>Type (int, float, char, etc.)</li>
+          <li>Scope (local, global)</li>
+          <li>Memory address / offset</li>
+          <li>Size</li>
+          <li>For functions: number/type of parameters, return type</li>
+        </ul>
+        <table>
+          <tr><th>Name</th><th>Type</th><th>Scope</th><th>Address</th><th>Size</th></tr>
+          <tr><td>x</td><td>int</td><td>local</td><td>1000</td><td>2</td></tr>
+          <tr><td>a</td><td>float</td><td>global</td><td>2000</td><td>4</td></tr>
+          <tr><td>sum</td><td>int</td><td>local</td><td>1002</td><td>2</td></tr>
+        </table>
+        <p>Symbol tables are implemented using arrays, linked lists, or hash tables. Hash tables are most efficient with O(1) average-case access.</p>
       </div>
     </div>
-  </section>
+  </div>
 
-  <div class="chapter-divider"><span class="divider-symbol">⟡</span></div>
+  <!-- Q7 -->
+  <div class="qa-card" id="q7">
+    <div class="qa-card-header" onclick="toggleCard(this)">
+      <span class="q-badge">Q 07</span>
+      <h3>Which are the different assembly language statements? Explain each of them with suitable example.</h3>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="qa-body">
+      <div class="ans">
+        <h4>Types of Assembly Language Statements</h4>
+        <p>An assembly language program consists of 3 types of statements:</p>
+        <h4>1. Imperative Statements (Machine Instructions)</h4>
+        <p>These cause an action to be performed during execution. They correspond directly to machine instructions. Each has an opcode and optional operands.</p>
+        <div class="code-block">Syntax: [Label]  Mnemonic  [Operand1 [, Operand2]]
 
-  <!-- ═══════════════════════════════════════════
-       CHAPTER 5: THE TROPHIES — Achievements
-  ═══════════════════════════════════════════ -->
-  <section class="chapter" id="trophies" style="background: radial-gradient(ellipse at 50% 30%, rgba(255,215,0,0.05) 0%, transparent 50%);">
-    <div class="chapter-content">
-      <span class="chapter-number reveal">05</span>
-      <div class="chapter-label reveal">Chapter Five</div>
-      <h2 class="chapter-title reveal">The Trophies</h2>
-      <p class="chapter-subtitle reveal">
-        Some battles end with recognition. These moments reminded me that 
-        the late nights and relentless learning were worth every second.
-      </p>
-
-      <div class="achievements-grid">
-        <div class="achievement-card reveal-scale" style="transition-delay: 0.1s;">
-          <div class="trophy-icon">🥉</div>
-          <h3>2nd Runner-Up — Ideathon</h3>
-          <p>
-            Times of India & Talrop (Kerala)<br />
-            Proposed an innovative tech solution for travel & tourism.
-          </p>
-          <div class="prize">₹30,000 Prize</div>
-        </div>
-
-        <div class="achievement-card reveal-scale" style="transition-delay: 0.2s;">
-          <div class="trophy-icon">🥇</div>
-          <h3>1st Place — Smart City Project</h3>
-          <p>
-            Technovations, SVBIT<br />
-            Recognized for creativity, problem-solving, and technical depth.
-          </p>
-          <div class="prize">🏆 Gold Medal</div>
-        </div>
-
-        <div class="achievement-card reveal-scale" style="transition-delay: 0.3s;">
-          <div class="trophy-icon">🎓</div>
-          <h3>University Rank 1 — Diploma</h3>
-          <p>
-            Atul Polytechnic, Khadat<br />
-            CGPA: 9.02 — Topped the entire university in Computer Engineering.
-          </p>
-          <div class="prize">🌟 Rank 1 out of all students</div>
-        </div>
-
-        <div class="achievement-card reveal-scale" style="transition-delay: 0.4s;">
-          <div class="trophy-icon">🌐</div>
-          <h3>Google Gen AI Exchange Hackathon</h3>
-          <p>
-            Participated under Google Cloud — Jan 2026<br />
-            Worked on cutting-edge AI solutions.
-          </p>
-          <div class="prize">Google Cloud Participant</div>
-        </div>
+Examples:
+LOOP  MOVER   AREG, A      ; Move value at A into AREG
+      ADD     AREG, B      ; Add value of B to AREG
+      MOVEM   AREG, C      ; Move AREG content to C
+      BC      LT, BACK     ; Branch if less than</div>
+        <h4>2. Declarative Statements (Assembler Directives / Non-executable)</h4>
+        <p>These provide data or information to the assembler but do not generate any machine code themselves.</p>
+        <div class="code-block">DS  (Define Storage):  A  DS  5   ; Reserve 5 words for A
+DC  (Define Constant): B  DC  '10' ; Define constant 10 at B
+EQU (Equate):          X  EQU A+1  ; X is same address as A+1
+LTORG:                 LTORG        ; Place literals here</div>
+        <h4>3. Assembler Directives</h4>
+        <p>Instructions for controlling the assembly process.</p>
+        <div class="code-block">START  100    ; Start assembly at address 100
+END          ; End of program
+ORIGIN 200   ; Set location counter to 200
+LTORG        ; Generate literal pool at this point</div>
+        <table>
+          <tr><th>Type</th><th>Example</th><th>Purpose</th></tr>
+          <tr><td>Imperative</td><td>MOVER AREG, A</td><td>Generates machine code; executed at runtime</td></tr>
+          <tr><td>Declarative</td><td>A DS 3</td><td>Allocates memory / defines constant</td></tr>
+          <tr><td>Assembler Directive</td><td>START 100</td><td>Controls the assembly process</td></tr>
+        </table>
       </div>
     </div>
-  </section>
+  </div>
 
-  <div class="chapter-divider"><span class="divider-symbol">⟡</span></div>
-
-  <!-- ═══════════════════════════════════════════
-       CHAPTER 6: THE SCROLLS — Certifications
-  ═══════════════════════════════════════════ -->
-  <section class="chapter" id="scrolls">
-    <div class="chapter-content">
-      <span class="chapter-number reveal">06</span>
-      <div class="chapter-label reveal">Chapter Six</div>
-      <h2 class="chapter-title reveal">The Scrolls of Knowledge</h2>
-      <p class="chapter-subtitle reveal">
-        A true developer never stops learning. Each certification is a chapter mastered, 
-        a skill sharpened, and a new horizon unlocked.
-      </p>
-
-      <div class="certs-scroll reveal" style="transition-delay: 0.2s;">
-        <div class="cert-card">
-          <div class="cert-icon">📋</div>
-          <h4>Project Management (CPM – IAPM)</h4>
-          <p>Udemy</p>
-        </div>
-        <div class="cert-card">
-          <div class="cert-icon">💻</div>
-          <h4>Full Stack PHP Developer</h4>
-          <p>Invision Software / Scrimba / YouTube</p>
-        </div>
-        <div class="cert-card">
-          <div class="cert-icon">🛡️</div>
-          <h4>Cyber Hygiene Practitioner</h4>
-          <p>MeitY, Govt. of India</p>
-        </div>
-        <div class="cert-card">
-          <div class="cert-icon">📧</div>
-          <h4>Email Security (ISEA Phase-II)</h4>
-          <p>Ministry of Electronics & IT</p>
-        </div>
-        <div class="cert-card">
-          <div class="cert-icon">🤖</div>
-          <h4>AI Prompt Engineering & ChatGPT Mastery</h4>
-          <p>Udemy</p>
-        </div>
-        <div class="cert-card">
-          <div class="cert-icon">📊</div>
-          <h4>Data Analysis using Excel</h4>
-          <p>Coursera / Microsoft</p>
-        </div>
-        <div class="cert-card">
-          <div class="cert-icon">🧠</div>
-          <h4>AI Masterclass</h4>
-          <p>Be10x</p>
-        </div>
-      </div>
-
-      <!-- Languages & Soft Skills -->
-      <div class="about-grid" style="margin-top: 50px;">
-        <div class="reveal-left" style="transition-delay: 0.3s;">
-          <h3 style="font-family: var(--font-display); margin-bottom: 16px;">🌍 Languages I Speak</h3>
-          <div class="skill-tags">
-            <span class="skill-tag">English — Intermediate (IELTS 5.5)</span>
-            <span class="skill-tag">Hindi — Native</span>
-            <span class="skill-tag">Gujarati — Native</span>
-          </div>
-        </div>
-        <div class="reveal-right" style="transition-delay: 0.4s;">
-          <h3 style="font-family: var(--font-display); margin-bottom: 16px;">💡 Strengths & Soft Skills</h3>
-          <div class="skill-tags">
-            <span class="skill-tag">Communication</span>
-            <span class="skill-tag">Team Leadership</span>
-            <span class="skill-tag">Analytical Thinking</span>
-            <span class="skill-tag">Time Management</span>
-            <span class="skill-tag">Active Listening</span>
-            <span class="skill-tag">Fast Learner</span>
-            <span class="skill-tag">Growth Mindset</span>
-          </div>
-        </div>
+  <!-- Q8 -->
+  <div class="qa-card" id="q8">
+    <div class="qa-card-header" onclick="toggleCard(this)">
+      <span class="q-badge">Q 08</span>
+      <h3>Explain advanced assembler directives with suitable example.</h3>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="qa-body">
+      <div class="ans">
+        <h4>Advanced Assembler Directives</h4>
+        <p>These are special instructions that control the assembly process but do not generate machine code.</p>
+        <h4>1. EQU (Equate)</h4>
+        <p>Assigns a name to a constant value or expression.</p>
+        <div class="code-block">D   EQU   A+1
+; D is assigned the address A+1
+; Useful for symbolic constants</div>
+        <h4>2. ORIGIN</h4>
+        <p>Resets the Location Counter (LC) to a specified value.</p>
+        <div class="code-block">    START  100
+A   DS     1      ; Address 100
+    ORIGIN 200
+B   DS     1      ; Address 200 (jumped from 101)</div>
+        <h4>3. LTORG (Literal Origin)</h4>
+        <p>Forces the assembler to allocate all accumulated literals at the current point in the program.</p>
+        <div class="code-block">    MOVER  AREG, ='5'
+    ADD    AREG, ='10'
+    LTORG            ; Literal pool placed HERE
+                     ; ='5' → 505, ='10' → 506
+    MOVER  BREG, ='15'
+    END              ; Second literal pool at end</div>
+        <h4>4. USING / DROP (Base Register Directives)</h4>
+        <p>Tells the assembler which register to use as base register for address calculation.</p>
+        <div class="code-block">    USING  *, R1       ; Use R1 as base from here
+    L      R2, VALUE
+    DROP   R1          ; Stop using R1 as base</div>
+        <h4>5. MACRO / MEND</h4>
+        <p>Defines a macro (reusable block of code).</p>
+        <div class="code-block">    MACRO
+    INCR  &X
+    MOVER AREG, &X
+    ADD   AREG, ='1'
+    MOVEM AREG, &X
+    MEND
+; Usage:
+    INCR A   ; expands to the 3 instructions above with &X=A</div>
+        <div class="note-box">LTORG is important to avoid large offset problems in base-displacement addressing when literals are far from the instruction.</div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <div class="chapter-divider"><span class="divider-symbol">⟡</span></div>
-
-  <!-- ═══════════════════════════════════════════
-       CHAPTER 7: THE NEXT CHAPTER — Contact
-  ═══════════════════════════════════════════ -->
-  <section class="chapter contact-section" id="nextchapter">
-    <div class="chapter-content">
-      <span class="chapter-number reveal">07</span>
-      <div class="chapter-label reveal">The Final Chapter</div>
-      <h2 class="chapter-title reveal" style="background: linear-gradient(135deg, var(--accent-secondary), var(--accent-primary)); -webkit-background-clip: text; background-clip: text;">
-        The Story Continues...
-      </h2>
-      <p class="chapter-subtitle reveal" style="margin: 0 auto 16px; text-align: center;">
-        Every great story needs a co-author. Whether it's a project, an opportunity, 
-        or just a conversation about tech — I'd love to connect.
-      </p>
-      <p class="reveal" style="color: var(--text-muted); font-family: var(--font-code); font-size: 0.85rem; margin-bottom: 32px;">
-        <span class="typewriter" id="typewriterContact"></span>
-      </p>
-
-      <div class="contact-links reveal" style="transition-delay: 0.2s;">
-        <a href="mailto:happier.aryan@gmail.com" class="contact-link">
-          <span class="link-icon">✉️</span>
-          happier.aryan@gmail.com
-        </a>
-        <a href="tel:+919023668571" class="contact-link">
-          <span class="link-icon">📱</span>
-          +91 90236 68571
-        </a>
-        <a href="#" class="contact-link">
-          <span class="link-icon">💼</span>
-          LinkedIn
-        </a>
-        <a href="#" class="contact-link">
-          <span class="link-icon">🐙</span>
-          GitHub
-        </a>
-        <a href="#" class="contact-link">
-          <span class="link-icon">📁</span>
-          Certificates
-        </a>
-      </div>
-
-      <div class="story-end reveal" style="transition-delay: 0.4s;">
-        <p>📍 Ahmedabad, India</p>
-        <p style="margin-top: 8px;">
-          // All experiences and achievements are supported by official documents.
-        </p>
-        <p style="margin-top: 16px; color: var(--accent-primary);">
-          &lt;/story&gt; — but the best chapters are yet to be written.
-        </p>
+  <!-- Q9 -->
+  <div class="qa-card" id="q9">
+    <div class="qa-card-header" onclick="toggleCard(this)">
+      <span class="q-badge">Q 09</span>
+      <h3>Discuss in detail the various data structures involved in PASS-I of the assembler.</h3>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="qa-body">
+      <div class="ans">
+        <h4>PASS-I of Two-Pass Assembler</h4>
+        <p>The primary goal of Pass-I is to define all symbols and literals, assign addresses, and generate an intermediate code. It uses the following data structures:</p>
+        <h4>1. SYMTAB – Symbol Table</h4>
+        <p>Stores labels/symbols and their addresses.</p>
+        <table>
+          <tr><th>Symbol</th><th>Address</th></tr>
+          <tr><td>A</td><td>100</td></tr>
+          <tr><td>L1</td><td>101</td></tr>
+          <tr><td>D</td><td>105</td></tr>
+          <tr><td>L2</td><td>106</td></tr>
+          <tr><td>B</td><td>108</td></tr>
+        </table>
+        <h4>2. LITTAB – Literal Table</h4>
+        <p>Stores all literals encountered in the program. The address is assigned during LTORG processing.</p>
+        <table>
+          <tr><th>Literal</th><th>Address</th></tr>
+          <tr><td>='13'</td><td>—</td></tr>
+          <tr><td>='19'</td><td>—</td></tr>
+        </table>
+        <h4>3. POOLTAB – Pool Table</h4>
+        <p>Tracks the starting index of each literal pool in the literal table (one entry per LTORG / END).</p>
+        <table>
+          <tr><th>Pool No.</th><th>Starting Index in LITTAB</th></tr>
+          <tr><td>1</td><td>1</td></tr>
+          <tr><td>2</td><td>2</td></tr>
+        </table>
+        <h4>4. OPTAB – Operation Code Table</h4>
+        <p>Pre-built table with mnemonics, their types, and machine opcodes.</p>
+        <table>
+          <tr><th>Mnemonic</th><th>Type</th><th>Opcode</th></tr>
+          <tr><td>MOVER</td><td>IS</td><td>04</td></tr>
+          <tr><td>ADD</td><td>IS</td><td>01</td></tr>
+          <tr><td>STOP</td><td>IS</td><td>00</td></tr>
+          <tr><td>DS</td><td>DL</td><td>—</td></tr>
+        </table>
+        <h4>5. Location Counter (LC)</h4>
+        <p>Keeps track of the address of the current instruction being processed. Initialized to value in START directive. Incremented by 1 for each word.</p>
+        <div class="note-box">Pass-I builds SYMTAB, LITTAB, and POOLTAB and generates intermediate code. Pass-II uses these tables to generate final machine code.</div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- ═══ Footer ═══ -->
-  <footer>
-    <p>Designed & Developed with 💜 by <strong>Aryan Patel</strong> — © 2025</p>
-    <p style="margin-top: 4px;">Built with pure HTML, CSS & JavaScript • No frameworks needed for this story.</p>
-  </footer>
+  <!-- Q10 -->
+  <div class="qa-card" id="q10">
+    <div class="qa-card-header" onclick="toggleCard(this)">
+      <span class="q-badge">Q 10</span>
+      <h3>Explain forward reference with suitable examples. How to solve it using back-patching?</h3>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="qa-body">
+      <div class="ans">
+        <h4>Forward Reference</h4>
+        <p>A <strong>forward reference</strong> occurs when a label or symbol is used before it is defined in the program. Since the assembler processes code sequentially, it doesn't know the address of a symbol that hasn't been encountered yet.</p>
+        <div class="code-block">Example:
+      MOVER  AREG, A      ; 'A' is used here at address 100
+      ADD    AREG, ='5'
+      STOP
+A     DS     1            ; 'A' is DEFINED here at address 103
+      END
 
-  <!-- ═══════════════════════════════════════════
-       JAVASCRIPT
-  ═══════════════════════════════════════════ -->
-  <script>
-    // ═══ PARTICLES ═══
-    (function createParticles() {
-      const container = document.getElementById('particles');
-      const colors = ['#6c63ff', '#00d4aa', '#00e5ff', '#ff6b6b', '#ffd700'];
-      for (let i = 0; i < 30; i++) {
-        const p = document.createElement('div');
-        p.classList.add('particle');
-        const size = Math.random() * 4 + 2;
-        p.style.width = size + 'px';
-        p.style.height = size + 'px';
-        p.style.left = Math.random() * 100 + '%';
-        p.style.background = colors[Math.floor(Math.random() * colors.length)];
-        p.style.animationDuration = (Math.random() * 20 + 15) + 's';
-        p.style.animationDelay = (Math.random() * 20) + 's';
-        container.appendChild(p);
-      }
-    })();
+→ 'A' is a forward reference because it is used before it is defined.</div>
+        <h4>Problems Caused</h4>
+        <ul>
+          <li>In single-pass assembler, address of forward-referenced symbol is unknown at time of use</li>
+          <li>Cannot directly generate correct machine code in one pass</li>
+        </ul>
+        <h4>Solution: Back-Patching</h4>
+        <p>Back-patching is the technique used to resolve forward references in a <strong>single-pass assembler</strong>.</p>
+        <p><strong>Mechanism:</strong></p>
+        <ol>
+          <li>When a forward reference is encountered, generate <em>incomplete</em> machine code with a placeholder (e.g., 0 or blank) for the unknown address</li>
+          <li>Add an entry to a <strong>Pending List / Incomplete Table</strong> recording: the instruction address, and the symbol referenced</li>
+          <li>When the symbol is defined later, its address is determined</li>
+          <li>Go back and <em>patch</em> (fill in) all incomplete entries in the generated code with the now-known address</li>
+        </ol>
+        <div class="code-block">Address  Instruction          Action
+100      MOVER AREG, ?       → Add (100, A) to pending list
+101      ADD   AREG, ='5'
+102      STOP
+103      DS 1                → A defined at 103
+                               ↑ Patch address 100: MOVER AREG, 103 ✓</div>
+        <div class="note-box">Two-pass assemblers solve forward references naturally: Pass-I collects all symbol definitions; Pass-II generates complete code using the built symbol table.</div>
+      </div>
+    </div>
+  </div>
 
-    // ═══ SCROLL PROGRESS BAR ═══
-    const progressBar = document.getElementById('storyProgress');
-    window.addEventListener('scroll', () => {
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollPercent = (scrollTop / docHeight) * 100;
-      progressBar.style.width = scrollPercent + '%';
+  <!-- Q11 -->
+  <div class="qa-card" id="q11">
+    <div class="qa-card-header" onclick="toggleCard(this)">
+      <span class="q-badge">Q 11</span>
+      <h3>Compare single pass assembler and two pass assembler. Explain two pass assembler in detail.</h3>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="qa-body">
+      <div class="ans">
+        <h4>Single Pass vs Two Pass Assembler</h4>
+        <table>
+          <tr><th>Parameter</th><th>Single Pass</th><th>Two Pass</th></tr>
+          <tr><td>Passes</td><td>One scan of source</td><td>Two scans of source</td></tr>
+          <tr><td>Forward Reference</td><td>Solved via back-patching</td><td>Naturally resolved (Pass-I collects all symbols)</td></tr>
+          <tr><td>Speed</td><td>Faster (one scan)</td><td>Slower (two scans)</td></tr>
+          <tr><td>Complexity</td><td>More complex (needs pending lists)</td><td>Simpler logic per pass</td></tr>
+          <tr><td>Memory</td><td>Less memory needed</td><td>More memory (stores intermediate code)</td></tr>
+          <tr><td>Usage</td><td>Embedded, real-time systems</td><td>General purpose assemblers</td></tr>
+        </table>
+        <h4>Two Pass Assembler — Pass I</h4>
+        <p><strong>Goal:</strong> Build Symbol Table, Literal Table, Pool Table; Generate Intermediate Code.</p>
+        <ol>
+          <li>Initialize Location Counter (LC)</li>
+          <li>For each statement:
+            <ul>
+              <li>If label present → add (label, LC) to SYMTAB</li>
+              <li>If literal present → add to LITTAB</li>
+              <li>If LTORG or END → assign addresses to literals, add entry to POOLTAB</li>
+              <li>If START → set LC</li>
+              <li>Increment LC appropriately</li>
+              <li>Generate intermediate code token-by-token</li>
+            </ul>
+          </li>
+        </ol>
+        <h4>Two Pass Assembler — Pass II</h4>
+        <p><strong>Goal:</strong> Generate final machine code using tables from Pass-I.</p>
+        <ol>
+          <li>Read intermediate code</li>
+          <li>For each instruction:
+            <ul>
+              <li>Look up opcode in OPTAB</li>
+              <li>Resolve symbol references using SYMTAB</li>
+              <li>Resolve literal references using LITTAB</li>
+              <li>Generate binary machine code</li>
+            </ul>
+          </li>
+        </ol>
+        <div class="code-block">Example Source Program:
+      START  100
+A     DS     3
+L1    MOVER  AREG, B
+      ADD    AREG, ='13'
+      STOP
+B     DC     '19'
+      END
+
+Pass-I SYMTAB:           Pass-I LITTAB:
+A  → 100                 ='13' → 105
+L1 → 101
+B  → 105
+
+Pass-II Machine Code (example):
+101: 04 1 105     (MOVER AREG, B)
+102: 01 1 106     (ADD AREG, ='13' literal at 106)
+103: 00 0 000     (STOP)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="qa-card" id="q12">
+    <div class="qa-card-header" onclick="toggleCard(this)">
+      <span class="q-badge">Q 12</span>
+      <h3>Given source program: Show contents of Symbol Table, Literal Table & Pool Table. Show intermediate code.</h3>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="qa-body">
+      <div class="ans">
+        <h4>Given Program</h4>
+        <div class="code-block">        START   100
+A       DS      3
+L1      MOVER   AREG, B
+        ADD     AREG, ='13'
+        MOVEM   AREG, D
+D       EQU     A+1
+L2      PRINT   D
+        STOP
+B       DC      '19'
+        END</div>
+        <h4>Location Counter Trace</h4>
+        <table>
+          <tr><th>Label</th><th>Statement</th><th>LC</th></tr>
+          <tr><td>—</td><td>START 100</td><td>100</td></tr>
+          <tr><td>A</td><td>DS 3</td><td>100 (A=100, LC→103)</td></tr>
+          <tr><td>L1</td><td>MOVER AREG, B</td><td>103</td></tr>
+          <tr><td>—</td><td>ADD AREG, ='13'</td><td>104</td></tr>
+          <tr><td>—</td><td>MOVEM AREG, D</td><td>105</td></tr>
+          <tr><td>D</td><td>EQU A+1</td><td>106 (D=101, no LC increment)</td></tr>
+          <tr><td>L2</td><td>PRINT D</td><td>106</td></tr>
+          <tr><td>—</td><td>STOP</td><td>107</td></tr>
+          <tr><td>B</td><td>DC '19'</td><td>108 (B=108, LC→109)</td></tr>
+          <tr><td>—</td><td>END</td><td>—</td></tr>
+        </table>
+        <h4>(i) Symbol Table (SYMTAB)</h4>
+        <table>
+          <tr><th>Symbol</th><th>Address</th></tr>
+          <tr><td>A</td><td>100</td></tr>
+          <tr><td>L1</td><td>103</td></tr>
+          <tr><td>D</td><td>101 (via EQU A+1)</td></tr>
+          <tr><td>L2</td><td>106</td></tr>
+          <tr><td>B</td><td>108</td></tr>
+        </table>
+        <h4>Literal Table (LITTAB)</h4>
+        <table>
+          <tr><th>Index</th><th>Literal</th><th>Address</th></tr>
+          <tr><td>1</td><td>='13'</td><td>109</td></tr>
+          <tr><td>2</td><td>='19'</td><td>— (B DC '19' is a symbol, not literal)</td></tr>
+        </table>
+        <h4>Pool Table (POOLTAB)</h4>
+        <table>
+          <tr><th>Pool No.</th><th>LITTAB Index</th></tr>
+          <tr><td>1</td><td>1</td></tr>
+        </table>
+        <h4>(ii) Intermediate Code</h4>
+        <div class="code-block">Addr  IC Representation
+100   (DL, 03) (C, 3)                   ← A DS 3
+103   (IS, 04) (1, 1) (S, 5)            ← MOVER AREG, B   [B→SYMTAB index 5]
+104   (IS, 01) (1, 1) (L, 1)            ← ADD AREG, ='13' [literal index 1]
+105   (IS, 05) (1, 1) (S, 3)            ← MOVEM AREG, D   [D→SYMTAB index 3]
+106   (IS, 09) (S, 3)                   ← PRINT D
+107   (IS, 00)                          ← STOP
+108   (DL, 01) (C, 19)                  ← B DC '19'
+
+Legend:
+IS = Imperative Statement | DL = Declarative | 
+S,n = nth entry in SYMTAB | L,n = nth literal | C = constant
+Register codes: AREG=1, BREG=2, CREG=3, DREG=4</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q13 -->
+  <div class="qa-card" id="q13">
+    <div class="qa-card-header" onclick="toggleCard(this)">
+      <span class="q-badge">Q 13</span>
+      <h3>What is grammar? List and explain various types of grammar.</h3>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="qa-body">
+      <div class="ans">
+        <h4>Grammar</h4>
+        <p>A <strong>formal grammar</strong> G is defined as a 4-tuple: <strong>G = (V, T, P, S)</strong> where:</p>
+        <ul>
+          <li><strong>V</strong> = Set of non-terminal symbols (variables)</li>
+          <li><strong>T</strong> = Set of terminal symbols</li>
+          <li><strong>P</strong> = Set of production rules</li>
+          <li><strong>S</strong> = Start symbol (S ∈ V)</li>
+        </ul>
+        <p>Grammar specifies the syntax rules for a language.</p>
+        <h4>Chomsky Hierarchy — 4 Types of Grammar</h4>
+        <table>
+          <tr><th>Type</th><th>Name</th><th>Production Rule Form</th><th>Automaton</th></tr>
+          <tr><td>Type 0</td><td>Unrestricted / Phrase Structure</td><td>α → β (no restriction; α,β ∈ (V∪T)*)</td><td>Turing Machine</td></tr>
+          <tr><td>Type 1</td><td>Context-Sensitive</td><td>αAβ → αγβ (|LHS| ≤ |RHS|)</td><td>Linear Bounded Automaton</td></tr>
+          <tr><td>Type 2</td><td>Context-Free Grammar (CFG)</td><td>A → α (single non-terminal on LHS)</td><td>Pushdown Automaton</td></tr>
+          <tr><td>Type 3</td><td>Regular Grammar</td><td>A → aB or A → a (right-linear)</td><td>Finite Automaton</td></tr>
+        </table>
+        <h4>Type 2 — Context-Free Grammar (Most important for compilers)</h4>
+        <p>All productions are of form <strong>A → α</strong> where A is a single non-terminal and α is any string of terminals/non-terminals.</p>
+        <div class="code-block">Example CFG for arithmetic expressions:
+E → E + T | T
+T → T * F | F
+F → ( E ) | id</div>
+        <h4>Type 3 — Regular Grammar</h4>
+        <p>Used for lexical analysis (tokenization). Right-linear: A → aB or A → a</p>
+        <div class="code-block">Example (identifiers):
+S → aA | bA
+A → aA | bA | ε   ; accepts (a|b)+</div>
+        <div class="note-box">In compiler design: Type 3 is used in Lexical Analysis; Type 2 (CFG) is used in Syntax Analysis (Parsing).</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q14 -->
+  <div class="qa-card" id="q14">
+    <div class="qa-card-header" onclick="toggleCard(this)">
+      <span class="q-badge">Q 14</span>
+      <h3>Explain Ambiguous Grammar with example.</h3>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="qa-body">
+      <div class="ans">
+        <h4>Ambiguous Grammar</h4>
+        <p>A grammar G is said to be <strong>ambiguous</strong> if there exists at least one string in the language L(G) that has <strong>more than one parse tree</strong> (or equivalently, more than one leftmost/rightmost derivation).</p>
+        <h4>Example</h4>
+        <p>Consider grammar: <strong>E → E + E | E * E | id</strong></p>
+        <p>Parse the string: <strong>id + id * id</strong></p>
+        <p>This string has <strong>two different parse trees:</strong></p>
+        <div class="code-block">Parse Tree 1: (Treats + first — incorrect precedence)
+         E
+       / | \
+      E  +  E
+      |    / | \
+      id  E  *  E
+          |     |
+          id    id
+Result: (id + id) * id
+
+Parse Tree 2: (Treats * first — correct precedence)
+         E
+       / | \
+      E  +  E
+      |    / | \
+      id  E  *  E
+          |     |
+          id    id
+Structured as: id + (id * id)</div>
+        <p>Since two parse trees exist, the grammar is <strong>ambiguous</strong>.</p>
+        <h4>Why Ambiguity is a Problem</h4>
+        <ul>
+          <li>A compiler cannot decide which parse tree to use, hence which code to generate</li>
+          <li>The meaning of the program becomes unclear</li>
+        </ul>
+        <h4>Resolving Ambiguity</h4>
+        <ul>
+          <li><strong>Operator Precedence</strong> — Give * higher precedence than +</li>
+          <li><strong>Associativity rules</strong> — Make operators left or right associative</li>
+          <li><strong>Rewrite grammar</strong> to be unambiguous:</li>
+        </ul>
+        <div class="code-block">Unambiguous version:
+E → E + T | T
+T → T * F | F
+F → ( E ) | id
+; Now * has higher precedence than + and both are left-associative</div>
+        <div class="note-box">Every ambiguous grammar can be rewritten as an unambiguous one, though not every ambiguous language can be described by an unambiguous grammar.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q15 -->
+  <div class="qa-card" id="q15">
+    <div class="qa-card-header" onclick="toggleCard(this)">
+      <span class="q-badge">Q 15</span>
+      <h3>Construct NFA and DFA for regular expression: (0 | 1)*001#</h3>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="qa-body">
+      <div class="ans">
+        <h4>Regular Expression: (0|1)*001#</h4>
+        <p>This RE accepts all binary strings ending with <strong>001</strong> followed by <strong>#</strong>.</p>
+        <h4>NFA Construction (Thompson's Construction)</h4>
+        <p>States: q0 → q1 → q2 → q3 → q4 (accepting)</p>
+        <div class="diagram">
+          <svg viewBox="0 0 620 160" xmlns="http://www.w3.org/2000/svg" width="620" height="160">
+            <defs>
+              <marker id="a2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                <path d="M0,0 L8,4 L0,8 Z" fill="#4fffb0"/>
+              </marker>
+            </defs>
+            <style>
+              .st { fill:#1a1e28; stroke:#4fffb0; stroke-width:1.5; }
+              .st-acc { fill:#1a1e28; stroke:#ffd166; stroke-width:2.5; }
+              .sl { fill:#e8eaf0; font-family:'JetBrains Mono',monospace; font-size:13px; text-anchor:middle; }
+              .el { fill:#4fffb0; font-family:'JetBrains Mono',monospace; font-size:11px; text-anchor:middle; }
+              .tr { stroke:#4fffb0; stroke-width:1.3; fill:none; marker-end:url(#a2); }
+            </style>
+            <!-- States -->
+            <circle class="st" cx="50" cy="80" r="24"/>
+            <text class="sl" x="50" y="85">q0</text>
+            <circle class="st" cx="180" cy="80" r="24"/>
+            <text class="sl" x="180" y="85">q1</text>
+            <circle class="st" cx="310" cy="80" r="24"/>
+            <text class="sl" x="310" y="85">q2</text>
+            <circle class="st" cx="440" cy="80" r="24"/>
+            <text class="sl" x="440" y="85">q3</text>
+            <circle class="st-acc" cx="570" cy="80" r="24"/>
+            <circle cx="570" cy="80" r="20" fill="none" stroke="#ffd166" stroke-width="1"/>
+            <text class="sl" x="570" y="85" fill="#ffd166">q4</text>
+            <!-- Arrows -->
+            <line class="tr" x1="74" y1="80" x2="156" y2="80"/>
+            <text class="el" x="117" y="72">0</text>
+            <line class="tr" x1="204" y1="80" x2="286" y2="80"/>
+            <text class="el" x="245" y="72">0</text>
+            <line class="tr" x1="334" y1="80" x2="416" y2="80"/>
+            <text class="el" x="375" y="72">1</text>
+            <line class="tr" x1="464" y1="80" x2="546" y2="80"/>
+            <text class="el" x="505" y="72">#</text>
+            <!-- Self-loop on q0 for (0|1)* -->
+            <path class="tr" d="M 35 56 Q 50 20 65 56" />
+            <text class="el" x="50" y="20">0,1</text>
+            <!-- Start arrow -->
+            <line class="tr" x1="10" y1="80" x2="26" y2="80"/>
+            <text class="el" x="5" y="68" fill="#ffd166">→</text>
+          </svg>
+        </div>
+        <h4>NFA Transition Table</h4>
+        <table>
+          <tr><th>State</th><th>0</th><th>1</th><th>#</th></tr>
+          <tr><td>→q0</td><td>{q0, q1}</td><td>{q0}</td><td>—</td></tr>
+          <tr><td>q1</td><td>{q2}</td><td>—</td><td>—</td></tr>
+          <tr><td>q2</td><td>—</td><td>{q3}</td><td>—</td></tr>
+          <tr><td>q3</td><td>—</td><td>—</td><td>{q4}</td></tr>
+          <tr><td>*q4</td><td>—</td><td>—</td><td>—</td></tr>
+        </table>
+        <h4>DFA Construction (Subset Construction)</h4>
+        <table>
+          <tr><th>DFA State</th><th>NFA States</th><th>On 0</th><th>On 1</th><th>On #</th></tr>
+          <tr><td>→A</td><td>{q0}</td><td>B</td><td>A</td><td>—</td></tr>
+          <tr><td>B</td><td>{q0,q1}</td><td>C</td><td>A</td><td>—</td></tr>
+          <tr><td>C</td><td>{q0,q1,q2}</td><td>C</td><td>D</td><td>—</td></tr>
+          <tr><td>D</td><td>{q0,q3}</td><td>B</td><td>A</td><td>E</td></tr>
+          <tr><td>*E</td><td>{q4}</td><td>—</td><td>—</td><td>—</td></tr>
+        </table>
+        <div class="note-box">State E is the accepting state. The DFA accepts any binary string containing "001" as a suffix, followed by #.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q16 -->
+  <div class="qa-card" id="q16">
+    <div class="qa-card-header" onclick="toggleCard(this)">
+      <span class="q-badge">Q 16</span>
+      <h3>What is left recursion? Eliminate left recursion from: S→A, A→aB/Ad, B→bBC/f, C→g</h3>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="qa-body">
+      <div class="ans">
+        <h4>Left Recursion</h4>
+        <p>A grammar is <strong>left-recursive</strong> if it has a non-terminal A such that there is a derivation A ⟹ Aα for some string α. Left recursion causes top-down parsers (like LL parsers) to loop infinitely.</p>
+        <p><strong>Direct Left Recursion:</strong> A → Aα | β</p>
+        <p><strong>Elimination Formula:</strong> Replace A → Aα | β with:</p>
+        <div class="code-block">A  → β A'
+A' → α A' | ε</div>
+        <h4>Given Grammar</h4>
+        <div class="code-block">S → A
+A → aB | Ad      ← Left recursive (A → Ad)
+B → bBC | f
+C → g</div>
+        <h4>Step-by-Step Elimination</h4>
+        <p>Only <strong>A → aB | Ad</strong> has left recursion. Here:</p>
+        <ul>
+          <li>α = d (the recursive part without leading A)</li>
+          <li>β = aB (the non-left-recursive alternative)</li>
+        </ul>
+        <p>Apply the formula:</p>
+        <div class="code-block">A  → aB A'
+A' → d A' | ε</div>
+        <h4>Final Grammar (After Left Recursion Elimination)</h4>
+        <div class="code-block">S  → A
+A  → aB A'
+A' → d A' | ε
+B  → bBC | f
+C  → g</div>
+        <div class="note-box">S, B, C have no left recursion, so they remain unchanged. Only A needed modification.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q17 -->
+  <div class="qa-card" id="q17">
+    <div class="qa-card-header" onclick="toggleCard(this)">
+      <span class="q-badge">Q 17</span>
+      <h3>Construct LL(1) parser table for: S→Aa|bAc|Bc|bBa, A→d, B→d</h3>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="qa-body">
+      <div class="ans">
+        <h4>Grammar</h4>
+        <div class="code-block">S → Aa | bAc | Bc | bBa
+A → d
+B → d</div>
+        <h4>Step 1: Compute FIRST Sets</h4>
+        <table>
+          <tr><th>Non-Terminal</th><th>FIRST</th></tr>
+          <tr><td>A</td><td>{d}</td></tr>
+          <tr><td>B</td><td>{d}</td></tr>
+          <tr><td>S → Aa</td><td>{d}</td></tr>
+          <tr><td>S → bAc</td><td>{b}</td></tr>
+          <tr><td>S → Bc</td><td>{d}</td></tr>
+          <tr><td>S → bBa</td><td>{b}</td></tr>
+        </table>
+        <h4>Step 2: Compute FOLLOW Sets</h4>
+        <table>
+          <tr><th>Non-Terminal</th><th>FOLLOW</th></tr>
+          <tr><td>S</td><td>{$}</td></tr>
+          <tr><td>A</td><td>{a, c}</td></tr>
+          <tr><td>B</td><td>{c, a}</td></tr>
+        </table>
+        <h4>Step 3: Check for LL(1) Conflicts</h4>
+        <p>For S: Productions S→Aa and S→Bc both have FIRST = {d}. This creates a conflict on input 'd'. Also S→bAc and S→bBa both start with 'b' — another conflict.</p>
+        <div class="note-box">This grammar is NOT LL(1) because of conflicts. The parser table entries show the conflict:</div>
+        <h4>LL(1) Parser Table (showing conflict)</h4>
+        <table>
+          <tr><th>NT \ Input</th><th>a</th><th>b</th><th>c</th><th>d</th><th>$</th></tr>
+          <tr><td>S</td><td>—</td><td>S→bAc, S→bBa ⚠️</td><td>—</td><td>S→Aa, S→Bc ⚠️</td><td>—</td></tr>
+          <tr><td>A</td><td>—</td><td>—</td><td>—</td><td>A→d</td><td>—</td></tr>
+          <tr><td>B</td><td>—</td><td>—</td><td>—</td><td>B→d</td><td>—</td></tr>
+        </table>
+        <p>The conflicts appear because the grammar is ambiguous (both A and B derive 'd', and S cannot distinguish which production to use with only 1 lookahead symbol). This grammar requires additional disambiguation.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q18 -->
+  <div class="qa-card" id="q18">
+    <div class="qa-card-header" onclick="toggleCard(this)">
+      <span class="q-badge">Q 18</span>
+      <h3>Discuss the need for left factoring in grammar? Explain it with suitable example.</h3>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="qa-body">
+      <div class="ans">
+        <h4>Need for Left Factoring</h4>
+        <p>Left factoring is required when a grammar has two or more productions for the same non-terminal that begin with the same terminal symbol. In such cases, a top-down parser (LL parser) cannot determine which production to apply by looking at only the current input token (lookahead).</p>
+        <p>Left factoring transforms the grammar to delay the decision until enough of the input has been seen to make an unambiguous choice.</p>
+        <h4>Problem Example</h4>
+        <div class="code-block">Consider:
+A → αβ₁ | αβ₂
+
+On seeing α, parser cannot decide whether to use αβ₁ or αβ₂ → CONFLICT!</div>
+        <h4>Left Factoring Rule</h4>
+        <p>If A → αβ₁ | αβ₂ | ... | αβₙ | γ then replace with:</p>
+        <div class="code-block">A  → α A' | γ
+A' → β₁ | β₂ | ... | βₙ</div>
+        <h4>Practical Example</h4>
+        <div class="code-block">Original Grammar:
+stmt → if expr then stmt else stmt
+     | if expr then stmt
+     
+Both productions start with "if expr then stmt" — conflict!
+
+After Left Factoring:
+stmt  → if expr then stmt stmt'
+stmt' → else stmt | ε
+
+Now the parser sees "if", uses the first rule, and defers the else decision to stmt'.</div>
+        <h4>Another Example</h4>
+        <div class="code-block">Original:
+A → aAB | aB | b
+
+Common prefix: 'a'
+
+After Left Factoring:
+A  → aA' | b
+A' → AB | B</div>
+        <h4>Benefits</h4>
+        <ul>
+          <li>Removes FIRST/FIRST conflicts from LL(1) parser table</li>
+          <li>Makes grammar suitable for predictive (LL) parsing</li>
+          <li>No change in the language generated</li>
+        </ul>
+        <div class="note-box">Left factoring does NOT change the language. It only restructures productions for deterministic top-down parsing.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q19 -->
+  <div class="qa-card" id="q19">
+    <div class="qa-card-header" onclick="toggleCard(this)">
+      <span class="q-badge">Q 19</span>
+      <h3>Find FIRST, FOLLOW and construct LL(1) parser table for E→TE', E'→+TE'|ε, T→FT', T'→*FT'|ε, F→(E)|id</h3>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="qa-body">
+      <div class="ans">
+        <h4>Grammar</h4>
+        <div class="code-block">E  → T E'
+E' → + T E' | ε
+T  → F T'
+T' → * F T' | ε
+F  → ( E ) | id</div>
+        <h4>Step 1: FIRST Sets</h4>
+        <p>FIRST(α) = set of terminals that begin strings derivable from α.</p>
+        <table>
+          <tr><th>Non-Terminal</th><th>FIRST</th><th>Reasoning</th></tr>
+          <tr><td>F</td><td>{ (, id }</td><td>F → (E) starts with '('; F → id starts with 'id'</td></tr>
+          <tr><td>T'</td><td>{ *, ε }</td><td>T' → *FT' starts with '*'; T' → ε</td></tr>
+          <tr><td>T</td><td>{ (, id }</td><td>T → FT'; FIRST(F) = {(, id}</td></tr>
+          <tr><td>E'</td><td>{ +, ε }</td><td>E' → +TE' starts with '+'; E' → ε</td></tr>
+          <tr><td>E</td><td>{ (, id }</td><td>E → TE'; FIRST(T) = {(, id}</td></tr>
+        </table>
+        <h4>Step 2: FOLLOW Sets</h4>
+        <p>FOLLOW(A) = set of terminals that can appear immediately after A.</p>
+        <table>
+          <tr><th>Non-Terminal</th><th>FOLLOW</th><th>Reasoning</th></tr>
+          <tr><td>E</td><td>{ ), $ }</td><td>E appears in F → (E): ')' follows; E is start: '$' follows</td></tr>
+          <tr><td>E'</td><td>{ ), $ }</td><td>E' at end of E → TE'; FOLLOW(E'=FOLLOW(E))</td></tr>
+          <tr><td>T</td><td>{ +, ), $ }</td><td>T followed by E' which can derive ε; also FOLLOW(E)</td></tr>
+          <tr><td>T'</td><td>{ +, ), $ }</td><td>T' at end of T → FT'; FOLLOW(T'=FOLLOW(T))</td></tr>
+          <tr><td>F</td><td>{ *, +, ), $ }</td><td>F followed by T' which can be ε; FOLLOW(T)</td></tr>
+        </table>
+        <h4>Step 3: LL(1) Parsing Table</h4>
+        <p>Rule: For production A → α, add A → α at M[A, t] for each t ∈ FIRST(α). If ε ∈ FIRST(α), add A → α at M[A, t] for each t ∈ FOLLOW(A).</p>
+        <table>
+          <tr><th>NT \ Input</th><th>id</th><th>+</th><th>*</th><th>(</th><th>)</th><th>$</th></tr>
+          <tr><td>E</td><td>E→TE'</td><td>—</td><td>—</td><td>E→TE'</td><td>—</td><td>—</td></tr>
+          <tr><td>E'</td><td>—</td><td>E'→+TE'</td><td>—</td><td>—</td><td>E'→ε</td><td>E'→ε</td></tr>
+          <tr><td>T</td><td>T→FT'</td><td>—</td><td>—</td><td>T→FT'</td><td>—</td><td>—</td></tr>
+          <tr><td>T'</td><td>—</td><td>T'→ε</td><td>T'→*FT'</td><td>—</td><td>T'→ε</td><td>T'→ε</td></tr>
+          <tr><td>F</td><td>F→id</td><td>—</td><td>—</td><td>F→(E)</td><td>—</td><td>—</td></tr>
+        </table>
+        <div class="note-box">No cell has more than one entry → This grammar IS LL(1). It is a classic example of an unambiguous grammar for arithmetic expressions.</div>
+        <h4>Parsing Example: id + id * id</h4>
+        <div class="code-block">Stack               Input           Production Used
+$E                  id+id*id$
+$E'T                id+id*id$       E → TE'
+$E'T'F              id+id*id$       T → FT'
+$E'T'id             id+id*id$       F → id
+$E'T'               +id*id$         (match id)
+$E'                 +id*id$         T' → ε
+$E'T+               +id*id$         E' → +TE'
+$E'T                id*id$          (match +)
+$E'T'F              id*id$          T → FT'
+$E'T'id             id*id$          F → id
+$E'T'               *id$            (match id)
+$E'T'F*             *id$            T' → *FT'
+$E'T'F              id$             (match *)
+$E'T'id             id$             F → id
+$E'T'               $               (match id)
+$E'                 $               T' → ε
+$                   $               E' → ε
+                                    ACCEPT ✓</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q20 -->
+  <div class="qa-card" id="q20">
+    <div class="qa-card-header" onclick="toggleCard(this)">
+      <span class="q-badge">Q 20</span>
+      <h3>Compare top-down and bottom-up parser.</h3>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="qa-body">
+      <div class="ans">
+        <h4>Top-Down vs Bottom-Up Parser</h4>
+        <table>
+          <tr><th>Parameter</th><th>Top-Down Parser</th><th>Bottom-Up Parser</th></tr>
+          <tr><td>Direction</td><td>Starts from Start Symbol, derives the input string</td><td>Starts from input string, reduces to Start Symbol</td></tr>
+          <tr><td>Derivation</td><td>Leftmost derivation</td><td>Reverse of rightmost derivation</td></tr>
+          <tr><td>Parse Tree</td><td>Built top to bottom (root first)</td><td>Built bottom to top (leaves first)</td></tr>
+          <tr><td>Actions</td><td>Expand: replace non-terminal with RHS of production</td><td>Reduce: replace RHS with LHS of production (handle)</td></tr>
+          <tr><td>Grammar</td><td>Works with LL grammars (left-to-right, leftmost)</td><td>Works with LR grammars (more powerful)</td></tr>
+          <tr><td>Examples</td><td>Recursive Descent, Predictive (LL(1))</td><td>Shift-Reduce, SLR, LALR, CLR (LR parsers)</td></tr>
+          <tr><td>Left Recursion</td><td>Cannot handle; must eliminate</td><td>Can handle left recursion</td></tr>
+          <tr><td>Backtracking</td><td>May require backtracking (unless predictive)</td><td>No backtracking</td></tr>
+          <tr><td>Grammar Power</td><td>Less powerful — handles subset of CFGs</td><td>More powerful — handles larger set of CFGs</td></tr>
+          <tr><td>Implementation</td><td>Simpler to understand and implement</td><td>Complex (uses stacks and DFA tables)</td></tr>
+          <tr><td>Error Detection</td><td>Early error detection</td><td>Error detected at reduction point</td></tr>
+          <tr><td>Tools</td><td>Written by hand or ANTLR</td><td>yacc, bison, LALR generators</td></tr>
+        </table>
+        <h4>Top-Down Parsing (LL)</h4>
+        <div class="code-block">Grammar: E → T + E | T
+Input:   a + b
+
+Derivation: E ⟹ T+E ⟹ a+E ⟹ a+T ⟹ a+b ✓
+(Expand from root downward)</div>
+        <h4>Bottom-Up Parsing (LR)</h4>
+        <div class="code-block">Grammar: E → E + T | T,  T → id
+Input:   id + id
+
+Shift-Reduce:
+id + id     → shift id
+T + id      → reduce T→id
+E + id      → reduce E→T
+E + id      → shift id
+E + T       → reduce T→id
+E           → reduce E→E+T ✓</div>
+        <div class="note-box">Bottom-up parsers (LR parsers) are more powerful and used in most real-world compiler tools (like gcc's parser). Top-down parsers are easier to write manually.</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<button id="top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// Questions list for sidebar
+const questions = [
+  "Define system software. Difference between System & Application Software.",
+  "Life cycle stages of a source program with diagram.",
+  "Define: System Software, Semantic Gap, Execution Gap, Specification Gap, Token.",
+  "Differentiate passes and phases of compiler.",
+  "Define: Linker, Loader, Parser, Assembler, Compiler.",
+  "Phases of language processor. Explain one phase. Symbol Table.",
+  "Assembly language statement types with examples.",
+  "Advanced assembler directives with examples.",
+  "Data structures in PASS-I of assembler.",
+  "Forward reference & back-patching.",
+  "Single pass vs two pass assembler. Two pass assembler detail.",
+  "Symbol table, literal table, pool table & intermediate code for given program.",
+  "Grammar types (Chomsky hierarchy).",
+  "Ambiguous grammar with example.",
+  "NFA and DFA for (0|1)*001#.",
+  "Left recursion & elimination: S→A, A→aB/Ad, B→bBC/f, C→g.",
+  "LL(1) parser table for S→Aa|bAc|Bc|bBa, A→d, B→d.",
+  "Need for left factoring with examples.",
+  "FIRST, FOLLOW & LL(1) table for E→TE', E'→+TE'|ε, T→FT', ...",
+  "Compare top-down and bottom-up parser."
+];
+
+const list = document.getElementById('q-list');
+questions.forEach((q, i) => {
+  const a = document.createElement('a');
+  a.className = 'q-item';
+  a.href = '#q' + (i+1);
+  a.innerHTML = `<span class="qnum">${String(i+1).padStart(2,'0')}</span><span>${q}</span>`;
+  a.addEventListener('click', e => {
+    document.querySelectorAll('.q-item').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+  });
+  list.appendChild(a);
+});
+
+// Filter
+function filterQ(v) {
+  document.querySelectorAll('.q-item').forEach(item => {
+    item.style.display = item.textContent.toLowerCase().includes(v.toLowerCase()) ? '' : 'none';
+  });
+}
+
+// Toggle card
+function toggleCard(header) {
+  const card = header.parentElement;
+  card.classList.toggle('open');
+}
+
+// Progress bar + top button
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.body.scrollHeight - window.innerHeight;
+  document.getElementById('progress-fill').style.width = (scrollTop/docHeight*100) + '%';
+  document.getElementById('top-btn').classList.toggle('show', scrollTop > 300);
+
+  // Highlight active sidebar item
+  let current = null;
+  document.querySelectorAll('.qa-card').forEach(card => {
+    const rect = card.getBoundingClientRect();
+    if (rect.top <= 80) current = card.id;
+  });
+  if (current) {
+    document.querySelectorAll('.q-item').forEach(item => {
+      item.classList.toggle('active', item.getAttribute('href') === '#'+current);
     });
+  }
+});
 
-    // ═══ SCROLL REVEAL ANIMATIONS ═══
-    const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
-
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
-
-    revealElements.forEach(el => revealObserver.observe(el));
-
-    // ═══ CHAPTER NAV DOTS ═══
-    const chapters = document.querySelectorAll('.chapter');
-    const dots = document.querySelectorAll('.chapter-dot');
-
-    const chapterObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const id = entry.target.id;
-          dots.forEach(dot => {
-            dot.classList.toggle('active', dot.dataset.target === id);
-          });
-        }
-      });
-    }, { threshold: 0.3 });
-
-    chapters.forEach(ch => chapterObserver.observe(ch));
-
-    dots.forEach(dot => {
-      dot.addEventListener('click', () => {
-        const target = document.getElementById(dot.dataset.target);
-        if (target) target.scrollIntoView({ behavior: 'smooth' });
-      });
-    });
-
-    // ═══ COUNTER ANIMATION ═══
-    const counters = document.querySelectorAll('.stat-number[data-count]');
-
-    const counterObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const el = entry.target;
-          const target = parseInt(el.getAttribute('data-count'));
-          let current = 0;
-          const increment = target / 40;
-          const timer = setInterval(() => {
-            current += increment;
-            if (current >= target) {
-              el.textContent = target + '+';
-              clearInterval(timer);
-            } else {
-              el.textContent = Math.ceil(current);
-            }
-          }, 40);
-          counterObserver.unobserve(el);
-        }
-      });
-    }, { threshold: 0.5 });
-
-    counters.forEach(c => counterObserver.observe(c));
-
-    // ═══ TYPEWRITER — Contact Section ═══
-    const typewriterEl = document.getElementById('typewriterContact');
-    const phrases = [
-      'let\'s build something amazing together_',
-      'open to Full Stack Developer roles_',
-      'always learning, always growing_',
-      'drop me a line anytime_'
-    ];
-    let phraseIndex = 0;
-    let charIndex = 0;
-    let isDeleting = false;
-
-    function typeEffect() {
-      const current = phrases[phraseIndex];
-      if (isDeleting) {
-        typewriterEl.textContent = current.substring(0, charIndex - 1);
-        charIndex--;
-      } else {
-        typewriterEl.textContent = current.substring(0, charIndex + 1);
-        charIndex++;
-      }
-
-      let speed = isDeleting ? 30 : 60;
-
-      if (!isDeleting && charIndex === current.length) {
-        speed = 2000;
-        isDeleting = true;
-      } else if (isDeleting && charIndex === 0) {
-        isDeleting = false;
-        phraseIndex = (phraseIndex + 1) % phrases.length;
-        speed = 500;
-      }
-
-      setTimeout(typeEffect, speed);
+// Smooth scroll for sidebar links
+document.querySelectorAll('.q-item').forEach(link => {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.classList.add('open');
+      target.scrollIntoView({behavior:'smooth', block:'start'});
+      setTimeout(() => target.classList.add('highlight'), 300);
+      setTimeout(() => target.classList.remove('highlight'), 1800);
     }
-
-    // Start typewriter when section is visible
-    const contactObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          typeEffect();
-          contactObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.3 });
-
-    contactObserver.observe(document.getElementById('nextchapter'));
-  </script>
+  });
+});
+</script>
 </body>
 </html>
