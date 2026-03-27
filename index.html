@@ -3,1453 +3,1016 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>System Software 3160715 — Q&A Bank</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Fraunces:ital,wght@0,300;0,600;0,700;1,300&display=swap" rel="stylesheet">
+<title>IPDC–2 Exam · Lectures 16–30</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0d0f14;
-    --surface: #13161d;
-    --card: #1a1e28;
-    --border: #252a38;
-    --accent: #4fffb0;
-    --accent2: #ff6b6b;
-    --accent3: #ffd166;
+    --surface: #13161e;
+    --border: #1e2330;
+    --border-bright: #2d3347;
     --text: #e8eaf0;
-    --muted: #7a8099;
-    --code-bg: #0a0c11;
+    --muted: #636b85;
+    --accent: #00d4ff;
+    --accent2: #7c6bff;
+    --correct: #00e5a0;
+    --wrong: #ff4f6b;
+    --warn: #ffb740;
+    --card: #161922;
+    --pill: #1a1e2a;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'Fraunces', Georgia, serif;
+    font-family: 'DM Mono', monospace;
     min-height: 100vh;
-    line-height: 1.7;
+    overflow-x: hidden;
   }
 
-  /* ─── SIDEBAR ─── */
-  #sidebar {
-    position: fixed; top: 0; left: 0;
-    width: 280px; height: 100vh;
-    background: var(--surface);
-    border-right: 1px solid var(--border);
-    overflow-y: auto;
-    z-index: 100;
-    display: flex; flex-direction: column;
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9999; opacity: .5;
   }
-  #sidebar-header {
-    padding: 24px 20px 16px;
+
+  /* ─── SCREENS ─── */
+  .screen { display: none; }
+  .screen.active { display: flex; flex-direction: column; min-height: 100vh; }
+
+  /* ══ SPLASH ══ */
+  #splash {
+    align-items: center; justify-content: center;
+    padding: 2rem;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, #0e2040 0%, var(--bg) 70%);
+  }
+  .splash-inner { max-width: 640px; width: 100%; text-align: center; }
+
+  .logo-mark {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 72px; height: 72px; border-radius: 18px;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    margin-bottom: 2rem;
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.8rem;
+    color: #fff; letter-spacing: -1px;
+    box-shadow: 0 0 40px rgba(0,212,255,.25);
+  }
+
+  .splash-tag {
+    font-size: .7rem; letter-spacing: .15em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 1rem;
+  }
+
+  .splash-title {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: clamp(2.2rem, 6vw, 3.4rem); line-height: 1.05;
+    background: linear-gradient(120deg, #fff 30%, var(--accent));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: .75rem;
+  }
+
+  .splash-sub {
+    font-size: .85rem; color: var(--muted); margin-bottom: 2.5rem; line-height: 1.7;
+  }
+
+  .meta-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: var(--border); border-radius: 14px; overflow: hidden;
+    margin-bottom: 2.5rem;
+  }
+  .meta-cell {
+    background: var(--surface); padding: 1.2rem .5rem; text-align: center;
+  }
+  .meta-cell .num {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.6rem;
+    color: var(--accent); display: block;
+  }
+  .meta-cell .label { font-size: .65rem; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
+
+  .start-btn {
+    width: 100%; padding: 1rem 2rem;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    border: none; border-radius: 10px;
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem;
+    color: #fff; letter-spacing: .05em; cursor: pointer;
+    transition: transform .15s, box-shadow .15s;
+    box-shadow: 0 4px 24px rgba(0,212,255,.2);
+  }
+  .start-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,212,255,.35); }
+
+  /* ══ EXAM LAYOUT ══ */
+  #exam { flex-direction: column; }
+
+  .top-bar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(13,15,20,.92); backdrop-filter: blur(14px);
     border-bottom: 1px solid var(--border);
-    position: sticky; top: 0;
-    background: var(--surface);
-    z-index: 1;
+    padding: .75rem 1.5rem; display: flex; align-items: center; gap: 1rem;
   }
-  #sidebar-header .subject-code {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    color: var(--accent);
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    margin-bottom: 4px;
+  .top-bar .course-id {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: .85rem;
+    color: var(--accent); letter-spacing: .05em; flex-shrink: 0;
   }
-  #sidebar-header h2 {
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--text);
-    line-height: 1.3;
+  .progress-track {
+    flex: 1; height: 4px; background: var(--border); border-radius: 99px; overflow: hidden;
   }
-  #search-box {
-    margin: 12px 16px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 8px 12px;
-    color: var(--text);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    width: calc(100% - 32px);
-    outline: none;
-    transition: border-color 0.2s;
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    border-radius: 99px; transition: width .4s cubic-bezier(.4,0,.2,1);
   }
-  #search-box:focus { border-color: var(--accent); }
-  #search-box::placeholder { color: var(--muted); }
+  .score-badge {
+    font-size: .75rem; color: var(--muted); flex-shrink: 0; white-space: nowrap;
+  }
+  .score-badge span { color: var(--text); font-weight: 500; }
 
-  #q-list { padding: 8px 0 24px; flex: 1; }
-  .q-item {
-    display: flex; align-items: flex-start; gap: 10px;
-    padding: 10px 16px;
-    cursor: pointer;
-    border-left: 3px solid transparent;
-    transition: all 0.15s;
-    text-decoration: none;
-    color: var(--muted);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11.5px;
-    line-height: 1.4;
+  /* ── Section header ── */
+  .section-header {
+    padding: 2rem 1.5rem 1rem;
+    max-width: 760px; margin: 0 auto; width: 100%;
   }
-  .q-item:hover { background: var(--card); color: var(--text); border-left-color: var(--accent); }
-  .q-item.active { background: rgba(79,255,176,0.07); color: var(--accent); border-left-color: var(--accent); }
-  .q-item .qnum {
-    flex-shrink: 0;
-    font-weight: 700;
-    color: var(--accent);
-    width: 22px;
+  .section-pill {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: var(--pill); border: 1px solid var(--border-bright);
+    padding: .35rem .8rem; border-radius: 99px;
+    font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--accent2);
+    margin-bottom: 1rem;
   }
-  .q-item.active .qnum { color: var(--accent); }
+  .section-name {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.5rem; margin-bottom: .35rem;
+  }
+  .section-desc { font-size: .78rem; color: var(--muted); line-height: 1.6; }
 
-  /* ─── MAIN CONTENT ─── */
-  #main {
-    margin-left: 280px;
-    padding: 48px 60px;
-    max-width: 960px;
+  /* ── Questions ── */
+  .questions-wrap {
+    padding: 0 1.5rem 2rem; max-width: 760px; margin: 0 auto; width: 100%;
+    display: flex; flex-direction: column; gap: 1rem;
   }
 
-  .page-header {
-    margin-bottom: 56px;
-    padding-bottom: 32px;
-    border-bottom: 1px solid var(--border);
+  .q-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 1.25rem 1.4rem;
+    transition: border-color .2s;
+    animation: fadeUp .35s ease both;
   }
-  .page-header .badge {
-    display: inline-block;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--accent);
-    background: rgba(79,255,176,0.1);
-    border: 1px solid rgba(79,255,176,0.3);
-    border-radius: 4px;
-    padding: 3px 10px;
-    letter-spacing: 2px;
-    margin-bottom: 16px;
-  }
-  .page-header h1 {
-    font-size: 40px;
-    font-weight: 700;
-    line-height: 1.1;
-    color: var(--text);
-    margin-bottom: 8px;
-  }
-  .page-header p {
-    color: var(--muted);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
+  .q-card:hover { border-color: var(--border-bright); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
-  /* ─── Q&A CARDS ─── */
-  .qa-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    margin-bottom: 32px;
-    overflow: hidden;
-    scroll-margin-top: 32px;
-    transition: border-color 0.3s;
+  .q-top {
+    display: flex; align-items: flex-start; gap: .75rem; margin-bottom: 1rem;
   }
-  .qa-card:target, .qa-card.highlight { border-color: var(--accent); }
-  .qa-card-header {
-    padding: 20px 28px;
-    background: rgba(255,255,255,0.02);
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; gap: 16px;
-    cursor: pointer;
+  .q-num {
+    flex-shrink: 0; width: 28px; height: 28px;
+    background: var(--pill); border: 1px solid var(--border-bright);
+    border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    font-size: .65rem; color: var(--muted); letter-spacing: .05em;
+    font-family: 'Syne', sans-serif; font-weight: 600;
+  }
+  .q-text {
+    font-size: .88rem; line-height: 1.65; color: var(--text); flex: 1;
+  }
+  .q-lec {
+    font-size: .65rem; color: var(--muted); margin-top: .2rem; font-style: italic;
+  }
+
+  .options { display: flex; flex-direction: column; gap: .5rem; }
+
+  .opt-label {
+    display: flex; align-items: center; gap: .75rem;
+    padding: .65rem .9rem; border-radius: 9px;
+    border: 1px solid var(--border); background: var(--surface);
+    cursor: pointer; transition: border-color .15s, background .15s;
+    font-size: .82rem; color: var(--muted);
     user-select: none;
   }
-  .qa-card-header .q-badge {
-    flex-shrink: 0;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--bg);
-    background: var(--accent);
-    border-radius: 6px;
-    padding: 4px 10px;
-    letter-spacing: 1px;
-  }
-  .qa-card-header h3 {
-    font-size: 17px;
-    font-weight: 600;
-    color: var(--text);
-    line-height: 1.35;
-    flex: 1;
-  }
-  .toggle-icon {
-    color: var(--muted);
-    font-size: 18px;
-    transition: transform 0.3s;
-    font-family: 'JetBrains Mono', monospace;
-  }
-  .qa-card.open .toggle-icon { transform: rotate(180deg); color: var(--accent); }
+  .opt-label:hover { border-color: var(--accent2); color: var(--text); }
+  .opt-label input[type=radio] { display: none; }
 
-  .qa-body {
-    display: none;
-    padding: 28px 32px;
+  .opt-dot {
+    width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0;
+    border: 1.5px solid var(--border-bright);
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color .15s, background .15s;
   }
-  .qa-card.open .qa-body { display: block; }
+  .opt-dot::after {
+    content: ''; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent); transform: scale(0); transition: transform .15s;
+  }
+  .opt-label.selected { border-color: var(--accent2); color: var(--text); background: rgba(124,107,255,.07); }
+  .opt-label.selected .opt-dot { border-color: var(--accent2); }
+  .opt-label.selected .opt-dot::after { transform: scale(1); background: var(--accent2); }
 
-  /* ─── ANSWER CONTENT STYLES ─── */
-  .ans h4 {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 2.5px;
-    color: var(--accent);
-    margin: 24px 0 12px;
-  }
-  .ans h4:first-child { margin-top: 0; }
-  .ans p { font-size: 15.5px; color: #c8cad8; margin-bottom: 14px; }
-  .ans ul, .ans ol { margin: 10px 0 16px 24px; color: #c8cad8; font-size: 15px; }
-  .ans li { margin-bottom: 6px; }
-  .ans strong { color: var(--accent3); font-weight: 600; }
-  .ans em { color: var(--accent2); font-style: italic; }
+  /* review states */
+  .opt-label.correct-ans  { border-color: var(--correct)!important; background: rgba(0,229,160,.08)!important; color: var(--text)!important; }
+  .opt-label.wrong-ans    { border-color: var(--wrong)!important;   background: rgba(255,79,107,.08)!important; color: var(--text)!important; }
+  .opt-label.correct-ans .opt-dot { border-color: var(--correct); }
+  .opt-label.correct-ans .opt-dot::after { transform: scale(1); background: var(--correct); }
+  .opt-label.wrong-ans .opt-dot { border-color: var(--wrong); }
+  .opt-label.wrong-ans .opt-dot::after { transform: scale(1); background: var(--wrong); }
 
-  .ans table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 16px 0 20px;
-    font-size: 14px;
-    font-family: 'JetBrains Mono', monospace;
-  }
-  .ans table th {
-    background: rgba(79,255,176,0.1);
-    color: var(--accent);
-    padding: 10px 14px;
-    text-align: left;
-    border: 1px solid var(--border);
-    font-size: 12px;
-    letter-spacing: 1px;
-  }
-  .ans table td {
-    padding: 9px 14px;
-    border: 1px solid var(--border);
-    color: #c0c2d0;
-    vertical-align: top;
-  }
-  .ans table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  .q-card.answered-correct { border-color: rgba(0,229,160,.3); }
+  .q-card.answered-wrong   { border-color: rgba(255,79,107,.3); }
 
-  .code-block {
-    background: var(--code-bg);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--accent);
-    border-radius: 8px;
-    padding: 16px 20px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    color: #a8ffda;
-    overflow-x: auto;
-    margin: 14px 0 20px;
-    white-space: pre;
-    line-height: 1.6;
+  /* Section C — best/secondary label */
+  .sec-c-tag {
+    display: inline-block; font-size: .6rem; letter-spacing: .1em; text-transform: uppercase;
+    padding: .15rem .45rem; border-radius: 4px; margin-left: .4rem;
+    vertical-align: middle;
+  }
+  .sec-c-tag.best { background: rgba(0,229,160,.15); color: var(--correct); }
+  .sec-c-tag.secondary { background: rgba(255,183,64,.15); color: var(--warn); }
+
+  /* ── Nav buttons ── */
+  .nav-bar {
+    position: sticky; bottom: 0;
+    background: rgba(13,15,20,.92); backdrop-filter: blur(14px);
+    border-top: 1px solid var(--border);
+    padding: 1rem 1.5rem; display: flex; justify-content: flex-end; gap: .75rem;
+    max-width: 100%;
   }
 
-  .diagram {
-    background: var(--code-bg);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 20px;
-    margin: 16px 0 20px;
-    overflow-x: auto;
-    text-align: center;
+  .btn {
+    padding: .65rem 1.4rem; border-radius: 9px; border: none;
+    font-family: 'DM Mono', monospace; font-size: .8rem; cursor: pointer;
+    letter-spacing: .03em; transition: transform .12s, box-shadow .12s;
   }
-  .diagram svg { max-width: 100%; height: auto; }
-
-  .note-box {
-    background: rgba(255,209,102,0.07);
-    border: 1px solid rgba(255,209,102,0.3);
-    border-radius: 8px;
-    padding: 14px 18px;
-    margin: 14px 0;
-    font-size: 14px;
-    color: var(--accent3);
-    font-family: 'JetBrains Mono', monospace;
+  .btn:hover { transform: translateY(-1px); }
+  .btn-ghost {
+    background: var(--surface); border: 1px solid var(--border-bright); color: var(--muted);
   }
-  .note-box::before { content: "💡 NOTE: "; font-weight: 700; }
-
-  .tag {
-    display: inline-block;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    padding: 2px 8px;
-    border-radius: 4px;
-    margin: 0 3px 4px 0;
-    background: rgba(255,107,107,0.12);
-    color: var(--accent2);
-    border: 1px solid rgba(255,107,107,0.25);
+  .btn-ghost:hover { color: var(--text); border-color: var(--accent2); }
+  .btn-primary {
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    color: #fff; box-shadow: 0 2px 14px rgba(0,212,255,.2);
+  }
+  .btn-primary:hover { box-shadow: 0 4px 22px rgba(0,212,255,.35); }
+  .btn-danger {
+    background: linear-gradient(90deg, #ff4f6b, #ff7a40);
+    color: #fff; box-shadow: 0 2px 14px rgba(255,79,107,.2);
   }
 
-  .divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
-
-  /* Scroll to top */
-  #top-btn {
-    position: fixed;
-    bottom: 32px; right: 32px;
-    width: 44px; height: 44px;
-    background: var(--accent);
-    color: var(--bg);
-    border: none;
-    border-radius: 50%;
-    font-size: 18px;
-    cursor: pointer;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    box-shadow: 0 4px 20px rgba(79,255,176,0.4);
-    z-index: 200;
+  /* Jump panel */
+  .jump-panel {
+    padding: 1rem 1.5rem; max-width: 760px; margin: 0 auto; width: 100%;
+    display: flex; flex-wrap: wrap; gap: .4rem; align-items: center;
   }
-  #top-btn.show { display: flex; }
-
-  /* Progress bar */
-  #progress-bar {
-    position: fixed; top: 0; left: 280px; right: 0;
-    height: 2px; background: rgba(255,255,255,0.05);
-    z-index: 300;
+  .jump-label { font-size: .65rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin-right: .3rem; }
+  .jump-btn {
+    width: 30px; height: 30px; border-radius: 7px;
+    background: var(--pill); border: 1px solid var(--border);
+    color: var(--muted); font-family: 'DM Mono', monospace; font-size: .65rem;
+    cursor: pointer; transition: all .12s; display: flex; align-items: center; justify-content: center;
   }
-  #progress-fill {
-    height: 100%; width: 0%; background: var(--accent);
-    transition: width 0.1s;
+  .jump-btn:hover { border-color: var(--accent2); color: var(--text); }
+  .jump-btn.j-answered { background: rgba(124,107,255,.15); border-color: var(--accent2); color: var(--accent2); }
+  .jump-btn.j-correct  { background: rgba(0,229,160,.15); border-color: var(--correct); color: var(--correct); }
+  .jump-btn.j-wrong    { background: rgba(255,79,107,.15); border-color: var(--wrong); color: var(--wrong); }
+
+  /* ══ RESULTS ══ */
+  #results {
+    align-items: center; justify-content: center; padding: 2rem;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, #0e2040 0%, var(--bg) 70%);
+  }
+  .results-inner { max-width: 700px; width: 100%; text-align: center; }
+
+  .result-icon {
+    font-size: 3rem; margin-bottom: 1rem;
+    display: inline-block; animation: pop .5s cubic-bezier(.36,.07,.19,.97);
+  }
+  @keyframes pop {
+    0%   { transform: scale(0); opacity: 0; }
+    70%  { transform: scale(1.2); }
+    100% { transform: scale(1); opacity: 1; }
   }
 
-  @media (max-width: 768px) {
-    #sidebar { width: 100%; height: auto; position: relative; }
-    #main { margin-left: 0; padding: 24px 20px; }
-    #progress-bar { left: 0; }
+  .result-title {
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(1.8rem, 5vw, 2.8rem);
+    background: linear-gradient(120deg, #fff 30%, var(--accent));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    margin-bottom: .5rem;
+  }
+  .result-sub { font-size: .85rem; color: var(--muted); margin-bottom: 2rem; }
+
+  .score-ring {
+    position: relative; width: 160px; height: 160px;
+    margin: 0 auto 2rem;
+  }
+  .score-ring svg { transform: rotate(-90deg); }
+  .ring-bg { fill: none; stroke: var(--border); stroke-width: 10; }
+  .ring-fill { fill: none; stroke-width: 10; stroke-linecap: round;
+    stroke: url(#ringGrad);
+    transition: stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1);
+  }
+  .ring-label {
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+  }
+  .ring-pct {
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 2rem;
+    background: linear-gradient(120deg, var(--accent2), var(--accent));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .ring-pts { font-size: .7rem; color: var(--muted); }
+
+  .stats-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: var(--border); border-radius: 14px; overflow: hidden;
+    margin-bottom: 2rem;
+  }
+  .stat-cell {
+    background: var(--surface); padding: 1.2rem .5rem; text-align: center;
+  }
+  .stat-cell .num { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.5rem; display: block; }
+  .stat-cell .lbl { font-size: .65rem; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
+  .stat-cell .num.green { color: var(--correct); }
+  .stat-cell .num.red   { color: var(--wrong); }
+  .stat-cell .num.blue  { color: var(--accent); }
+
+  .grade-badge {
+    display: inline-block; padding: .5rem 1.5rem; border-radius: 99px;
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem;
+    margin-bottom: 2rem; letter-spacing: .05em;
+  }
+
+  .result-actions { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; }
+
+  /* ── Scroll anchor ── */
+  .anchor { scroll-margin-top: 80px; }
+
+  /* ── Responsive ── */
+  @media (max-width: 520px) {
+    .top-bar { padding: .65rem 1rem; }
+    .questions-wrap { padding: 0 .85rem 2rem; }
+    .section-header { padding: 1.5rem .85rem .75rem; }
+    .jump-panel { padding: .75rem .85rem; }
+    .nav-bar { padding: .75rem .85rem; }
+    .meta-grid { grid-template-columns: repeat(3,1fr); }
   }
 </style>
 </head>
 <body>
 
-<div id="progress-bar"><div id="progress-fill"></div></div>
-
-<!-- SIDEBAR -->
-<nav id="sidebar">
-  <div id="sidebar-header">
-    <div class="subject-code">3160715</div>
-    <h2>System Software<br>Question Bank</h2>
-  </div>
-  <input id="search-box" type="text" placeholder="Search questions..." oninput="filterQ(this.value)">
-  <div id="q-list">
-    <!-- populated by JS -->
-  </div>
-</nav>
-
-<!-- MAIN -->
-<main id="main">
-  <div class="page-header">
-    <div class="badge">GTU · SEM 6 · CE</div>
-    <h1>System Software</h1>
-    <p>Subject Code: 3160715 &nbsp;·&nbsp; SVBIT Computer Engineering &nbsp;·&nbsp; 20 Questions</p>
-  </div>
-
-  <!-- Q1 -->
-  <div class="qa-card open" id="q1">
-    <div class="qa-card-header" onclick="toggleCard(this)">
-      <span class="q-badge">Q 01</span>
-      <h3>Define system software. Give difference between System Software and Application software.</h3>
-      <span class="toggle-icon">▼</span>
+<!-- ══════════ SPLASH ══════════ -->
+<div id="splash" class="screen active">
+  <div class="splash-inner">
+    <div class="logo-mark">ip</div>
+    <p class="splash-tag">Integrated Personality Development Course</p>
+    <h1 class="splash-title">IPDC–2<br>Question Bank</h1>
+    <p class="splash-sub">Lectures 16 to 30 · Three sections · 130 questions<br>Answer every question; review your results at the end.</p>
+    <div class="meta-grid">
+      <div class="meta-cell"><span class="num">130</span><span class="label">Questions</span></div>
+      <div class="meta-cell"><span class="num">130</span><span class="label">Total Marks</span></div>
+      <div class="meta-cell"><span class="num">3</span><span class="label">Sections</span></div>
     </div>
-    <div class="qa-body">
-      <div class="ans">
-        <h4>Definition — System Software</h4>
-        <p><strong>System software</strong> is a collection of programs designed to operate, control, and extend the processing capabilities of a computer. It acts as an interface between the hardware and the application programs. It manages and controls hardware so that application software can perform a task.</p>
-        <p>Examples: Operating System, Compiler, Assembler, Linker, Loader, Device Drivers.</p>
-        <h4>Difference: System Software vs Application Software</h4>
-        <table>
-          <tr><th>Parameter</th><th>System Software</th><th>Application Software</th></tr>
-          <tr><td>Purpose</td><td>Manages hardware resources and provides platform for running apps</td><td>Performs specific tasks for the end user</td></tr>
-          <tr><td>Interaction</td><td>Interacts directly with hardware</td><td>Interacts with system software</td></tr>
-          <tr><td>Dependency</td><td>Can run independently</td><td>Depends on system software to run</td></tr>
-          <tr><td>Language</td><td>Written in low-level languages (C, Assembly)</td><td>Written in high-level languages (Java, Python)</td></tr>
-          <tr><td>User Interaction</td><td>Minimal direct interaction with user</td><td>Direct interaction with user</td></tr>
-          <tr><td>Examples</td><td>OS, Compiler, Loader, Linker</td><td>MS Word, Browser, VLC, Tally</td></tr>
-          <tr><td>Design</td><td>General purpose</td><td>Specific purpose</td></tr>
-          <tr><td>Developed by</td><td>System developers / Vendors</td><td>Software developers / Third parties</td></tr>
-        </table>
+    <button class="start-btn" onclick="startExam()">Begin Exam →</button>
+  </div>
+</div>
+
+<!-- ══════════ EXAM ══════════ -->
+<div id="exam" class="screen">
+  <div class="top-bar">
+    <span class="course-id">IPDC·2</span>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <span class="score-badge">Q <span id="answeredCount">0</span>/<span id="totalQCount">130</span></span>
+  </div>
+
+  <div id="examContent"></div>
+
+  <div class="nav-bar">
+    <button class="btn btn-ghost" id="prevBtn" onclick="prevSection()" style="display:none">← Back</button>
+    <button class="btn btn-primary" id="nextBtn" onclick="nextSection()">Next Section →</button>
+    <button class="btn btn-danger" id="submitBtn" onclick="submitExam()" style="display:none">Submit Exam</button>
+  </div>
+</div>
+
+<!-- ══════════ RESULTS ══════════ -->
+<div id="results" class="screen">
+  <div class="results-inner">
+    <span class="result-icon" id="resultIcon">🎓</span>
+    <h1 class="result-title" id="resultTitle">Exam Complete</h1>
+    <p class="result-sub" id="resultSub">Here's how you did</p>
+
+    <div class="score-ring">
+      <svg width="160" height="160" viewBox="0 0 160 160">
+        <defs>
+          <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#7c6bff"/>
+            <stop offset="100%" stop-color="#00d4ff"/>
+          </linearGradient>
+        </defs>
+        <circle class="ring-bg" cx="80" cy="80" r="70"/>
+        <circle class="ring-fill" id="ringFill" cx="80" cy="80" r="70"
+          stroke-dasharray="439.82" stroke-dashoffset="439.82"/>
+      </svg>
+      <div class="ring-label">
+        <span class="ring-pct" id="ringPct">0%</span>
+        <span class="ring-pts" id="ringPts">0/130</span>
       </div>
     </div>
-  </div>
 
-  <!-- Q2 -->
-  <div class="qa-card" id="q2">
-    <div class="qa-card-header" onclick="toggleCard(this)">
-      <span class="q-badge">Q 02</span>
-      <h3>Explain the various stages of the life cycle of a source program with a neat diagram.</h3>
-      <span class="toggle-icon">▼</span>
+    <div class="stats-grid">
+      <div class="stat-cell"><span class="num green" id="rCorrect">0</span><span class="lbl">Correct</span></div>
+      <div class="stat-cell"><span class="num red"   id="rWrong">0</span><span class="lbl">Wrong</span></div>
+      <div class="stat-cell"><span class="num blue"  id="rSkipped">0</span><span class="lbl">Skipped</span></div>
     </div>
-    <div class="qa-body">
-      <div class="ans">
-        <h4>Source Program Life Cycle</h4>
-        <p>A source program goes through several transformations before it becomes an executable program. The main stages are:</p>
-        <ol>
-          <li><strong>Source Program</strong> – Written by programmer in high-level language (C, Java, etc.)</li>
-          <li><strong>Preprocessor</strong> – Handles macros, file inclusions, conditional compilation (#include, #define)</li>
-          <li><strong>Compiler</strong> – Translates source code into assembly or object code, checks syntax & semantics</li>
-          <li><strong>Assembler</strong> – Converts assembly language code into relocatable machine code (object file)</li>
-          <li><strong>Linker</strong> – Combines multiple object files and library routines into a single relocatable module</li>
-          <li><strong>Loader</strong> – Loads the executable into main memory for execution</li>
-          <li><strong>Execution</strong> – CPU executes the program</li>
-        </ol>
-        <div class="diagram">
-          <svg viewBox="0 0 520 540" xmlns="http://www.w3.org/2000/svg" width="520" height="540">
-            <defs>
-              <marker id="arr" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
-                <path d="M0,0 L8,4 L0,8 Z" fill="#4fffb0"/>
-              </marker>
-            </defs>
-            <style>
-              .box { rx:8; fill:#1a1e28; stroke:#4fffb0; stroke-width:1.5; }
-              .box2 { rx:8; fill:#1a1e28; stroke:#ffd166; stroke-width:1.5; }
-              .lbl { fill:#e8eaf0; font-family:'JetBrains Mono',monospace; font-size:13px; text-anchor:middle; }
-              .sub { fill:#7a8099; font-family:'JetBrains Mono',monospace; font-size:10px; text-anchor:middle; }
-              .arr-line { stroke:#4fffb0; stroke-width:1.5; marker-end:url(#arr); }
-              .side-lbl { fill:#ffd166; font-family:'JetBrains Mono',monospace; font-size:10px; }
-            </style>
-            <!-- Source Program -->
-            <rect class="box" x="165" y="10" width="190" height="44"/>
-            <text class="lbl" x="260" y="37">Source Program</text>
 
-            <line class="arr-line" x1="260" y1="54" x2="260" y2="78"/>
+    <div class="grade-badge" id="gradeBadge">—</div>
 
-            <!-- Preprocessor -->
-            <rect class="box" x="165" y="78" width="190" height="44"/>
-            <text class="lbl" x="260" y="105">Preprocessor</text>
-
-            <line class="arr-line" x1="260" y1="122" x2="260" y2="146"/>
-            <text class="sub" x="300" y="138">Modified source</text>
-
-            <!-- Compiler -->
-            <rect class="box" x="165" y="146" width="190" height="44"/>
-            <text class="lbl" x="260" y="173">Compiler</text>
-
-            <line class="arr-line" x1="260" y1="190" x2="260" y2="214"/>
-            <text class="sub" x="305" y="206">Assembly code</text>
-
-            <!-- Assembler -->
-            <rect class="box" x="165" y="214" width="190" height="44"/>
-            <text class="lbl" x="260" y="241">Assembler</text>
-
-            <line class="arr-line" x1="260" y1="258" x2="260" y2="282"/>
-            <text class="sub" x="305" y="274">Object code</text>
-
-            <!-- Library/Object files side -->
-            <rect class="box2" x="390" y="278" width="120" height="44"/>
-            <text class="lbl" x="450" y="298" fill="#ffd166">Library &amp;</text>
-            <text class="lbl" x="450" y="314" fill="#ffd166">Object Files</text>
-            <line x1="390" y1="300" x2="355" y2="300" stroke="#ffd166" stroke-width="1" stroke-dasharray="4" marker-end="url(#arr)"/>
-
-            <!-- Linker -->
-            <rect class="box" x="165" y="282" width="190" height="44"/>
-            <text class="lbl" x="260" y="309">Linker</text>
-
-            <line class="arr-line" x1="260" y1="326" x2="260" y2="350"/>
-            <text class="sub" x="310" y="342">Relocatable machine code</text>
-
-            <!-- Loader -->
-            <rect class="box" x="165" y="350" width="190" height="44"/>
-            <text class="lbl" x="260" y="377">Loader</text>
-
-            <line class="arr-line" x1="260" y1="394" x2="260" y2="418"/>
-            <text class="sub" x="300" y="410">Load into memory</text>
-
-            <!-- Execution -->
-            <rect x="165" y="418" width="190" height="44" rx="8" fill="rgba(79,255,176,0.1)" stroke="#4fffb0" stroke-width="2"/>
-            <text class="lbl" x="260" y="444" fill="#4fffb0">▶  Execution</text>
-          </svg>
-        </div>
-        <p>Each stage produces an intermediate form of the program which is fed as input to the next stage.</p>
-      </div>
+    <div class="result-actions">
+      <button class="btn btn-ghost" onclick="reviewExam()">Review Answers</button>
+      <button class="btn btn-primary" onclick="restartExam()">Try Again</button>
     </div>
   </div>
-
-  <!-- Q3 -->
-  <div class="qa-card" id="q3">
-    <div class="qa-card-header" onclick="toggleCard(this)">
-      <span class="q-badge">Q 03</span>
-      <h3>Define: System Software, Semantic Gap, Execution Gap, Specification Gap, Token</h3>
-      <span class="toggle-icon">▼</span>
-    </div>
-    <div class="qa-body">
-      <div class="ans">
-        <h4>1. System Software</h4>
-        <p><strong>System Software</strong> is a set of programs designed to control and manage the computer hardware and provide services to application programs. It acts as an intermediary between hardware and user applications. Examples: OS, Compiler, Assembler, Loader.</p>
-        <h4>2. Semantic Gap</h4>
-        <p><strong>Semantic Gap</strong> is the difference between the meaning/functionality provided by a high-level language and the actual instructions available in the machine language (ISA). It represents the conceptual distance between what a programmer wants to express and what the hardware can directly execute. A larger semantic gap means more complex translation required.</p>
-        <h4>3. Execution Gap</h4>
-        <p><strong>Execution Gap</strong> is the difference between the form of a program that a programmer writes (source code) and the form actually executed by the hardware (machine code). It represents the gap that compilers, assemblers, and loaders bridge.</p>
-        <h4>4. Specification Gap</h4>
-        <p><strong>Specification Gap</strong> is the difference between the user's requirements/specification and the actual implementation in code. It refers to the mismatch between what the user wants and what the system actually does — often filled by requirements engineering and software design tools.</p>
-        <h4>5. Token</h4>
-        <p><strong>Token</strong> is the smallest meaningful unit of a program that the lexical analyzer (scanner) recognizes. It is a sequence of characters that represents a single, logically cohesive unit.</p>
-        <p>Token types include: <strong>Keywords</strong> (if, while, int), <strong>Identifiers</strong> (variable names), <strong>Literals</strong> (numbers, strings), <strong>Operators</strong> (+, -, *), <strong>Punctuation</strong> ({, ;, }).</p>
-        <div class="code-block">Source: int a = 10;
-Tokens: &lt;keyword, int&gt;  &lt;id, a&gt;  &lt;op, =&gt;  &lt;literal, 10&gt;  &lt;punct, ;&gt;</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Q4 -->
-  <div class="qa-card" id="q4">
-    <div class="qa-card-header" onclick="toggleCard(this)">
-      <span class="q-badge">Q 04</span>
-      <h3>Differentiate between passes and phases of compiler.</h3>
-      <span class="toggle-icon">▼</span>
-    </div>
-    <div class="qa-body">
-      <div class="ans">
-        <table>
-          <tr><th>Parameter</th><th>Phases of Compiler</th><th>Passes of Compiler</th></tr>
-          <tr><td>Definition</td><td>A phase is a logically distinct stage of compilation that transforms the program from one representation to another</td><td>A pass is a complete scan/traversal of the entire source (or intermediate) program</td></tr>
-          <tr><td>Nature</td><td>Logical/conceptual division</td><td>Physical division (actual traversal of input)</td></tr>
-          <tr><td>Number</td><td>Fixed — 6 standard phases</td><td>Varies — 1, 2 or more passes possible</td></tr>
-          <tr><td>Combination</td><td>Multiple phases can be combined in a single pass</td><td>A single pass may include several phases</td></tr>
-          <tr><td>Examples</td><td>Lexical Analysis, Syntax Analysis, Semantic Analysis, IR Generation, Optimization, Code Generation</td><td>Pass 1: Lexical + Syntax + Semantic; Pass 2: Optimization + Code Gen</td></tr>
-          <tr><td>Memory</td><td>Phases may hold partial data</td><td>Each pass reads from file/memory, writes result</td></tr>
-        </table>
-        <h4>6 Phases of a Compiler</h4>
-        <ol>
-          <li>Lexical Analysis (Scanner)</li>
-          <li>Syntax Analysis (Parser)</li>
-          <li>Semantic Analysis</li>
-          <li>Intermediate Code Generation</li>
-          <li>Code Optimization</li>
-          <li>Code Generation</li>
-        </ol>
-        <div class="note-box">Multiple phases can be grouped into fewer passes to reduce I/O overhead and improve compiler speed.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Q5 -->
-  <div class="qa-card" id="q5">
-    <div class="qa-card-header" onclick="toggleCard(this)">
-      <span class="q-badge">Q 05</span>
-      <h3>Define: Linker, Loader, Parser, Assembler, Compiler</h3>
-      <span class="toggle-icon">▼</span>
-    </div>
-    <div class="qa-body">
-      <div class="ans">
-        <h4>1. Linker</h4>
-        <p>A <strong>Linker</strong> is a system program that combines one or more object files (generated by assembler/compiler) along with library files into a single executable file. It resolves external references and assigns final addresses. Types: Static Linker, Dynamic Linker.</p>
-        <h4>2. Loader</h4>
-        <p>A <strong>Loader</strong> is a system program that loads the executable program into main memory (RAM) for execution. It allocates memory, performs address relocation, and transfers control to the program's entry point. Types: Absolute Loader, Relocating Loader, Direct Linking Loader.</p>
-        <h4>3. Parser</h4>
-        <p>A <strong>Parser</strong> is a component of the compiler (Phase 2 – Syntax Analysis) that reads a stream of tokens produced by the lexer and checks them against the grammar rules of the language. It builds a parse tree (syntax tree). Types: Top-down Parser, Bottom-up Parser.</p>
-        <h4>4. Assembler</h4>
-        <p>An <strong>Assembler</strong> is a translator that converts assembly language programs into machine language (object code). It converts mnemonics (ADD, MOV, etc.) to their binary opcode equivalents. Types: Single-pass Assembler, Two-pass Assembler.</p>
-        <h4>5. Compiler</h4>
-        <p>A <strong>Compiler</strong> is a program that translates the entire source code written in a high-level language into machine code (or assembly language) at once, reporting all errors after complete translation. Output is an executable or object file.</p>
-        <table>
-          <tr><th>Tool</th><th>Input</th><th>Output</th></tr>
-          <tr><td>Compiler</td><td>High-level source code</td><td>Object/Assembly code</td></tr>
-          <tr><td>Assembler</td><td>Assembly language</td><td>Machine code (object file)</td></tr>
-          <tr><td>Linker</td><td>Object files + Libraries</td><td>Single executable</td></tr>
-          <tr><td>Loader</td><td>Executable file</td><td>Program in memory</td></tr>
-          <tr><td>Parser</td><td>Token stream</td><td>Parse/Syntax tree</td></tr>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- Q6 -->
-  <div class="qa-card" id="q6">
-    <div class="qa-card-header" onclick="toggleCard(this)">
-      <span class="q-badge">Q 06</span>
-      <h3>List various phases of language processor. Explain any one phase in detail. Also explain Symbol Table.</h3>
-      <span class="toggle-icon">▼</span>
-    </div>
-    <div class="qa-body">
-      <div class="ans">
-        <h4>Phases of a Language Processor (Compiler)</h4>
-        <ol>
-          <li>Lexical Analysis</li>
-          <li>Syntax Analysis (Parsing)</li>
-          <li>Semantic Analysis</li>
-          <li>Intermediate Code Generation</li>
-          <li>Code Optimization</li>
-          <li>Code Generation</li>
-        </ol>
-        <h4>Detailed Explanation: Lexical Analysis</h4>
-        <p>The <strong>Lexical Analyzer</strong> (also called Scanner) is the first phase of the compiler. It reads the source program character by character and groups them into meaningful sequences called <em>lexemes</em>, then converts them to <em>tokens</em>.</p>
-        <p><strong>Tasks performed:</strong></p>
-        <ul>
-          <li>Remove whitespace and comments</li>
-          <li>Identify tokens (keywords, identifiers, operators, literals)</li>
-          <li>Enter identifiers into the symbol table</li>
-          <li>Report lexical errors (invalid characters)</li>
-        </ul>
-        <div class="code-block">Source: x = a + b * 2;
-
-Tokens produced:
-&lt;id, x&gt;  &lt;op, =&gt;  &lt;id, a&gt;  &lt;op, +&gt;  &lt;id, b&gt;  &lt;op, *&gt;  &lt;num, 2&gt;  &lt;punct, ;&gt;</div>
-        <h4>Symbol Table</h4>
-        <p>A <strong>Symbol Table</strong> is a data structure maintained throughout the compilation process to store information about identifiers (variables, functions, objects) declared in the program.</p>
-        <p><strong>Information stored in Symbol Table:</strong></p>
-        <ul>
-          <li>Name of the identifier</li>
-          <li>Type (int, float, char, etc.)</li>
-          <li>Scope (local, global)</li>
-          <li>Memory address / offset</li>
-          <li>Size</li>
-          <li>For functions: number/type of parameters, return type</li>
-        </ul>
-        <table>
-          <tr><th>Name</th><th>Type</th><th>Scope</th><th>Address</th><th>Size</th></tr>
-          <tr><td>x</td><td>int</td><td>local</td><td>1000</td><td>2</td></tr>
-          <tr><td>a</td><td>float</td><td>global</td><td>2000</td><td>4</td></tr>
-          <tr><td>sum</td><td>int</td><td>local</td><td>1002</td><td>2</td></tr>
-        </table>
-        <p>Symbol tables are implemented using arrays, linked lists, or hash tables. Hash tables are most efficient with O(1) average-case access.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Q7 -->
-  <div class="qa-card" id="q7">
-    <div class="qa-card-header" onclick="toggleCard(this)">
-      <span class="q-badge">Q 07</span>
-      <h3>Which are the different assembly language statements? Explain each of them with suitable example.</h3>
-      <span class="toggle-icon">▼</span>
-    </div>
-    <div class="qa-body">
-      <div class="ans">
-        <h4>Types of Assembly Language Statements</h4>
-        <p>An assembly language program consists of 3 types of statements:</p>
-        <h4>1. Imperative Statements (Machine Instructions)</h4>
-        <p>These cause an action to be performed during execution. They correspond directly to machine instructions. Each has an opcode and optional operands.</p>
-        <div class="code-block">Syntax: [Label]  Mnemonic  [Operand1 [, Operand2]]
-
-Examples:
-LOOP  MOVER   AREG, A      ; Move value at A into AREG
-      ADD     AREG, B      ; Add value of B to AREG
-      MOVEM   AREG, C      ; Move AREG content to C
-      BC      LT, BACK     ; Branch if less than</div>
-        <h4>2. Declarative Statements (Assembler Directives / Non-executable)</h4>
-        <p>These provide data or information to the assembler but do not generate any machine code themselves.</p>
-        <div class="code-block">DS  (Define Storage):  A  DS  5   ; Reserve 5 words for A
-DC  (Define Constant): B  DC  '10' ; Define constant 10 at B
-EQU (Equate):          X  EQU A+1  ; X is same address as A+1
-LTORG:                 LTORG        ; Place literals here</div>
-        <h4>3. Assembler Directives</h4>
-        <p>Instructions for controlling the assembly process.</p>
-        <div class="code-block">START  100    ; Start assembly at address 100
-END          ; End of program
-ORIGIN 200   ; Set location counter to 200
-LTORG        ; Generate literal pool at this point</div>
-        <table>
-          <tr><th>Type</th><th>Example</th><th>Purpose</th></tr>
-          <tr><td>Imperative</td><td>MOVER AREG, A</td><td>Generates machine code; executed at runtime</td></tr>
-          <tr><td>Declarative</td><td>A DS 3</td><td>Allocates memory / defines constant</td></tr>
-          <tr><td>Assembler Directive</td><td>START 100</td><td>Controls the assembly process</td></tr>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- Q8 -->
-  <div class="qa-card" id="q8">
-    <div class="qa-card-header" onclick="toggleCard(this)">
-      <span class="q-badge">Q 08</span>
-      <h3>Explain advanced assembler directives with suitable example.</h3>
-      <span class="toggle-icon">▼</span>
-    </div>
-    <div class="qa-body">
-      <div class="ans">
-        <h4>Advanced Assembler Directives</h4>
-        <p>These are special instructions that control the assembly process but do not generate machine code.</p>
-        <h4>1. EQU (Equate)</h4>
-        <p>Assigns a name to a constant value or expression.</p>
-        <div class="code-block">D   EQU   A+1
-; D is assigned the address A+1
-; Useful for symbolic constants</div>
-        <h4>2. ORIGIN</h4>
-        <p>Resets the Location Counter (LC) to a specified value.</p>
-        <div class="code-block">    START  100
-A   DS     1      ; Address 100
-    ORIGIN 200
-B   DS     1      ; Address 200 (jumped from 101)</div>
-        <h4>3. LTORG (Literal Origin)</h4>
-        <p>Forces the assembler to allocate all accumulated literals at the current point in the program.</p>
-        <div class="code-block">    MOVER  AREG, ='5'
-    ADD    AREG, ='10'
-    LTORG            ; Literal pool placed HERE
-                     ; ='5' → 505, ='10' → 506
-    MOVER  BREG, ='15'
-    END              ; Second literal pool at end</div>
-        <h4>4. USING / DROP (Base Register Directives)</h4>
-        <p>Tells the assembler which register to use as base register for address calculation.</p>
-        <div class="code-block">    USING  *, R1       ; Use R1 as base from here
-    L      R2, VALUE
-    DROP   R1          ; Stop using R1 as base</div>
-        <h4>5. MACRO / MEND</h4>
-        <p>Defines a macro (reusable block of code).</p>
-        <div class="code-block">    MACRO
-    INCR  &X
-    MOVER AREG, &X
-    ADD   AREG, ='1'
-    MOVEM AREG, &X
-    MEND
-; Usage:
-    INCR A   ; expands to the 3 instructions above with &X=A</div>
-        <div class="note-box">LTORG is important to avoid large offset problems in base-displacement addressing when literals are far from the instruction.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Q9 -->
-  <div class="qa-card" id="q9">
-    <div class="qa-card-header" onclick="toggleCard(this)">
-      <span class="q-badge">Q 09</span>
-      <h3>Discuss in detail the various data structures involved in PASS-I of the assembler.</h3>
-      <span class="toggle-icon">▼</span>
-    </div>
-    <div class="qa-body">
-      <div class="ans">
-        <h4>PASS-I of Two-Pass Assembler</h4>
-        <p>The primary goal of Pass-I is to define all symbols and literals, assign addresses, and generate an intermediate code. It uses the following data structures:</p>
-        <h4>1. SYMTAB – Symbol Table</h4>
-        <p>Stores labels/symbols and their addresses.</p>
-        <table>
-          <tr><th>Symbol</th><th>Address</th></tr>
-          <tr><td>A</td><td>100</td></tr>
-          <tr><td>L1</td><td>101</td></tr>
-          <tr><td>D</td><td>105</td></tr>
-          <tr><td>L2</td><td>106</td></tr>
-          <tr><td>B</td><td>108</td></tr>
-        </table>
-        <h4>2. LITTAB – Literal Table</h4>
-        <p>Stores all literals encountered in the program. The address is assigned during LTORG processing.</p>
-        <table>
-          <tr><th>Literal</th><th>Address</th></tr>
-          <tr><td>='13'</td><td>—</td></tr>
-          <tr><td>='19'</td><td>—</td></tr>
-        </table>
-        <h4>3. POOLTAB – Pool Table</h4>
-        <p>Tracks the starting index of each literal pool in the literal table (one entry per LTORG / END).</p>
-        <table>
-          <tr><th>Pool No.</th><th>Starting Index in LITTAB</th></tr>
-          <tr><td>1</td><td>1</td></tr>
-          <tr><td>2</td><td>2</td></tr>
-        </table>
-        <h4>4. OPTAB – Operation Code Table</h4>
-        <p>Pre-built table with mnemonics, their types, and machine opcodes.</p>
-        <table>
-          <tr><th>Mnemonic</th><th>Type</th><th>Opcode</th></tr>
-          <tr><td>MOVER</td><td>IS</td><td>04</td></tr>
-          <tr><td>ADD</td><td>IS</td><td>01</td></tr>
-          <tr><td>STOP</td><td>IS</td><td>00</td></tr>
-          <tr><td>DS</td><td>DL</td><td>—</td></tr>
-        </table>
-        <h4>5. Location Counter (LC)</h4>
-        <p>Keeps track of the address of the current instruction being processed. Initialized to value in START directive. Incremented by 1 for each word.</p>
-        <div class="note-box">Pass-I builds SYMTAB, LITTAB, and POOLTAB and generates intermediate code. Pass-II uses these tables to generate final machine code.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Q10 -->
-  <div class="qa-card" id="q10">
-    <div class="qa-card-header" onclick="toggleCard(this)">
-      <span class="q-badge">Q 10</span>
-      <h3>Explain forward reference with suitable examples. How to solve it using back-patching?</h3>
-      <span class="toggle-icon">▼</span>
-    </div>
-    <div class="qa-body">
-      <div class="ans">
-        <h4>Forward Reference</h4>
-        <p>A <strong>forward reference</strong> occurs when a label or symbol is used before it is defined in the program. Since the assembler processes code sequentially, it doesn't know the address of a symbol that hasn't been encountered yet.</p>
-        <div class="code-block">Example:
-      MOVER  AREG, A      ; 'A' is used here at address 100
-      ADD    AREG, ='5'
-      STOP
-A     DS     1            ; 'A' is DEFINED here at address 103
-      END
-
-→ 'A' is a forward reference because it is used before it is defined.</div>
-        <h4>Problems Caused</h4>
-        <ul>
-          <li>In single-pass assembler, address of forward-referenced symbol is unknown at time of use</li>
-          <li>Cannot directly generate correct machine code in one pass</li>
-        </ul>
-        <h4>Solution: Back-Patching</h4>
-        <p>Back-patching is the technique used to resolve forward references in a <strong>single-pass assembler</strong>.</p>
-        <p><strong>Mechanism:</strong></p>
-        <ol>
-          <li>When a forward reference is encountered, generate <em>incomplete</em> machine code with a placeholder (e.g., 0 or blank) for the unknown address</li>
-          <li>Add an entry to a <strong>Pending List / Incomplete Table</strong> recording: the instruction address, and the symbol referenced</li>
-          <li>When the symbol is defined later, its address is determined</li>
-          <li>Go back and <em>patch</em> (fill in) all incomplete entries in the generated code with the now-known address</li>
-        </ol>
-        <div class="code-block">Address  Instruction          Action
-100      MOVER AREG, ?       → Add (100, A) to pending list
-101      ADD   AREG, ='5'
-102      STOP
-103      DS 1                → A defined at 103
-                               ↑ Patch address 100: MOVER AREG, 103 ✓</div>
-        <div class="note-box">Two-pass assemblers solve forward references naturally: Pass-I collects all symbol definitions; Pass-II generates complete code using the built symbol table.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Q11 -->
-  <div class="qa-card" id="q11">
-    <div class="qa-card-header" onclick="toggleCard(this)">
-      <span class="q-badge">Q 11</span>
-      <h3>Compare single pass assembler and two pass assembler. Explain two pass assembler in detail.</h3>
-      <span class="toggle-icon">▼</span>
-    </div>
-    <div class="qa-body">
-      <div class="ans">
-        <h4>Single Pass vs Two Pass Assembler</h4>
-        <table>
-          <tr><th>Parameter</th><th>Single Pass</th><th>Two Pass</th></tr>
-          <tr><td>Passes</td><td>One scan of source</td><td>Two scans of source</td></tr>
-          <tr><td>Forward Reference</td><td>Solved via back-patching</td><td>Naturally resolved (Pass-I collects all symbols)</td></tr>
-          <tr><td>Speed</td><td>Faster (one scan)</td><td>Slower (two scans)</td></tr>
-          <tr><td>Complexity</td><td>More complex (needs pending lists)</td><td>Simpler logic per pass</td></tr>
-          <tr><td>Memory</td><td>Less memory needed</td><td>More memory (stores intermediate code)</td></tr>
-          <tr><td>Usage</td><td>Embedded, real-time systems</td><td>General purpose assemblers</td></tr>
-        </table>
-        <h4>Two Pass Assembler — Pass I</h4>
-        <p><strong>Goal:</strong> Build Symbol Table, Literal Table, Pool Table; Generate Intermediate Code.</p>
-        <ol>
-          <li>Initialize Location Counter (LC)</li>
-          <li>For each statement:
-            <ul>
-              <li>If label present → add (label, LC) to SYMTAB</li>
-              <li>If literal present → add to LITTAB</li>
-              <li>If LTORG or END → assign addresses to literals, add entry to POOLTAB</li>
-              <li>If START → set LC</li>
-              <li>Increment LC appropriately</li>
-              <li>Generate intermediate code token-by-token</li>
-            </ul>
-          </li>
-        </ol>
-        <h4>Two Pass Assembler — Pass II</h4>
-        <p><strong>Goal:</strong> Generate final machine code using tables from Pass-I.</p>
-        <ol>
-          <li>Read intermediate code</li>
-          <li>For each instruction:
-            <ul>
-              <li>Look up opcode in OPTAB</li>
-              <li>Resolve symbol references using SYMTAB</li>
-              <li>Resolve literal references using LITTAB</li>
-              <li>Generate binary machine code</li>
-            </ul>
-          </li>
-        </ol>
-        <div class="code-block">Example Source Program:
-      START  100
-A     DS     3
-L1    MOVER  AREG, B
-      ADD    AREG, ='13'
-      STOP
-B     DC     '19'
-      END
-
-Pass-I SYMTAB:           Pass-I LITTAB:
-A  → 100                 ='13' → 105
-L1 → 101
-B  → 105
-
-Pass-II Machine Code (example):
-101: 04 1 105     (MOVER AREG, B)
-102: 01 1 106     (ADD AREG, ='13' literal at 106)
-103: 00 0 000     (STOP)</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Q12 -->
-  <div class="qa-card" id="q12">
-    <div class="qa-card-header" onclick="toggleCard(this)">
-      <span class="q-badge">Q 12</span>
-      <h3>Given source program: Show contents of Symbol Table, Literal Table & Pool Table. Show intermediate code.</h3>
-      <span class="toggle-icon">▼</span>
-    </div>
-    <div class="qa-body">
-      <div class="ans">
-        <h4>Given Program</h4>
-        <div class="code-block">        START   100
-A       DS      3
-L1      MOVER   AREG, B
-        ADD     AREG, ='13'
-        MOVEM   AREG, D
-D       EQU     A+1
-L2      PRINT   D
-        STOP
-B       DC      '19'
-        END</div>
-        <h4>Location Counter Trace</h4>
-        <table>
-          <tr><th>Label</th><th>Statement</th><th>LC</th></tr>
-          <tr><td>—</td><td>START 100</td><td>100</td></tr>
-          <tr><td>A</td><td>DS 3</td><td>100 (A=100, LC→103)</td></tr>
-          <tr><td>L1</td><td>MOVER AREG, B</td><td>103</td></tr>
-          <tr><td>—</td><td>ADD AREG, ='13'</td><td>104</td></tr>
-          <tr><td>—</td><td>MOVEM AREG, D</td><td>105</td></tr>
-          <tr><td>D</td><td>EQU A+1</td><td>106 (D=101, no LC increment)</td></tr>
-          <tr><td>L2</td><td>PRINT D</td><td>106</td></tr>
-          <tr><td>—</td><td>STOP</td><td>107</td></tr>
-          <tr><td>B</td><td>DC '19'</td><td>108 (B=108, LC→109)</td></tr>
-          <tr><td>—</td><td>END</td><td>—</td></tr>
-        </table>
-        <h4>(i) Symbol Table (SYMTAB)</h4>
-        <table>
-          <tr><th>Symbol</th><th>Address</th></tr>
-          <tr><td>A</td><td>100</td></tr>
-          <tr><td>L1</td><td>103</td></tr>
-          <tr><td>D</td><td>101 (via EQU A+1)</td></tr>
-          <tr><td>L2</td><td>106</td></tr>
-          <tr><td>B</td><td>108</td></tr>
-        </table>
-        <h4>Literal Table (LITTAB)</h4>
-        <table>
-          <tr><th>Index</th><th>Literal</th><th>Address</th></tr>
-          <tr><td>1</td><td>='13'</td><td>109</td></tr>
-          <tr><td>2</td><td>='19'</td><td>— (B DC '19' is a symbol, not literal)</td></tr>
-        </table>
-        <h4>Pool Table (POOLTAB)</h4>
-        <table>
-          <tr><th>Pool No.</th><th>LITTAB Index</th></tr>
-          <tr><td>1</td><td>1</td></tr>
-        </table>
-        <h4>(ii) Intermediate Code</h4>
-        <div class="code-block">Addr  IC Representation
-100   (DL, 03) (C, 3)                   ← A DS 3
-103   (IS, 04) (1, 1) (S, 5)            ← MOVER AREG, B   [B→SYMTAB index 5]
-104   (IS, 01) (1, 1) (L, 1)            ← ADD AREG, ='13' [literal index 1]
-105   (IS, 05) (1, 1) (S, 3)            ← MOVEM AREG, D   [D→SYMTAB index 3]
-106   (IS, 09) (S, 3)                   ← PRINT D
-107   (IS, 00)                          ← STOP
-108   (DL, 01) (C, 19)                  ← B DC '19'
-
-Legend:
-IS = Imperative Statement | DL = Declarative | 
-S,n = nth entry in SYMTAB | L,n = nth literal | C = constant
-Register codes: AREG=1, BREG=2, CREG=3, DREG=4</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Q13 -->
-  <div class="qa-card" id="q13">
-    <div class="qa-card-header" onclick="toggleCard(this)">
-      <span class="q-badge">Q 13</span>
-      <h3>What is grammar? List and explain various types of grammar.</h3>
-      <span class="toggle-icon">▼</span>
-    </div>
-    <div class="qa-body">
-      <div class="ans">
-        <h4>Grammar</h4>
-        <p>A <strong>formal grammar</strong> G is defined as a 4-tuple: <strong>G = (V, T, P, S)</strong> where:</p>
-        <ul>
-          <li><strong>V</strong> = Set of non-terminal symbols (variables)</li>
-          <li><strong>T</strong> = Set of terminal symbols</li>
-          <li><strong>P</strong> = Set of production rules</li>
-          <li><strong>S</strong> = Start symbol (S ∈ V)</li>
-        </ul>
-        <p>Grammar specifies the syntax rules for a language.</p>
-        <h4>Chomsky Hierarchy — 4 Types of Grammar</h4>
-        <table>
-          <tr><th>Type</th><th>Name</th><th>Production Rule Form</th><th>Automaton</th></tr>
-          <tr><td>Type 0</td><td>Unrestricted / Phrase Structure</td><td>α → β (no restriction; α,β ∈ (V∪T)*)</td><td>Turing Machine</td></tr>
-          <tr><td>Type 1</td><td>Context-Sensitive</td><td>αAβ → αγβ (|LHS| ≤ |RHS|)</td><td>Linear Bounded Automaton</td></tr>
-          <tr><td>Type 2</td><td>Context-Free Grammar (CFG)</td><td>A → α (single non-terminal on LHS)</td><td>Pushdown Automaton</td></tr>
-          <tr><td>Type 3</td><td>Regular Grammar</td><td>A → aB or A → a (right-linear)</td><td>Finite Automaton</td></tr>
-        </table>
-        <h4>Type 2 — Context-Free Grammar (Most important for compilers)</h4>
-        <p>All productions are of form <strong>A → α</strong> where A is a single non-terminal and α is any string of terminals/non-terminals.</p>
-        <div class="code-block">Example CFG for arithmetic expressions:
-E → E + T | T
-T → T * F | F
-F → ( E ) | id</div>
-        <h4>Type 3 — Regular Grammar</h4>
-        <p>Used for lexical analysis (tokenization). Right-linear: A → aB or A → a</p>
-        <div class="code-block">Example (identifiers):
-S → aA | bA
-A → aA | bA | ε   ; accepts (a|b)+</div>
-        <div class="note-box">In compiler design: Type 3 is used in Lexical Analysis; Type 2 (CFG) is used in Syntax Analysis (Parsing).</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Q14 -->
-  <div class="qa-card" id="q14">
-    <div class="qa-card-header" onclick="toggleCard(this)">
-      <span class="q-badge">Q 14</span>
-      <h3>Explain Ambiguous Grammar with example.</h3>
-      <span class="toggle-icon">▼</span>
-    </div>
-    <div class="qa-body">
-      <div class="ans">
-        <h4>Ambiguous Grammar</h4>
-        <p>A grammar G is said to be <strong>ambiguous</strong> if there exists at least one string in the language L(G) that has <strong>more than one parse tree</strong> (or equivalently, more than one leftmost/rightmost derivation).</p>
-        <h4>Example</h4>
-        <p>Consider grammar: <strong>E → E + E | E * E | id</strong></p>
-        <p>Parse the string: <strong>id + id * id</strong></p>
-        <p>This string has <strong>two different parse trees:</strong></p>
-        <div class="code-block">Parse Tree 1: (Treats + first — incorrect precedence)
-         E
-       / | \
-      E  +  E
-      |    / | \
-      id  E  *  E
-          |     |
-          id    id
-Result: (id + id) * id
-
-Parse Tree 2: (Treats * first — correct precedence)
-         E
-       / | \
-      E  +  E
-      |    / | \
-      id  E  *  E
-          |     |
-          id    id
-Structured as: id + (id * id)</div>
-        <p>Since two parse trees exist, the grammar is <strong>ambiguous</strong>.</p>
-        <h4>Why Ambiguity is a Problem</h4>
-        <ul>
-          <li>A compiler cannot decide which parse tree to use, hence which code to generate</li>
-          <li>The meaning of the program becomes unclear</li>
-        </ul>
-        <h4>Resolving Ambiguity</h4>
-        <ul>
-          <li><strong>Operator Precedence</strong> — Give * higher precedence than +</li>
-          <li><strong>Associativity rules</strong> — Make operators left or right associative</li>
-          <li><strong>Rewrite grammar</strong> to be unambiguous:</li>
-        </ul>
-        <div class="code-block">Unambiguous version:
-E → E + T | T
-T → T * F | F
-F → ( E ) | id
-; Now * has higher precedence than + and both are left-associative</div>
-        <div class="note-box">Every ambiguous grammar can be rewritten as an unambiguous one, though not every ambiguous language can be described by an unambiguous grammar.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Q15 -->
-  <div class="qa-card" id="q15">
-    <div class="qa-card-header" onclick="toggleCard(this)">
-      <span class="q-badge">Q 15</span>
-      <h3>Construct NFA and DFA for regular expression: (0 | 1)*001#</h3>
-      <span class="toggle-icon">▼</span>
-    </div>
-    <div class="qa-body">
-      <div class="ans">
-        <h4>Regular Expression: (0|1)*001#</h4>
-        <p>This RE accepts all binary strings ending with <strong>001</strong> followed by <strong>#</strong>.</p>
-        <h4>NFA Construction (Thompson's Construction)</h4>
-        <p>States: q0 → q1 → q2 → q3 → q4 (accepting)</p>
-        <div class="diagram">
-          <svg viewBox="0 0 620 160" xmlns="http://www.w3.org/2000/svg" width="620" height="160">
-            <defs>
-              <marker id="a2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
-                <path d="M0,0 L8,4 L0,8 Z" fill="#4fffb0"/>
-              </marker>
-            </defs>
-            <style>
-              .st { fill:#1a1e28; stroke:#4fffb0; stroke-width:1.5; }
-              .st-acc { fill:#1a1e28; stroke:#ffd166; stroke-width:2.5; }
-              .sl { fill:#e8eaf0; font-family:'JetBrains Mono',monospace; font-size:13px; text-anchor:middle; }
-              .el { fill:#4fffb0; font-family:'JetBrains Mono',monospace; font-size:11px; text-anchor:middle; }
-              .tr { stroke:#4fffb0; stroke-width:1.3; fill:none; marker-end:url(#a2); }
-            </style>
-            <!-- States -->
-            <circle class="st" cx="50" cy="80" r="24"/>
-            <text class="sl" x="50" y="85">q0</text>
-            <circle class="st" cx="180" cy="80" r="24"/>
-            <text class="sl" x="180" y="85">q1</text>
-            <circle class="st" cx="310" cy="80" r="24"/>
-            <text class="sl" x="310" y="85">q2</text>
-            <circle class="st" cx="440" cy="80" r="24"/>
-            <text class="sl" x="440" y="85">q3</text>
-            <circle class="st-acc" cx="570" cy="80" r="24"/>
-            <circle cx="570" cy="80" r="20" fill="none" stroke="#ffd166" stroke-width="1"/>
-            <text class="sl" x="570" y="85" fill="#ffd166">q4</text>
-            <!-- Arrows -->
-            <line class="tr" x1="74" y1="80" x2="156" y2="80"/>
-            <text class="el" x="117" y="72">0</text>
-            <line class="tr" x1="204" y1="80" x2="286" y2="80"/>
-            <text class="el" x="245" y="72">0</text>
-            <line class="tr" x1="334" y1="80" x2="416" y2="80"/>
-            <text class="el" x="375" y="72">1</text>
-            <line class="tr" x1="464" y1="80" x2="546" y2="80"/>
-            <text class="el" x="505" y="72">#</text>
-            <!-- Self-loop on q0 for (0|1)* -->
-            <path class="tr" d="M 35 56 Q 50 20 65 56" />
-            <text class="el" x="50" y="20">0,1</text>
-            <!-- Start arrow -->
-            <line class="tr" x1="10" y1="80" x2="26" y2="80"/>
-            <text class="el" x="5" y="68" fill="#ffd166">→</text>
-          </svg>
-        </div>
-        <h4>NFA Transition Table</h4>
-        <table>
-          <tr><th>State</th><th>0</th><th>1</th><th>#</th></tr>
-          <tr><td>→q0</td><td>{q0, q1}</td><td>{q0}</td><td>—</td></tr>
-          <tr><td>q1</td><td>{q2}</td><td>—</td><td>—</td></tr>
-          <tr><td>q2</td><td>—</td><td>{q3}</td><td>—</td></tr>
-          <tr><td>q3</td><td>—</td><td>—</td><td>{q4}</td></tr>
-          <tr><td>*q4</td><td>—</td><td>—</td><td>—</td></tr>
-        </table>
-        <h4>DFA Construction (Subset Construction)</h4>
-        <table>
-          <tr><th>DFA State</th><th>NFA States</th><th>On 0</th><th>On 1</th><th>On #</th></tr>
-          <tr><td>→A</td><td>{q0}</td><td>B</td><td>A</td><td>—</td></tr>
-          <tr><td>B</td><td>{q0,q1}</td><td>C</td><td>A</td><td>—</td></tr>
-          <tr><td>C</td><td>{q0,q1,q2}</td><td>C</td><td>D</td><td>—</td></tr>
-          <tr><td>D</td><td>{q0,q3}</td><td>B</td><td>A</td><td>E</td></tr>
-          <tr><td>*E</td><td>{q4}</td><td>—</td><td>—</td><td>—</td></tr>
-        </table>
-        <div class="note-box">State E is the accepting state. The DFA accepts any binary string containing "001" as a suffix, followed by #.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Q16 -->
-  <div class="qa-card" id="q16">
-    <div class="qa-card-header" onclick="toggleCard(this)">
-      <span class="q-badge">Q 16</span>
-      <h3>What is left recursion? Eliminate left recursion from: S→A, A→aB/Ad, B→bBC/f, C→g</h3>
-      <span class="toggle-icon">▼</span>
-    </div>
-    <div class="qa-body">
-      <div class="ans">
-        <h4>Left Recursion</h4>
-        <p>A grammar is <strong>left-recursive</strong> if it has a non-terminal A such that there is a derivation A ⟹ Aα for some string α. Left recursion causes top-down parsers (like LL parsers) to loop infinitely.</p>
-        <p><strong>Direct Left Recursion:</strong> A → Aα | β</p>
-        <p><strong>Elimination Formula:</strong> Replace A → Aα | β with:</p>
-        <div class="code-block">A  → β A'
-A' → α A' | ε</div>
-        <h4>Given Grammar</h4>
-        <div class="code-block">S → A
-A → aB | Ad      ← Left recursive (A → Ad)
-B → bBC | f
-C → g</div>
-        <h4>Step-by-Step Elimination</h4>
-        <p>Only <strong>A → aB | Ad</strong> has left recursion. Here:</p>
-        <ul>
-          <li>α = d (the recursive part without leading A)</li>
-          <li>β = aB (the non-left-recursive alternative)</li>
-        </ul>
-        <p>Apply the formula:</p>
-        <div class="code-block">A  → aB A'
-A' → d A' | ε</div>
-        <h4>Final Grammar (After Left Recursion Elimination)</h4>
-        <div class="code-block">S  → A
-A  → aB A'
-A' → d A' | ε
-B  → bBC | f
-C  → g</div>
-        <div class="note-box">S, B, C have no left recursion, so they remain unchanged. Only A needed modification.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Q17 -->
-  <div class="qa-card" id="q17">
-    <div class="qa-card-header" onclick="toggleCard(this)">
-      <span class="q-badge">Q 17</span>
-      <h3>Construct LL(1) parser table for: S→Aa|bAc|Bc|bBa, A→d, B→d</h3>
-      <span class="toggle-icon">▼</span>
-    </div>
-    <div class="qa-body">
-      <div class="ans">
-        <h4>Grammar</h4>
-        <div class="code-block">S → Aa | bAc | Bc | bBa
-A → d
-B → d</div>
-        <h4>Step 1: Compute FIRST Sets</h4>
-        <table>
-          <tr><th>Non-Terminal</th><th>FIRST</th></tr>
-          <tr><td>A</td><td>{d}</td></tr>
-          <tr><td>B</td><td>{d}</td></tr>
-          <tr><td>S → Aa</td><td>{d}</td></tr>
-          <tr><td>S → bAc</td><td>{b}</td></tr>
-          <tr><td>S → Bc</td><td>{d}</td></tr>
-          <tr><td>S → bBa</td><td>{b}</td></tr>
-        </table>
-        <h4>Step 2: Compute FOLLOW Sets</h4>
-        <table>
-          <tr><th>Non-Terminal</th><th>FOLLOW</th></tr>
-          <tr><td>S</td><td>{$}</td></tr>
-          <tr><td>A</td><td>{a, c}</td></tr>
-          <tr><td>B</td><td>{c, a}</td></tr>
-        </table>
-        <h4>Step 3: Check for LL(1) Conflicts</h4>
-        <p>For S: Productions S→Aa and S→Bc both have FIRST = {d}. This creates a conflict on input 'd'. Also S→bAc and S→bBa both start with 'b' — another conflict.</p>
-        <div class="note-box">This grammar is NOT LL(1) because of conflicts. The parser table entries show the conflict:</div>
-        <h4>LL(1) Parser Table (showing conflict)</h4>
-        <table>
-          <tr><th>NT \ Input</th><th>a</th><th>b</th><th>c</th><th>d</th><th>$</th></tr>
-          <tr><td>S</td><td>—</td><td>S→bAc, S→bBa ⚠️</td><td>—</td><td>S→Aa, S→Bc ⚠️</td><td>—</td></tr>
-          <tr><td>A</td><td>—</td><td>—</td><td>—</td><td>A→d</td><td>—</td></tr>
-          <tr><td>B</td><td>—</td><td>—</td><td>—</td><td>B→d</td><td>—</td></tr>
-        </table>
-        <p>The conflicts appear because the grammar is ambiguous (both A and B derive 'd', and S cannot distinguish which production to use with only 1 lookahead symbol). This grammar requires additional disambiguation.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Q18 -->
-  <div class="qa-card" id="q18">
-    <div class="qa-card-header" onclick="toggleCard(this)">
-      <span class="q-badge">Q 18</span>
-      <h3>Discuss the need for left factoring in grammar? Explain it with suitable example.</h3>
-      <span class="toggle-icon">▼</span>
-    </div>
-    <div class="qa-body">
-      <div class="ans">
-        <h4>Need for Left Factoring</h4>
-        <p>Left factoring is required when a grammar has two or more productions for the same non-terminal that begin with the same terminal symbol. In such cases, a top-down parser (LL parser) cannot determine which production to apply by looking at only the current input token (lookahead).</p>
-        <p>Left factoring transforms the grammar to delay the decision until enough of the input has been seen to make an unambiguous choice.</p>
-        <h4>Problem Example</h4>
-        <div class="code-block">Consider:
-A → αβ₁ | αβ₂
-
-On seeing α, parser cannot decide whether to use αβ₁ or αβ₂ → CONFLICT!</div>
-        <h4>Left Factoring Rule</h4>
-        <p>If A → αβ₁ | αβ₂ | ... | αβₙ | γ then replace with:</p>
-        <div class="code-block">A  → α A' | γ
-A' → β₁ | β₂ | ... | βₙ</div>
-        <h4>Practical Example</h4>
-        <div class="code-block">Original Grammar:
-stmt → if expr then stmt else stmt
-     | if expr then stmt
-     
-Both productions start with "if expr then stmt" — conflict!
-
-After Left Factoring:
-stmt  → if expr then stmt stmt'
-stmt' → else stmt | ε
-
-Now the parser sees "if", uses the first rule, and defers the else decision to stmt'.</div>
-        <h4>Another Example</h4>
-        <div class="code-block">Original:
-A → aAB | aB | b
-
-Common prefix: 'a'
-
-After Left Factoring:
-A  → aA' | b
-A' → AB | B</div>
-        <h4>Benefits</h4>
-        <ul>
-          <li>Removes FIRST/FIRST conflicts from LL(1) parser table</li>
-          <li>Makes grammar suitable for predictive (LL) parsing</li>
-          <li>No change in the language generated</li>
-        </ul>
-        <div class="note-box">Left factoring does NOT change the language. It only restructures productions for deterministic top-down parsing.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Q19 -->
-  <div class="qa-card" id="q19">
-    <div class="qa-card-header" onclick="toggleCard(this)">
-      <span class="q-badge">Q 19</span>
-      <h3>Find FIRST, FOLLOW and construct LL(1) parser table for E→TE', E'→+TE'|ε, T→FT', T'→*FT'|ε, F→(E)|id</h3>
-      <span class="toggle-icon">▼</span>
-    </div>
-    <div class="qa-body">
-      <div class="ans">
-        <h4>Grammar</h4>
-        <div class="code-block">E  → T E'
-E' → + T E' | ε
-T  → F T'
-T' → * F T' | ε
-F  → ( E ) | id</div>
-        <h4>Step 1: FIRST Sets</h4>
-        <p>FIRST(α) = set of terminals that begin strings derivable from α.</p>
-        <table>
-          <tr><th>Non-Terminal</th><th>FIRST</th><th>Reasoning</th></tr>
-          <tr><td>F</td><td>{ (, id }</td><td>F → (E) starts with '('; F → id starts with 'id'</td></tr>
-          <tr><td>T'</td><td>{ *, ε }</td><td>T' → *FT' starts with '*'; T' → ε</td></tr>
-          <tr><td>T</td><td>{ (, id }</td><td>T → FT'; FIRST(F) = {(, id}</td></tr>
-          <tr><td>E'</td><td>{ +, ε }</td><td>E' → +TE' starts with '+'; E' → ε</td></tr>
-          <tr><td>E</td><td>{ (, id }</td><td>E → TE'; FIRST(T) = {(, id}</td></tr>
-        </table>
-        <h4>Step 2: FOLLOW Sets</h4>
-        <p>FOLLOW(A) = set of terminals that can appear immediately after A.</p>
-        <table>
-          <tr><th>Non-Terminal</th><th>FOLLOW</th><th>Reasoning</th></tr>
-          <tr><td>E</td><td>{ ), $ }</td><td>E appears in F → (E): ')' follows; E is start: '$' follows</td></tr>
-          <tr><td>E'</td><td>{ ), $ }</td><td>E' at end of E → TE'; FOLLOW(E'=FOLLOW(E))</td></tr>
-          <tr><td>T</td><td>{ +, ), $ }</td><td>T followed by E' which can derive ε; also FOLLOW(E)</td></tr>
-          <tr><td>T'</td><td>{ +, ), $ }</td><td>T' at end of T → FT'; FOLLOW(T'=FOLLOW(T))</td></tr>
-          <tr><td>F</td><td>{ *, +, ), $ }</td><td>F followed by T' which can be ε; FOLLOW(T)</td></tr>
-        </table>
-        <h4>Step 3: LL(1) Parsing Table</h4>
-        <p>Rule: For production A → α, add A → α at M[A, t] for each t ∈ FIRST(α). If ε ∈ FIRST(α), add A → α at M[A, t] for each t ∈ FOLLOW(A).</p>
-        <table>
-          <tr><th>NT \ Input</th><th>id</th><th>+</th><th>*</th><th>(</th><th>)</th><th>$</th></tr>
-          <tr><td>E</td><td>E→TE'</td><td>—</td><td>—</td><td>E→TE'</td><td>—</td><td>—</td></tr>
-          <tr><td>E'</td><td>—</td><td>E'→+TE'</td><td>—</td><td>—</td><td>E'→ε</td><td>E'→ε</td></tr>
-          <tr><td>T</td><td>T→FT'</td><td>—</td><td>—</td><td>T→FT'</td><td>—</td><td>—</td></tr>
-          <tr><td>T'</td><td>—</td><td>T'→ε</td><td>T'→*FT'</td><td>—</td><td>T'→ε</td><td>T'→ε</td></tr>
-          <tr><td>F</td><td>F→id</td><td>—</td><td>—</td><td>F→(E)</td><td>—</td><td>—</td></tr>
-        </table>
-        <div class="note-box">No cell has more than one entry → This grammar IS LL(1). It is a classic example of an unambiguous grammar for arithmetic expressions.</div>
-        <h4>Parsing Example: id + id * id</h4>
-        <div class="code-block">Stack               Input           Production Used
-$E                  id+id*id$
-$E'T                id+id*id$       E → TE'
-$E'T'F              id+id*id$       T → FT'
-$E'T'id             id+id*id$       F → id
-$E'T'               +id*id$         (match id)
-$E'                 +id*id$         T' → ε
-$E'T+               +id*id$         E' → +TE'
-$E'T                id*id$          (match +)
-$E'T'F              id*id$          T → FT'
-$E'T'id             id*id$          F → id
-$E'T'               *id$            (match id)
-$E'T'F*             *id$            T' → *FT'
-$E'T'F              id$             (match *)
-$E'T'id             id$             F → id
-$E'T'               $               (match id)
-$E'                 $               T' → ε
-$                   $               E' → ε
-                                    ACCEPT ✓</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Q20 -->
-  <div class="qa-card" id="q20">
-    <div class="qa-card-header" onclick="toggleCard(this)">
-      <span class="q-badge">Q 20</span>
-      <h3>Compare top-down and bottom-up parser.</h3>
-      <span class="toggle-icon">▼</span>
-    </div>
-    <div class="qa-body">
-      <div class="ans">
-        <h4>Top-Down vs Bottom-Up Parser</h4>
-        <table>
-          <tr><th>Parameter</th><th>Top-Down Parser</th><th>Bottom-Up Parser</th></tr>
-          <tr><td>Direction</td><td>Starts from Start Symbol, derives the input string</td><td>Starts from input string, reduces to Start Symbol</td></tr>
-          <tr><td>Derivation</td><td>Leftmost derivation</td><td>Reverse of rightmost derivation</td></tr>
-          <tr><td>Parse Tree</td><td>Built top to bottom (root first)</td><td>Built bottom to top (leaves first)</td></tr>
-          <tr><td>Actions</td><td>Expand: replace non-terminal with RHS of production</td><td>Reduce: replace RHS with LHS of production (handle)</td></tr>
-          <tr><td>Grammar</td><td>Works with LL grammars (left-to-right, leftmost)</td><td>Works with LR grammars (more powerful)</td></tr>
-          <tr><td>Examples</td><td>Recursive Descent, Predictive (LL(1))</td><td>Shift-Reduce, SLR, LALR, CLR (LR parsers)</td></tr>
-          <tr><td>Left Recursion</td><td>Cannot handle; must eliminate</td><td>Can handle left recursion</td></tr>
-          <tr><td>Backtracking</td><td>May require backtracking (unless predictive)</td><td>No backtracking</td></tr>
-          <tr><td>Grammar Power</td><td>Less powerful — handles subset of CFGs</td><td>More powerful — handles larger set of CFGs</td></tr>
-          <tr><td>Implementation</td><td>Simpler to understand and implement</td><td>Complex (uses stacks and DFA tables)</td></tr>
-          <tr><td>Error Detection</td><td>Early error detection</td><td>Error detected at reduction point</td></tr>
-          <tr><td>Tools</td><td>Written by hand or ANTLR</td><td>yacc, bison, LALR generators</td></tr>
-        </table>
-        <h4>Top-Down Parsing (LL)</h4>
-        <div class="code-block">Grammar: E → T + E | T
-Input:   a + b
-
-Derivation: E ⟹ T+E ⟹ a+E ⟹ a+T ⟹ a+b ✓
-(Expand from root downward)</div>
-        <h4>Bottom-Up Parsing (LR)</h4>
-        <div class="code-block">Grammar: E → E + T | T,  T → id
-Input:   id + id
-
-Shift-Reduce:
-id + id     → shift id
-T + id      → reduce T→id
-E + id      → reduce E→T
-E + id      → shift id
-E + T       → reduce T→id
-E           → reduce E→E+T ✓</div>
-        <div class="note-box">Bottom-up parsers (LR parsers) are more powerful and used in most real-world compiler tools (like gcc's parser). Top-down parsers are easier to write manually.</div>
-      </div>
-    </div>
-  </div>
-
-</main>
-
-<button id="top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+</div>
 
 <script>
-// Questions list for sidebar
-const questions = [
-  "Define system software. Difference between System & Application Software.",
-  "Life cycle stages of a source program with diagram.",
-  "Define: System Software, Semantic Gap, Execution Gap, Specification Gap, Token.",
-  "Differentiate passes and phases of compiler.",
-  "Define: Linker, Loader, Parser, Assembler, Compiler.",
-  "Phases of language processor. Explain one phase. Symbol Table.",
-  "Assembly language statement types with examples.",
-  "Advanced assembler directives with examples.",
-  "Data structures in PASS-I of assembler.",
-  "Forward reference & back-patching.",
-  "Single pass vs two pass assembler. Two pass assembler detail.",
-  "Symbol table, literal table, pool table & intermediate code for given program.",
-  "Grammar types (Chomsky hierarchy).",
-  "Ambiguous grammar with example.",
-  "NFA and DFA for (0|1)*001#.",
-  "Left recursion & elimination: S→A, A→aB/Ad, B→bBC/f, C→g.",
-  "LL(1) parser table for S→Aa|bAc|Bc|bBa, A→d, B→d.",
-  "Need for left factoring with examples.",
-  "FIRST, FOLLOW & LL(1) table for E→TE', E'→+TE'|ε, T→FT', ...",
-  "Compare top-down and bottom-up parser."
+/* ═══════════════════════════════════════════════
+   QUESTION DATA  (130 questions)
+   Sections: A (1–50 T/F), B (51–100 MCQ), C (101–130 MCQ)
+═══════════════════════════════════════════════ */
+const QUESTIONS = [
+  // ── SECTION A ──────────────────────────────
+  // correct: index of correct option (0=a, 1=b)
+  {sec:'A', lec:16, text:'When you live a life without any direction, you will not move far in any one direction.',
+   opts:['True','False'], ans:0},
+  {sec:'A', lec:16, text:'To achieve your long-term goals, you need to create smaller short-term goals to guide your life in the right direction.',
+   opts:['True','False'], ans:0},
+  {sec:'A', lec:16, text:'The more you visualize your long-term goals, the fewer chances there are of achieving them.',
+   opts:['True','False'], ans:1},
+  {sec:'A', lec:16, text:'Short term goals should be time-bound.',
+   opts:['True','False'], ans:0},
+  {sec:'A', lec:16, text:'Clear goals will give our lives a clear direction.',
+   opts:['True','False'], ans:0},
+  {sec:'A', lec:17, text:'There is no risk of addiction when smoking cigarettes occasionally to please one\'s friends.',
+   opts:['True','False'], ans:1},
+  {sec:'A', lec:17, text:'Drinking alcohol is only harmful to the health of the elderly but not to the youth.',
+   opts:['True','False'], ans:1},
+  {sec:'A', lec:17, text:'It is our duty to kindly encourage our family members to give up their bad addictions.',
+   opts:['True','False'], ans:0},
+  {sec:'A', lec:18, text:'Seva should be performed with compassion.',
+   opts:['True','False'], ans:0},
+  {sec:'A', lec:18, text:'Being generous can make us happier.',
+   opts:['True','False'], ans:0},
+  {sec:'A', lec:18, text:'Seva should be performed with the expectation of a reward.',
+   opts:['True','False'], ans:1},
+  {sec:'A', lec:19, text:'Working in a team helps you gain new perspectives.',
+   opts:['True','False'], ans:0},
+  {sec:'A', lec:19, text:'We should learn to be adaptable when working in a team.',
+   opts:['True','False'], ans:0},
+  {sec:'A', lec:19, text:'The biggest role of a team member is to take credit for the team\'s success.',
+   opts:['True','False'], ans:1},
+  {sec:'A', lec:19, text:'A good team member is willing to sacrifice something for the team.',
+   opts:['True','False'], ans:0},
+  {sec:'A', lec:21, text:'Legends create everlasting impressions.',
+   opts:['True','False'], ans:0},
+  {sec:'A', lec:21, text:'It is possible to lead with humility.',
+   opts:['True','False'], ans:0},
+  {sec:'A', lec:21, text:'The most effective way to lead is by making workers feel inferior.',
+   opts:['True','False'], ans:1},
+  {sec:'A', lec:21, text:'An aggressive leadership style is generally the most effective.',
+   opts:['True','False'], ans:1},
+  {sec:'A', lec:22, text:'A country without value-based citizens can create an environment of crime and corruption.',
+   opts:['True','False'], ans:0},
+  {sec:'A', lec:22, text:'To become value-based citizens, we must learn asset valuation techniques.',
+   opts:['True','False'], ans:1},
+  {sec:'A', lec:22, text:'Moral values are a universal necessity.',
+   opts:['True','False'], ans:0},
+  {sec:'A', lec:22, text:'Unfair treatment promotes a productive environment.',
+   opts:['True','False'], ans:1},
+  {sec:'A', lec:22, text:'We should always be accountable for our actions and be honest with the people who are depending on us.',
+   opts:['True','False'], ans:0},
+  {sec:'A', lec:23, text:'By completing the small things sincerely, it encourages you to do the big things better.',
+   opts:['True','False'], ans:0},
+  {sec:'A', lec:23, text:'Focus on perfecting only the big things. The small things are not as important.',
+   opts:['True','False'], ans:1},
+  {sec:'A', lec:23, text:'Good character is essential in our personal lives, but not in the workplace.',
+   opts:['True','False'], ans:1},
+  {sec:'A', lec:23, text:'It is possible for a person to bring change in his/her attitude.',
+   opts:['True','False'], ans:0},
+  {sec:'A', lec:23, text:'Being punctual in the workplace is unimportant.',
+   opts:['True','False'], ans:1},
+  {sec:'A', lec:24, text:'Death can teach us about life.',
+   opts:['True','False'], ans:0},
+  {sec:'A', lec:24, text:'Whatever happens, happens for the worst.',
+   opts:['True','False'], ans:1},
+  {sec:'A', lec:24, text:'Realizing our lifespan as finite can allow us to become more productive.',
+   opts:['True','False'], ans:0},
+  {sec:'A', lec:25, text:'Forgiveness can release us from the burden of regret and guilt. It can bring peace to our minds.',
+   opts:['True','False'], ans:0},
+  {sec:'A', lec:25, text:'Asking for forgiveness is an act of a coward.',
+   opts:['True','False'], ans:1},
+  {sec:'A', lec:25, text:'Ask for forgiveness because relationships are more important than our ego.',
+   opts:['True','False'], ans:0},
+  {sec:'A', lec:25, text:'Failure makes a person become worthless.',
+   opts:['True','False'], ans:1},
+  {sec:'A', lec:26, text:'Stress is a physical reaction to a mental state.',
+   opts:['True','False'], ans:0},
+  {sec:'A', lec:26, text:'Children are not affected by stress.',
+   opts:['True','False'], ans:1},
+  {sec:'A', lec:26, text:'Stress affects our health.',
+   opts:['True','False'], ans:0},
+  {sec:'A', lec:26, text:'Our eating habits can affect stress levels.',
+   opts:['True','False'], ans:0},
+  {sec:'A', lec:27, text:'We should limit the number of sugary drinks we drink.',
+   opts:['True','False'], ans:0},
+  {sec:'A', lec:27, text:'Physical exercise can reduce stress levels.',
+   opts:['True','False'], ans:0},
+  {sec:'A', lec:27, text:'The recommended amount of moderate physical exercise is 100 minutes per week.',
+   opts:['True','False'], ans:1},
+  {sec:'A', lec:27, text:'Most health professionals say that is ideal to get 6 hours of sleep every night.',
+   opts:['True','False'], ans:1},
+  {sec:'A', lec:27, text:'Physical exercise impacts our mental wellbeing.',
+   opts:['True','False'], ans:0},
+  {sec:'A', lec:29, text:'Financial planning can help one move abroad or buy a house.',
+   opts:['True','False'], ans:0},
+  {sec:'A', lec:29, text:'A mid-term financial goal cannot be achieved straight away but should only take a few years to achieve.',
+   opts:['True','False'], ans:0},
+  {sec:'A', lec:29, text:'Compounding is a process of growing.',
+   opts:['True','False'], ans:0},
+  {sec:'A', lec:30, text:'The company we keep has little influence on our development and decisions.',
+   opts:['True','False'], ans:1},
+  {sec:'A', lec:30, text:'The company you keep has the potential can make you or break you.',
+   opts:['True','False'], ans:0},
+
+  // ── SECTION B ──────────────────────────────
+  {sec:'B', lec:16, text:'What is the meaning of "begin with the end in mind"?',
+   opts:['You should end the task while remembering the start point',
+         'You should envision where you want to be in future and structure your life now to give direction to reach your goal',
+         'You should begin the task and later plan to end it depending on your initial progress',
+         'You should imagine how you want to begin the task before starting'], ans:1},
+  {sec:'B', lec:16, text:'"One should analyses oneself continually, introspect and think that ..."',
+   opts:['How can I get people to like me more?',
+         'I have enough time to do this task later.',
+         'This is still to be done, and what have I come to do, and what is happening?',
+         'What is the point of doing anything when one must die one day?'], ans:2},
+  {sec:'B', lec:16, text:'What is the first step to begin with the end in mind?',
+   opts:['Create good daily routines','Prepare short-term goals','Calculate your risk-outcome ratio','Visualize your long-term goal'], ans:3},
+  {sec:'B', lec:16, text:'Short term goals should be...?',
+   opts:['vague','not be time-bound','relevant to your long-term goal','hard to achieve'], ans:2},
+  {sec:'B', lec:16, text:'What does "S" stand for in the "SMART" method (used to define short-term goals)?',
+   opts:['Specific','Standard','Superb','Simple'], ans:0},
+  {sec:'B', lec:16, text:'Complete this sentence: To achieve your short-term goal...',
+   opts:['You should not work in time-limits',
+         'Your daily routine should include activities that help to achieve it',
+         'Do the same thing that your friends do',
+         'You should avoid focussing on your daily habits'], ans:1},
+  {sec:'B', lec:17, text:'Drug addictions can negatively impact which of the following?',
+   opts:['Health','Wealth','Family','All the above'], ans:3},
+  {sec:'B', lec:17, text:'Which of the following is the least likely reason for the formation of drug addiction?',
+   opts:['Peer pressure','The search for an escape from stress','Curiosity','The desire to form an addiction'], ans:3},
+  {sec:'B', lec:17, text:'Which of these methods can help an addict overcome their addictions?',
+   opts:['Firmly decide to give up','Reject assistance','Deny accountability','All the above'], ans:0},
+  {sec:'B', lec:17, text:'According to the statistics presented in the IPDC workbook, how many adult smokers began before the age of 18?',
+   opts:['3/10','5/10','7/10','9/10'], ans:3},
+  {sec:'B', lec:17, text:'What was the fate of the shining star Devashish Ghosh?',
+   opts:['He is currently working at NASA, even though he had initially declined their offer',
+         'He is working for ISRO since he declined NASA\'s offer to serve his country',
+         'He is working on aerospace research for Lockheed Martin',
+         'He is working at a clothing processing factory in Ahmedabad'], ans:3},
+  {sec:'B', lec:17, text:'How does the \'cool factor\' play a role in recreational drugs (e.g. cigarettes, alcohol)?',
+   opts:['One will borrow money from their family to buy recreational drugs',
+         'One will use recreational drugs out of curiosity',
+         'One will start to use recreational drugs to improve concentration levels',
+         'One will use recreational drugs because of the belief that it improves one\'s social status'], ans:3},
+  {sec:'B', lec:18, text:'Which one of the following services were NOT provided to the victims of the Gujarat earthquake in Bhuj?',
+   opts:['Postcards','Mobile phones','Psychological Trauma Centre','Last rites for the deceased'], ans:1},
+  {sec:'B', lec:18, text:'How did Carl Joss, a reporter from the Swiss magazine Sonntagsblick, describe his experience after performing seva in the Gujarat Earthquake relief camp?',
+   opts:['"The best birthday gift that anyone could have given me"',
+         '"It was a very memorable experience for me"',
+         '"Tiring but definitely worthwhile"',
+         '"It was hard to see the people suffering"'], ans:0},
+  {sec:'B', lec:18, text:'Which of the following seva did the journalist, Carl Joss, NOT perform during the relief work of the Gujarat earthquake?',
+   opts:['Cutting vegetables','Serving food','Donating money','Driving the ambulance'], ans:3},
+  {sec:'B', lec:19, text:'Norgay and Hillary were able to successfully climb Mount Everest. What factor allowed them to do this while their predecessors could not?',
+   opts:['They took permission of the government',
+         'They were experienced in mountaineering',
+         'They were part of a team that worked selflessly',
+         'There was no disappointment in their team'], ans:2},
+  {sec:'B', lec:19, text:'Which of the following is NOT a characteristic of a good team player?',
+   opts:['Selflessness','Respect','Half-heartedness','Adaptability'], ans:2},
+  {sec:'B', lec:19, text:'How did Tenzing Norgay climb Mount Everest?',
+   opts:['With unselfish teamwork','With agility and recklessness','By trying to get ahead on his own','With persistent fast speed'], ans:0},
+  {sec:'B', lec:19, text:'Which of the following does NOT contribute to being a good team player?',
+   opts:['Sacrifice','Value each team member','Make sure to claim your credit','Learn to change, change to learn'], ans:2},
+  {sec:'B', lec:21, text:'What standard did Pramukh Swami Maharaj study until?',
+   opts:['6th standard','12th standard','10th standard','Bachelor\'s degree'], ans:0},
+  {sec:'B', lec:21, text:'What was the first thing that Pramukh Swami Maharaj did, after being appointed as the president of BAPS, in 1950?',
+   opts:['Take a selfie','Delegate work to people','Wash dishes and utensils','Travel overseas'], ans:2},
+  {sec:'B', lec:21, text:'What did Anjali Ahuja do every Wednesday?',
+   opts:['Take a nap','Meet with her mentor to review her progress','Serve the employees lunch','Evaluate everyone\'s wages'], ans:2},
+  {sec:'B', lec:21, text:'Pramukh Swami Maharaj reacted to the workers\' refusal to continue the construction by doing what?',
+   opts:['Lifting tiles','Serving tea','Giving a discourse','Scolding them'], ans:0},
+  {sec:'B', lec:23, text:'Who supported Mahatma Gandhi as his personal secretary for 25 years?',
+   opts:['Vallabhbhai Patel','Vithalbhai Patel','Mahadev Desai','V. P. Menon'], ans:2},
+  {sec:'B', lec:23, text:'As per the IPDC workbook, what is NOT one of the ways to bring a positive change in your perception?',
+   opts:['Make others feel your importance',
+         'Don\'t Understand Small Things to be Small',
+         'Look at the Bigger Picture',
+         'None of the above'], ans:0},
+  {sec:'B', lec:23, text:'______ is to complete a required task or fulfil an obligation, before or at a previously decided time.',
+   opts:['Loyalty','Sincerity','Punctuality','Honesty'], ans:2},
+  {sec:'B', lec:23, text:'How did Mahadev Desai win the complete trust of Mahatma Gandhi?',
+   opts:['By being loyal','By being sincere in his work','By being punctual in all his duties','All of the above'], ans:3},
+  {sec:'B', lec:23, text:'How did Walt Disney bring a change in the attitude of his employees at Disneyland?',
+   opts:['He doubled the salary of all the employees.',
+         'He gave them a new perspective in which to view their role.',
+         'He hired motivational speakers to inspire his employees',
+         'He increased paid leaves for the employees.'], ans:1},
+  {sec:'B', lec:23, text:'What was the reply from the sweeper at NASA when President John F. Kennedy asked him about his job?',
+   opts:['"I\'m helping put a man on the moon."',
+         '"I keep the NASA premises clean."',
+         '"There is no significant contribution from me in NASA\'s success."',
+         '"I clean the instruments to be used for NASA\'s moon mission."'], ans:0},
+  {sec:'B', lec:24, text:'Reminding ourselves that \'life is finite\' can benefit us in many ways. Which of the following are NOT one of those ways?',
+   opts:['It can make our life more meaningful',
+         'It can make us more productive',
+         'It can increase our lifespan',
+         'It can give us clarity'], ans:2},
+  {sec:'B', lec:24, text:'Which of the following are NOT one of the powerful thoughts explored in the lecture "Timeless Wisdom for Daily Life"?',
+   opts:['Live every day as if it were your last',
+         'Look beyond the body',
+         'Whatever happens, happens for the best',
+         'When the going gets tough, the tough get going'], ans:3},
+  {sec:'B', lec:24, text:'Which one of the following famous personalities received a cancer diagnosis from which they learnt to understand life as finite and encouraged them to create the most iconic technological advantages in the 21st century?',
+   opts:['Bill Gates','Steve Jobs','Sundar Pichai','Mark Zuckerberg'], ans:1},
+  {sec:'B', lec:25, text:'How did Raj react to his father when he gave him a Bhagwat Gita instead of the car he asked for?',
+   opts:['He never spoke to his father again',
+         'He told his friend to buy him the car instead',
+         'He asked for an explanation',
+         'He moved to Japan and lived there'], ans:0},
+  {sec:'B', lec:25, text:'According to the workbook, which of the following is NOT one of the 6 important tips when asking for forgiveness?',
+   opts:['Apologize','Make excuses','Show empathy','Trying to make things right'], ans:1},
+  {sec:'B', lec:25, text:'According to the workbook, which of the following is NOT part of the process of forgiving?',
+   opts:['Consider why you want to forgive this person',
+         'Choose to forgive',
+         'Think of the person\'s flaws and share them with others',
+         'When in doubt, take your time'], ans:2},
+  {sec:'B', lec:25, text:'Asking for forgiveness is an act of the ______.',
+   opts:['Courageous','Weak','Foolish','Shy'], ans:0},
+  {sec:'B', lec:25, text:'After forgiving someone, what should we do next? Answer according to the lecture.',
+   opts:['Remind them of their mistake',
+         'Tell others about their mistake',
+         'Forget their mistake and move on',
+         'Tell them to write a letter of apology'], ans:2},
+  {sec:'B', lec:26, text:'Which of the below is NOT an effective method for relieving stress?',
+   opts:['Meditation','Sufficient rest','Smoking cigarettes','Exercise'], ans:2},
+  {sec:'B', lec:26, text:'\'Performing exercise\' best fits into which one of the below categories?',
+   opts:['Important & Urgent','Important but Not Urgent','Not Important but Urgent','Not Important & Not Urgent'], ans:1},
+  {sec:'B', lec:26, text:'\'Mindless web-browsing\' best fits into which one of the below categories?',
+   opts:['Important & Urgent','Important but Not Urgent','Not Important but Urgent','Not Important & Not Urgent'], ans:3},
+  {sec:'B', lec:27, text:'Which one of the following statements is false?',
+   opts:['Physical exercise can increase creativity',
+         'Physical exercise can sharpen memory',
+         'Physical exercise can improve brain power',
+         'Physical exercise can change the color of the brain'], ans:3},
+  {sec:'B', lec:27, text:'According to the Harvard School of Public Health, how much of a portioned plate should be filled with fruits and vegetables?',
+   opts:['15%','25%','40%','50%'], ans:3},
+  {sec:'B', lec:27, text:'According to the Harvard School of Public Health, how much of a portioned plate should be filled with healthy proteins?',
+   opts:['15%','25%','40%','50%'], ans:1},
+  {sec:'B', lec:29, text:'Which of the following does NOT directly benefit from financial planning?',
+   opts:['Retirement','Purchasing a house','Exam technique','Emergencies'], ans:2},
+  {sec:'B', lec:29, text:'Purchasing a smartphone is most likely to be which type of financial goal?',
+   opts:['Short-term','Mid-term','Maximization','Strategic'], ans:0},
+  {sec:'B', lec:29, text:'Which of the following is a fixed-voluntary cost?',
+   opts:['Rent','Gym membership','Medicine','Food'], ans:1},
+  {sec:'B', lec:29, text:'For a person with secure employment, how many months of basic expenses should be saved in an emergency fund?',
+   opts:['At least 1 months\' worth','At least 2 months\' worth','At least 3 months\' worth','At least 12 months\' worth'], ans:2},
+  {sec:'B', lec:29, text:'Which of the following is NOT an important component of financial planning?',
+   opts:['Using compound interest','Investing in an orient fund','Calculating your budget','Creating an emergency fund'], ans:1},
+  {sec:'B', lec:30, text:'Mangesh Mhaskar scored 97% on the 10th standard board exams. But what caused his downfall?',
+   opts:['Lack of finance','Illness','A lack of support from his parents','Bad company'], ans:3},
+  {sec:'B', lec:30, text:'How can we create a good environment for ourselves?',
+   opts:['Read good books','Watch popular shows','Keep negative thoughts','Eat more food'], ans:0},
+
+  // ── SECTION C ──────────────────────────────
+  // best: ans index for 2 marks; secondary is the other (1 mark)
+  {sec:'C', lec:16, text:'Rajesh has cleared his 12th standard exam with good grades. He is confused about the selection of his degree course. What should Rajesh do?',
+   opts:['He should seek some advice in choosing a course that is relevant to his prospective career choice.',
+         'He should select the course that is most popular with his friends and other students.'], ans:0},
+  {sec:'C', lec:16, text:'Amit is a very bright student. He wants to be an engineer and get entry to the best company in his field. He has just got admission into the engineering institute that he desired, now what should Amit follow?',
+   opts:['Amit should try to settle down into the new atmosphere, observe what others are doing and should follow in their footsteps.',
+         'Amit should define some short-term goals that will help get entry into the company of his choice.'], ans:1},
+  {sec:'C', lec:16, text:'Anjali is an average Student. She has set a clear long-term goal to join the Civil Services. With the help from experts, she has set some short-term goals too, but she is struggling to achieve them. What should she do?',
+   opts:['Anjali should change her long-term goal to something easier.',
+         'Anjali should create a daily routine that will help her achieve her short-term targets.'], ans:1},
+  {sec:'C', lec:16, text:'What can we learn from the Alexander-The-Great quote: "Bury my body, do not build any monument, keep my hands outside so that the world knows the person who won the world had nothing in his hands when dying"?',
+   opts:['Great people often die unhappy.',
+         'Material gain and reputation are not the most important thing in life.'], ans:1},
+  {sec:'C', lec:17, text:'Neel\'s friend encourages him to smoke some cigarettes because he believes that \'there is no harm in trying it once\'. Why should Neel decline his friend\'s offer to smoke?',
+   opts:['Smoking is harmful and can become addictive.',
+         'Smoking can be an unpleasant experience for beginners.'], ans:0},
+  {sec:'C', lec:17, text:'Devashish Ghosh, an intelligent youth, had great career prospects. But he became addicted to various drugs. The Defense Ministry found him in possession of drugs and blacklisted him. This ruined his career. How do you think Devashish Ghosh could have avoided this situation?',
+   opts:['Devashish should have only used drugs occasionally during his vacation time.',
+         'Devashish should not have taken the risk. He should have avoided the use of drugs completely.'], ans:1},
+  {sec:'C', lec:17, text:'Sejal often gets stressed because she has financial difficulties. She is also addicted to cigarettes, smoking 15 cigarettes daily. She refuses to stop smoking because she says that it helps control her stress. Do you think it is beneficial for her to stop smoking?',
+   opts:['Yes. Spending money on cigarettes is wasting her money. If she can be strong and give up her addiction, then this will be more beneficial in the long term.',
+         'No. By trying to stop smoking she will get more stressed. Which will only make her situation worse.'], ans:0},
+  {sec:'C', lec:18, text:'A charitable NGO is planning on building a school for the local orphans. During the discussion, one volunteer suggests installing air coolers into the school so that the students feel comfortable during the summer. Some other members disagree as it would mean increasing the fundraising target by 5%. What would you suggest?',
+   opts:['"It will be worth the extra effort of fundraising so that the students feel more comfortable."',
+         '"We should only focus on the basic necessities needed to build the school."'], ans:0},
+  {sec:'C', lec:18, text:'The local community has organised a one-day cleanup event. The organisers have invited the local minister alongside sixty members of the community to clean all the trash in the village river. The local media has not confirmed their attendance. Upon hearing this, the minister is considering whether to attend the event or not, what would you advise him?',
+   opts:['You should request the organisers to postpone the event until the media guarantees their attendance.',
+         'You should attend the event even if the media does not attend because it is a good cause.'], ans:1},
+  {sec:'C', lec:19, text:'Sanjay is part of a district football team. So far, he has played a crucial role in getting his team to the finals. Today, Sanjay has been scheduled to play in the final match, but Sanjay\'s back has started hurting in a way that affects his performance. Help him decide what advice he should take.',
+   opts:['Do not tell anyone and play the match even with the chance that your performance might get impacted.',
+         'Alert your coach about it, even if that means he may not let you play in the match. It is better to do what is best for the team.'], ans:1},
+  {sec:'C', lec:19, text:'Anmol has been given the responsibility to lead a new project for an IT company. One of his responsibilities is to hire new people into his team. Which approach do you think is the best to take?',
+   opts:['Make a team with less diversity to help avoid conflicts and confusion.',
+         'Make a team with more diversity to increase innovation, different perspectives, and greater acceptance.'], ans:1},
+  {sec:'C', lec:19, text:'Which attribute of a good team player is emphasised in the quote, "Teamwork: simply stated, it is less me and more we."?',
+   opts:['A good team player should be able to sacrifice his personal gains for the success of the team.',
+         'A good team player should be able to change his personality to fit in with the team.'], ans:0},
+  {sec:'C', lec:21, text:'What is the best way to describe the leadership concept \'Leading without Leading\'?',
+   opts:['Great leaders should delegate as much work as possible to free up their time for the most important things.',
+         'Great leaders can lead through a good example instead of a more commanding nature.'], ans:1},
+  {sec:'C', lec:21, text:'What leadership style best describes the following quotation: "As we look ahead into the next century, leaders will be those who empower others." [Bill Gates]',
+   opts:['Delegative Leadership','Servant Leadership'], ans:1},
+  {sec:'C', lec:21, text:'Jeff Garcia showed up every day to do the work — first one to practice, first one out the tunnel — and in the way he carried himself he demanded that you do the same. Which leadership style best represents this?',
+   opts:['Lead by example','First in, is the first to win'], ans:0},
+  {sec:'C', lec:23, text:'Manan is an intelligent college student. But he often gets late to class, and he rarely submits the assignments on time. His professor is new at his role and has not noticed Manan\'s absences. What should Manan do?',
+   opts:['Manan can maintain his lifestyle but should also stay aware such that his grades do not suffer.',
+         'He should become more punctual in his attendance and submissions.'], ans:1},
+  {sec:'C', lec:23, text:'What is the closest interpretation of the following quote: "\'Small things make perfection, but perfection is not a small thing\'"?',
+   opts:['Try to bring perfection into the small tasks of your day-to-day life. Perfection in small tasks drives our life to perfection.',
+         'Perfection is very important for your career. Bring perfection into your important tasks as a student or as a professional.'], ans:0},
+  {sec:'C', lec:23, text:'Archana is a software engineer. She likes to work on program designing and coding. But she does not like to do the supporting documentation work. She finds it unimportant. What should Archana do?',
+   opts:['Complete the documentation work by noting down only the biggest details.',
+         'Complete the documentation work sincerely. Follow the organization guidelines to specify the details. Even if it seems unimportant, she should be sincere in completing her work.'], ans:1},
+  {sec:'C', lec:24, text:'Every morning Steve Jobs asked himself: "If today was the last day of my life, would I want to do what I am about to do today?" From the following two statements, pick that which you think best explains Jobs\' quote.',
+   opts:['Jobs wanted to remind himself of what is most important in his life and to continue working in that direction.',
+         'Jobs wanted to focus more on achieving short term benefits instead of making long term investments.'], ans:0},
+  {sec:'C', lec:24, text:'"Death teaches about life." Which of the following statements best explains the importance of this quotation?',
+   opts:['We should accept that everything has an ending point.',
+         'Realizing our life as finite can improve our productivity, clarity, and stability.'], ans:1},
+  {sec:'C', lec:25, text:'Anamika and Aditi are friends. But Aditi forgot to invite Anamika to her birthday celebration. Anamika felt upset. A few weeks later, Anamika\'s birthday is approaching, and she is planning her birthday celebration. What should Anamika do?',
+   opts:['Invite Aditi to her birthday celebration. This will make Aditi realize her mistake and more likely to apologize.',
+         'Invite Aditi to her birthday celebration and bridge the gap in their friendship.'], ans:1},
+  {sec:'C', lec:25, text:'Due to poor exam results, Rahul\'s father scolded him in front of his friends. Rahul had an argument with his father in the evening because of this reason. After the argument, Rahul felt even more disturbed. What advice would you give to Rahul?',
+   opts:['Meet your father and say sorry to him. A gentle talk may inspire your father to realize that he should not have scolded you in front of your friends.',
+         'Meet your father and say sorry to him. Accept your fault and apologize for your improper behavior. Promise him that you will work harder for your studies from now onward.'], ans:1},
+  {sec:'C', lec:25, text:'Avinash stays in a hostel. Raj is his roommate. Raj is very notorious and has a habit of mocking everyone. After a few months, Raj stopped teasing Avinash. But Avinash has started to hate Raj because of his nature. What should Avinash do to feel more positive?',
+   opts:['Change rooms and avoid speaking to Raj. That way he cannot ruin his mood.',
+         'Try and forgive Raj for his mocking nature. Focus on his positive qualities instead.'], ans:1},
+  {sec:'C', lec:25, text:'"Resentment is like drinking poison and then hoping it will kill your enemies." — Nelson Mandela. What is the most useful lesson to learn from this quote?',
+   opts:['Keeping bitter emotions for those who have hurt us will only prove to be self-destructive. So, we should learn to forgive others for our own peace of mind.',
+         'Keeping bitter emotions for your enemies is unlikely to inflict harm on them. It is better to act upon it instead.'], ans:0},
+  {sec:'C', lec:26, text:'Which of the following do you think is the most effective method to become more productive?',
+   opts:['Create and follow a schedule while neglecting everything else.',
+         'Find your biggest priorities and ensure they are scheduled and completed.'], ans:1},
+  {sec:'C', lec:26, text:'Jatin has important exams approaching in three weeks. He is aware that he will need to commit a decent amount of time to study, but he would also like to give some time for exercise. How would you suggest that he balances his time?',
+   opts:['Jatin should schedule at least 30 minutes of exercising every morning before studying.',
+         'Jatin should commit to exercising only on the days when he finds spare time after completing his studies and other responsibilities.'], ans:0},
+  {sec:'C', lec:26, text:'Anil is currently learning to code while also working part-time as an IT consultant. Every morning after studying at home, he will drive to meet his client at 11 AM. The journey normally takes around 44 minutes. Anil is trying to decide how to fit this journey into his schedule.',
+   opts:['Anil should leave home at 10:15 AM, so as not to potentially waste any time waiting around.',
+         'Anil should leave home at 10:05 AM, so to include buffer time into his schedule.'], ans:1},
+  {sec:'C', lec:27, text:'Anjali sleeps for 7 hours a night and wakes up a few hours later on Sunday. However, on Monday mornings, Anjali often feels more tired than usual and finds it harder to concentrate. How do you think Anjali should adjust her sleep pattern?',
+   opts:['Anjali should try to sleep extra early on Sunday night so that she feels well-rested on Monday morning.',
+         'Anjali should try to keep the same sleep schedule on weekdays and weekends so as not to disturb her body clock.'], ans:1},
+  {sec:'C', lec:29, text:'The monsoon season saw some serious flooding. The structure of your house has been significantly damaged because of excessive water exposure. The repair work will cost you ₹5 lakh. How should you go about financing the repair?',
+   opts:['Check if your insurance covers water damage, make the necessary insurance claim and withdraw the balance from your emergency fund.',
+         'Check if your insurance covers water damage, make the necessary insurance claim and borrow the balance of the money from a bank.'], ans:0},
+  {sec:'C', lec:29, text:'After graduating, Shivani started working as a data scientist for the last 4 years. She has been earning ₹7 lakh rupees every year. Now that her 25th birthday is approaching, she is wondering about the best time to start a retirement fund. What financial plan will allow her to benefit the most?',
+   opts:['Start investing into a retirement fund straight away to earn more money through compound interest.',
+         'For the next 5-7 years, she should keep her money free so she can spend it. She can then start a retirement fund afterwards.'], ans:0},
 ];
 
-const list = document.getElementById('q-list');
-questions.forEach((q, i) => {
-  const a = document.createElement('a');
-  a.className = 'q-item';
-  a.href = '#q' + (i+1);
-  a.innerHTML = `<span class="qnum">${String(i+1).padStart(2,'0')}</span><span>${q}</span>`;
-  a.addEventListener('click', e => {
-    document.querySelectorAll('.q-item').forEach(x=>x.classList.remove('active'));
-    a.classList.add('active');
-  });
-  list.appendChild(a);
-});
+/* ── State ── */
+let answers = new Array(130).fill(null);
+let currentSection = 0; // 0=A, 1=B, 2=C
+let reviewMode = false;
+const SECTIONS = [
+  { id:'A', name:'Section A — True or False', desc:'Choose True or False for each statement. Each correct answer = 1 mark.', range:[0,49] },
+  { id:'B', name:'Section B — Multiple Choice', desc:'Select the single best answer for each question. Each correct answer = 1 mark.', range:[50,99] },
+  { id:'C', name:'Section C — Applied Thinking', desc:'Choose the best answer from two options. Each correct answer = 1 mark.', range:[100,129] },
+];
 
-// Filter
-function filterQ(v) {
-  document.querySelectorAll('.q-item').forEach(item => {
-    item.style.display = item.textContent.toLowerCase().includes(v.toLowerCase()) ? '' : 'none';
-  });
+function startExam() {
+  document.getElementById('splash').classList.remove('active');
+  document.getElementById('exam').classList.add('active');
+  document.getElementById('totalQCount').textContent = '130';
+  renderSection(0);
 }
 
-// Toggle card
-function toggleCard(header) {
-  const card = header.parentElement;
-  card.classList.toggle('open');
-}
+function renderSection(secIdx) {
+  currentSection = secIdx;
+  const sec = SECTIONS[secIdx];
+  const [s, e] = sec.range;
+  const content = document.getElementById('examContent');
+  content.innerHTML = '';
 
-// Progress bar + top button
-window.addEventListener('scroll', () => {
-  const scrollTop = window.scrollY;
-  const docHeight = document.body.scrollHeight - window.innerHeight;
-  document.getElementById('progress-fill').style.width = (scrollTop/docHeight*100) + '%';
-  document.getElementById('top-btn').classList.toggle('show', scrollTop > 300);
+  // Section header
+  const hdr = document.createElement('div');
+  hdr.className = 'section-header';
+  hdr.innerHTML = `
+    <div class="section-pill">
+      <span>Section ${sec.id}</span>
+      <span style="color:var(--muted)">·</span>
+      <span>Q${s+1}–${e+1}</span>
+    </div>
+    <div class="section-name">${sec.name}</div>
+    <div class="section-desc">${sec.desc}</div>
+  `;
+  content.appendChild(hdr);
 
-  // Highlight active sidebar item
-  let current = null;
-  document.querySelectorAll('.qa-card').forEach(card => {
-    const rect = card.getBoundingClientRect();
-    if (rect.top <= 80) current = card.id;
-  });
-  if (current) {
-    document.querySelectorAll('.q-item').forEach(item => {
-      item.classList.toggle('active', item.getAttribute('href') === '#'+current);
-    });
-  }
-});
+  // Jump panel
+  const jp = document.createElement('div');
+  jp.className = 'jump-panel';
+  jp.id = 'jumpPanel';
+  content.appendChild(jp);
 
-// Smooth scroll for sidebar links
-document.querySelectorAll('.q-item').forEach(link => {
-  link.addEventListener('click', function(e) {
-    e.preventDefault();
-    const target = document.querySelector(this.getAttribute('href'));
-    if (target) {
-      target.classList.add('open');
-      target.scrollIntoView({behavior:'smooth', block:'start'});
-      setTimeout(() => target.classList.add('highlight'), 300);
-      setTimeout(() => target.classList.remove('highlight'), 1800);
+  // Questions
+  const wrap = document.createElement('div');
+  wrap.className = 'questions-wrap';
+
+  for (let i = s; i <= e; i++) {
+    const q = QUESTIONS[i];
+    const qNum = i + 1;
+    const card = document.createElement('div');
+    card.className = 'q-card anchor';
+    card.id = `q${qNum}`;
+    card.style.animationDelay = `${(i - s) * 0.03}s`;
+
+    const chosen = answers[i];
+    const isCorrect = chosen === q.ans;
+    if (reviewMode && chosen !== null) {
+      card.classList.add(isCorrect ? 'answered-correct' : 'answered-wrong');
     }
+
+    const optLetters = ['a','b','c','d'];
+    let optsHtml = q.opts.map((o, oi) => {
+      let cls = 'opt-label';
+      if (chosen === oi) cls += ' selected';
+      if (reviewMode) {
+        if (oi === q.ans) cls += ' correct-ans';
+        else if (chosen === oi && oi !== q.ans) cls += ' wrong-ans';
+      }
+      let extra = '';
+      if (reviewMode && q.sec === 'C') {
+        if (oi === q.ans)   extra = '<span class="sec-c-tag best">Best · 1 mark</span>';
+        else                extra = '<span class="sec-c-tag secondary">Alt · 1 mark</span>';
+      }
+      return `<label class="${cls}">
+        <input type="radio" name="q${qNum}" value="${oi}" onchange="selectAns(${i}, ${oi})">
+        <span class="opt-dot"></span>
+        <span style="flex:1"><strong style="opacity:.5">${optLetters[oi]}.</strong> ${o}${extra}</span>
+      </label>`;
+    }).join('');
+
+    card.innerHTML = `
+      <div class="q-top">
+        <div class="q-num">${qNum}</div>
+        <div>
+          <div class="q-text">${q.text}</div>
+          <div class="q-lec">Lecture ${q.lec}</div>
+        </div>
+      </div>
+      <div class="options">${optsHtml}</div>
+    `;
+    wrap.appendChild(card);
+  }
+  content.appendChild(wrap);
+
+  // Nav buttons
+  document.getElementById('prevBtn').style.display = secIdx > 0 ? 'inline-flex' : 'none';
+  if (secIdx < 2) {
+    document.getElementById('nextBtn').style.display = 'inline-flex';
+    document.getElementById('submitBtn').style.display = 'none';
+  } else {
+    document.getElementById('nextBtn').style.display = 'none';
+    document.getElementById('submitBtn').style.display = 'inline-flex';
+  }
+
+  updateJump();
+  updateProgress();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function selectAns(qIdx, optIdx) {
+  answers[qIdx] = optIdx;
+  const q = QUESTIONS[qIdx];
+  const qNum = qIdx + 1;
+  const card = document.getElementById(`q${qNum}`);
+  // Update visual
+  card.querySelectorAll('.opt-label').forEach((lbl, i) => {
+    lbl.classList.toggle('selected', i === optIdx);
   });
-});
+  updateProgress();
+  updateJump();
+}
+
+function updateProgress() {
+  const answered = answers.filter(a => a !== null).length;
+  document.getElementById('answeredCount').textContent = answered;
+  document.getElementById('progressFill').style.width = `${(answered/130)*100}%`;
+}
+
+function updateJump() {
+  const sec = SECTIONS[currentSection];
+  const [s, e] = sec.range;
+  const jp = document.getElementById('jumpPanel');
+  if (!jp) return;
+  jp.innerHTML = '<span class="jump-label">Jump to</span>';
+  for (let i = s; i <= e; i++) {
+    const btn = document.createElement('button');
+    btn.className = 'jump-btn';
+    btn.textContent = i + 1;
+    if (answers[i] !== null) {
+      if (reviewMode) {
+        btn.classList.add(answers[i] === QUESTIONS[i].ans ? 'j-correct' : 'j-wrong');
+      } else {
+        btn.classList.add('j-answered');
+      }
+    }
+    btn.onclick = () => {
+      document.getElementById(`q${i+1}`).scrollIntoView({behavior:'smooth', block:'start'});
+    };
+    jp.appendChild(btn);
+  }
+}
+
+function nextSection() {
+  if (currentSection < 2) renderSection(currentSection + 1);
+}
+function prevSection() {
+  if (currentSection > 0) renderSection(currentSection - 1);
+}
+
+function submitExam() {
+  if (!confirm('Submit the exam? You can review answers after.')) return;
+  showResults();
+}
+
+function showResults() {
+  document.getElementById('exam').classList.remove('active');
+  document.getElementById('results').classList.add('active');
+
+  let correct = 0, wrong = 0, skipped = 0;
+  answers.forEach((a, i) => {
+    if (a === null) skipped++;
+    else if (a === QUESTIONS[i].ans) correct++;
+    else wrong++;
+  });
+
+  const total = 130;
+  const pct = Math.round((correct / total) * 100);
+
+  document.getElementById('ringPct').textContent = pct + '%';
+  document.getElementById('ringPts').textContent = `${correct}/${total}`;
+  document.getElementById('rCorrect').textContent = correct;
+  document.getElementById('rWrong').textContent = wrong;
+  document.getElementById('rSkipped').textContent = skipped;
+
+  // Grade
+  let grade, gradeStyle, icon;
+  if (pct >= 90)      { grade='A+ · Distinction'; gradeStyle='background:rgba(0,229,160,.15);color:var(--correct);border:1px solid rgba(0,229,160,.3)'; icon='🏆'; }
+  else if (pct >= 75) { grade='A · First Class'; gradeStyle='background:rgba(0,212,255,.15);color:var(--accent);border:1px solid rgba(0,212,255,.3)'; icon='🎓'; }
+  else if (pct >= 60) { grade='B · Second Class'; gradeStyle='background:rgba(124,107,255,.15);color:var(--accent2);border:1px solid rgba(124,107,255,.3)'; icon='👍'; }
+  else if (pct >= 40) { grade='C · Pass'; gradeStyle='background:rgba(255,183,64,.15);color:var(--warn);border:1px solid rgba(255,183,64,.3)'; icon='📚'; }
+  else                { grade='F · Needs Improvement'; gradeStyle='background:rgba(255,79,107,.15);color:var(--wrong);border:1px solid rgba(255,79,107,.3)'; icon='💪'; }
+
+  document.getElementById('resultIcon').textContent = icon;
+  document.getElementById('gradeBadge').textContent = grade;
+  document.getElementById('gradeBadge').style.cssText += ';' + gradeStyle;
+
+  // Animate ring
+  const circumference = 2 * Math.PI * 70; // 439.82
+  const offset = circumference - (pct / 100) * circumference;
+  setTimeout(() => {
+    document.getElementById('ringFill').style.strokeDashoffset = offset;
+  }, 200);
+}
+
+function reviewExam() {
+  reviewMode = true;
+  document.getElementById('results').classList.remove('active');
+  document.getElementById('exam').classList.add('active');
+  document.getElementById('nextBtn').textContent = 'Next Section →';
+  document.getElementById('submitBtn').textContent = 'Back to Results';
+  document.getElementById('submitBtn').onclick = () => {
+    document.getElementById('exam').classList.remove('active');
+    document.getElementById('results').classList.add('active');
+  };
+  renderSection(0);
+}
+
+function restartExam() {
+  answers = new Array(130).fill(null);
+  reviewMode = false;
+  currentSection = 0;
+  document.getElementById('results').classList.remove('active');
+  document.getElementById('exam').classList.add('active');
+  document.getElementById('submitBtn').onclick = submitExam;
+  document.getElementById('nextBtn').textContent = 'Next Section →';
+  renderSection(0);
+}
 </script>
 </body>
 </html>
