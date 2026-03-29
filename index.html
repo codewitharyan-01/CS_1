@@ -3,1016 +3,1415 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IPDC–2 Exam · Lectures 16–30</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>GTU IoT & Applications – Question Bank</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=Source+Serif+4:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
   :root {
-    --bg: #0d0f14;
-    --surface: #13161e;
-    --border: #1e2330;
-    --border-bright: #2d3347;
-    --text: #e8eaf0;
-    --muted: #636b85;
-    --accent: #00d4ff;
-    --accent2: #7c6bff;
-    --correct: #00e5a0;
-    --wrong: #ff4f6b;
-    --warn: #ffb740;
-    --card: #161922;
-    --pill: #1a1e2a;
+    --bg: #0e0e0e;
+    --bg2: #151515;
+    --card: #1a1a1a;
+    --card-hover: #1f1f1f;
+    --border: #2a2a2a;
+    --fg: #e8e4df;
+    --fg2: #9e9890;
+    --accent: #d4a053;
+    --accent-dim: rgba(212,160,83,0.12);
+    --accent-glow: rgba(212,160,83,0.06);
+    --green: #6ecf8e;
+    --green-dim: rgba(110,207,142,0.1);
+    --radius: 10px;
   }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
 
   body {
+    font-family: 'DM Sans', sans-serif;
     background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    min-height: 100vh;
-    overflow-x: hidden;
+    color: var(--fg);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
   }
 
-  /* ── NOISE OVERLAY ── */
+  /* Subtle grain texture overlay */
   body::before {
     content: '';
-    position: fixed; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-    pointer-events: none; z-index: 9999; opacity: .5;
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
   }
 
-  /* ─── SCREENS ─── */
-  .screen { display: none; }
-  .screen.active { display: flex; flex-direction: column; min-height: 100vh; }
-
-  /* ══ SPLASH ══ */
-  #splash {
-    align-items: center; justify-content: center;
-    padding: 2rem;
-    background: radial-gradient(ellipse 80% 60% at 50% 0%, #0e2040 0%, var(--bg) 70%);
+  /* Ambient glow blobs */
+  .glow-tl, .glow-br {
+    position: fixed;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    filter: blur(150px);
+    pointer-events: none;
+    z-index: 0;
   }
-  .splash-inner { max-width: 640px; width: 100%; text-align: center; }
+  .glow-tl { top: -200px; left: -150px; background: var(--accent-glow); }
+  .glow-br { bottom: -200px; right: -150px; background: var(--green-dim); }
 
-  .logo-mark {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 72px; height: 72px; border-radius: 18px;
-    background: linear-gradient(135deg, var(--accent2), var(--accent));
-    margin-bottom: 2rem;
-    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.8rem;
-    color: #fff; letter-spacing: -1px;
-    box-shadow: 0 0 40px rgba(0,212,255,.25);
-  }
-
-  .splash-tag {
-    font-size: .7rem; letter-spacing: .15em; text-transform: uppercase;
-    color: var(--muted); margin-bottom: 1rem;
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 60px 24px 100px;
   }
 
-  .splash-title {
-    font-family: 'Syne', sans-serif; font-weight: 800;
-    font-size: clamp(2.2rem, 6vw, 3.4rem); line-height: 1.05;
-    background: linear-gradient(120deg, #fff 30%, var(--accent));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: .75rem;
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 56px;
+    animation: fadeUp 0.8s ease;
+  }
+  .header .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-dim);
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+  .header h1 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(28px, 5vw, 42px);
+    line-height: 1.2;
+    color: var(--fg);
+    margin-bottom: 12px;
+  }
+  .header p {
+    color: var(--fg2);
+    font-size: 15px;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+  .header .meta {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 18px;
+    font-size: 12px;
+    color: var(--fg2);
+  }
+  .header .meta span i {
+    color: var(--accent);
+    margin-right: 5px;
   }
 
-  .splash-sub {
-    font-size: .85rem; color: var(--muted); margin-bottom: 2.5rem; line-height: 1.7;
+  /* Unit section */
+  .unit {
+    margin-bottom: 48px;
+    animation: fadeUp 0.8s ease both;
   }
+  .unit:nth-child(2) { animation-delay: 0.1s; }
 
-  .meta-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: 1px; background: var(--border); border-radius: 14px; overflow: hidden;
-    margin-bottom: 2.5rem;
-  }
-  .meta-cell {
-    background: var(--surface); padding: 1.2rem .5rem; text-align: center;
-  }
-  .meta-cell .num {
-    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.6rem;
-    color: var(--accent); display: block;
-  }
-  .meta-cell .label { font-size: .65rem; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
-
-  .start-btn {
-    width: 100%; padding: 1rem 2rem;
-    background: linear-gradient(90deg, var(--accent2), var(--accent));
-    border: none; border-radius: 10px;
-    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem;
-    color: #fff; letter-spacing: .05em; cursor: pointer;
-    transition: transform .15s, box-shadow .15s;
-    box-shadow: 0 4px 24px rgba(0,212,255,.2);
-  }
-  .start-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,212,255,.35); }
-
-  /* ══ EXAM LAYOUT ══ */
-  #exam { flex-direction: column; }
-
-  .top-bar {
-    position: sticky; top: 0; z-index: 100;
-    background: rgba(13,15,20,.92); backdrop-filter: blur(14px);
+  .unit-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 14px;
     border-bottom: 1px solid var(--border);
-    padding: .75rem 1.5rem; display: flex; align-items: center; gap: 1rem;
   }
-  .top-bar .course-id {
-    font-family: 'Syne', sans-serif; font-weight: 700; font-size: .85rem;
-    color: var(--accent); letter-spacing: .05em; flex-shrink: 0;
+  .unit-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: var(--accent-dim);
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
   }
-  .progress-track {
-    flex: 1; height: 4px; background: var(--border); border-radius: 99px; overflow: hidden;
+  .unit-header h2 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: 20px;
+    color: var(--fg);
   }
-  .progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent2), var(--accent));
-    border-radius: 99px; transition: width .4s cubic-bezier(.4,0,.2,1);
-  }
-  .score-badge {
-    font-size: .75rem; color: var(--muted); flex-shrink: 0; white-space: nowrap;
-  }
-  .score-badge span { color: var(--text); font-weight: 500; }
-
-  /* ── Section header ── */
-  .section-header {
-    padding: 2rem 1.5rem 1rem;
-    max-width: 760px; margin: 0 auto; width: 100%;
-  }
-  .section-pill {
-    display: inline-flex; align-items: center; gap: .5rem;
-    background: var(--pill); border: 1px solid var(--border-bright);
-    padding: .35rem .8rem; border-radius: 99px;
-    font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--accent2);
-    margin-bottom: 1rem;
-  }
-  .section-name {
-    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.5rem; margin-bottom: .35rem;
-  }
-  .section-desc { font-size: .78rem; color: var(--muted); line-height: 1.6; }
-
-  /* ── Questions ── */
-  .questions-wrap {
-    padding: 0 1.5rem 2rem; max-width: 760px; margin: 0 auto; width: 100%;
-    display: flex; flex-direction: column; gap: 1rem;
+  .unit-header .topics {
+    font-size: 12px;
+    color: var(--fg2);
+    margin-top: 2px;
   }
 
-  .q-card {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 14px; padding: 1.25rem 1.4rem;
-    transition: border-color .2s;
-    animation: fadeUp .35s ease both;
+  /* Marks group */
+  .marks-group {
+    margin-bottom: 24px;
   }
-  .q-card:hover { border-color: var(--border-bright); }
+  .marks-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--fg2);
+    margin-bottom: 12px;
+    padding-left: 2px;
+  }
+  .marks-label .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
+  /* Q&A Card */
+  .qa-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 8px;
+    overflow: hidden;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .qa-card:hover {
+    border-color: #333;
+  }
+  .qa-card.open {
+    border-color: rgba(212,160,83,0.25);
+    background: var(--card-hover);
   }
 
-  .q-top {
-    display: flex; align-items: flex-start; gap: .75rem; margin-bottom: 1rem;
+  .qa-question {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 18px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
   }
-  .q-num {
-    flex-shrink: 0; width: 28px; height: 28px;
-    background: var(--pill); border: 1px solid var(--border-bright);
-    border-radius: 8px; display: flex; align-items: center; justify-content: center;
-    font-size: .65rem; color: var(--muted); letter-spacing: .05em;
-    font-family: 'Syne', sans-serif; font-weight: 600;
+  .qa-question:hover {
+    background: rgba(255,255,255,0.015);
+  }
+  .qa-question:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+    border-radius: var(--radius);
+  }
+
+  .q-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+  }
+  .q-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--fg2);
+  }
+  .q-meta .mark-badge {
+    background: var(--accent-dim);
+    color: var(--accent);
+    padding: 1px 7px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+  .q-meta .year-badge {
+    color: var(--fg2);
+    opacity: 0.7;
   }
   .q-text {
-    font-size: .88rem; line-height: 1.65; color: var(--text); flex: 1;
+    font-size: 14.5px;
+    font-weight: 400;
+    color: var(--fg);
+    line-height: 1.6;
   }
-  .q-lec {
-    font-size: .65rem; color: var(--muted); margin-top: .2rem; font-style: italic;
+
+  .q-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: transparent;
+    border: none;
+    color: var(--fg2);
+    font-size: 12px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: transform 0.3s, color 0.3s, background 0.3s;
+    cursor: pointer;
+  }
+  .qa-card.open .q-toggle {
+    transform: rotate(180deg);
+    color: var(--accent);
+    background: var(--accent-dim);
   }
 
-  .options { display: flex; flex-direction: column; gap: .5rem; }
-
-  .opt-label {
-    display: flex; align-items: center; gap: .75rem;
-    padding: .65rem .9rem; border-radius: 9px;
-    border: 1px solid var(--border); background: var(--surface);
-    cursor: pointer; transition: border-color .15s, background .15s;
-    font-size: .82rem; color: var(--muted);
-    user-select: none;
+  .qa-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  .opt-label:hover { border-color: var(--accent2); color: var(--text); }
-  .opt-label input[type=radio] { display: none; }
-
-  .opt-dot {
-    width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0;
-    border: 1.5px solid var(--border-bright);
-    display: flex; align-items: center; justify-content: center;
-    transition: border-color .15s, background .15s;
+  .qa-card.open .qa-answer {
+    max-height: 2000px;
   }
-  .opt-dot::after {
-    content: ''; width: 7px; height: 7px; border-radius: 50%;
-    background: var(--accent); transform: scale(0); transition: transform .15s;
-  }
-  .opt-label.selected { border-color: var(--accent2); color: var(--text); background: rgba(124,107,255,.07); }
-  .opt-label.selected .opt-dot { border-color: var(--accent2); }
-  .opt-label.selected .opt-dot::after { transform: scale(1); background: var(--accent2); }
-
-  /* review states */
-  .opt-label.correct-ans  { border-color: var(--correct)!important; background: rgba(0,229,160,.08)!important; color: var(--text)!important; }
-  .opt-label.wrong-ans    { border-color: var(--wrong)!important;   background: rgba(255,79,107,.08)!important; color: var(--text)!important; }
-  .opt-label.correct-ans .opt-dot { border-color: var(--correct); }
-  .opt-label.correct-ans .opt-dot::after { transform: scale(1); background: var(--correct); }
-  .opt-label.wrong-ans .opt-dot { border-color: var(--wrong); }
-  .opt-label.wrong-ans .opt-dot::after { transform: scale(1); background: var(--wrong); }
-
-  .q-card.answered-correct { border-color: rgba(0,229,160,.3); }
-  .q-card.answered-wrong   { border-color: rgba(255,79,107,.3); }
-
-  /* Section C — best/secondary label */
-  .sec-c-tag {
-    display: inline-block; font-size: .6rem; letter-spacing: .1em; text-transform: uppercase;
-    padding: .15rem .45rem; border-radius: 4px; margin-left: .4rem;
-    vertical-align: middle;
-  }
-  .sec-c-tag.best { background: rgba(0,229,160,.15); color: var(--correct); }
-  .sec-c-tag.secondary { background: rgba(255,183,64,.15); color: var(--warn); }
-
-  /* ── Nav buttons ── */
-  .nav-bar {
-    position: sticky; bottom: 0;
-    background: rgba(13,15,20,.92); backdrop-filter: blur(14px);
+  .qa-answer-inner {
+    padding: 0 18px 18px 18px;
     border-top: 1px solid var(--border);
-    padding: 1rem 1.5rem; display: flex; justify-content: flex-end; gap: .75rem;
-    max-width: 100%;
+    margin-top: 0;
+    padding-top: 14px;
+  }
+  .qa-answer-inner p,
+  .qa-answer-inner li {
+    font-size: 13.5px;
+    color: var(--fg2);
+    line-height: 1.75;
+  }
+  .qa-answer-inner strong {
+    color: var(--fg);
+    font-weight: 500;
+  }
+  .qa-answer-inner ul, .qa-answer-inner ol {
+    padding-left: 18px;
+    margin: 6px 0;
+  }
+  .qa-answer-inner li {
+    margin-bottom: 3px;
+  }
+  .qa-answer-inner .sub-heading {
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 600;
+    margin: 12px 0 4px;
+    display: block;
+  }
+  .qa-answer-inner code {
+    background: rgba(255,255,255,0.06);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 12.5px;
+    color: var(--green);
   }
 
-  .btn {
-    padding: .65rem 1.4rem; border-radius: 9px; border: none;
-    font-family: 'DM Mono', monospace; font-size: .8rem; cursor: pointer;
-    letter-spacing: .03em; transition: transform .12s, box-shadow .12s;
+  /* Stats bar */
+  .stats-bar {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+    animation: fadeUp 0.8s ease 0.05s both;
   }
-  .btn:hover { transform: translateY(-1px); }
-  .btn-ghost {
-    background: var(--surface); border: 1px solid var(--border-bright); color: var(--muted);
+  .stat {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 13px;
   }
-  .btn-ghost:hover { color: var(--text); border-color: var(--accent2); }
-  .btn-primary {
-    background: linear-gradient(90deg, var(--accent2), var(--accent));
-    color: #fff; box-shadow: 0 2px 14px rgba(0,212,255,.2);
+  .stat .num {
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--accent);
   }
-  .btn-primary:hover { box-shadow: 0 4px 22px rgba(0,212,255,.35); }
-  .btn-danger {
-    background: linear-gradient(90deg, #ff4f6b, #ff7a40);
-    color: #fff; box-shadow: 0 2px 14px rgba(255,79,107,.2);
-  }
-
-  /* Jump panel */
-  .jump-panel {
-    padding: 1rem 1.5rem; max-width: 760px; margin: 0 auto; width: 100%;
-    display: flex; flex-wrap: wrap; gap: .4rem; align-items: center;
-  }
-  .jump-label { font-size: .65rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin-right: .3rem; }
-  .jump-btn {
-    width: 30px; height: 30px; border-radius: 7px;
-    background: var(--pill); border: 1px solid var(--border);
-    color: var(--muted); font-family: 'DM Mono', monospace; font-size: .65rem;
-    cursor: pointer; transition: all .12s; display: flex; align-items: center; justify-content: center;
-  }
-  .jump-btn:hover { border-color: var(--accent2); color: var(--text); }
-  .jump-btn.j-answered { background: rgba(124,107,255,.15); border-color: var(--accent2); color: var(--accent2); }
-  .jump-btn.j-correct  { background: rgba(0,229,160,.15); border-color: var(--correct); color: var(--correct); }
-  .jump-btn.j-wrong    { background: rgba(255,79,107,.15); border-color: var(--wrong); color: var(--wrong); }
-
-  /* ══ RESULTS ══ */
-  #results {
-    align-items: center; justify-content: center; padding: 2rem;
-    background: radial-gradient(ellipse 80% 60% at 50% 0%, #0e2040 0%, var(--bg) 70%);
-  }
-  .results-inner { max-width: 700px; width: 100%; text-align: center; }
-
-  .result-icon {
-    font-size: 3rem; margin-bottom: 1rem;
-    display: inline-block; animation: pop .5s cubic-bezier(.36,.07,.19,.97);
-  }
-  @keyframes pop {
-    0%   { transform: scale(0); opacity: 0; }
-    70%  { transform: scale(1.2); }
-    100% { transform: scale(1); opacity: 1; }
+  .stat .label {
+    color: var(--fg2);
+    font-size: 12px;
   }
 
-  .result-title {
-    font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(1.8rem, 5vw, 2.8rem);
-    background: linear-gradient(120deg, #fff 30%, var(--accent));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    margin-bottom: .5rem;
+  /* Controls */
+  .controls {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeUp 0.8s ease 0.08s both;
   }
-  .result-sub { font-size: .85rem; color: var(--muted); margin-bottom: 2rem; }
-
-  .score-ring {
-    position: relative; width: 160px; height: 160px;
-    margin: 0 auto 2rem;
+  .ctrl-btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--fg2);
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
   }
-  .score-ring svg { transform: rotate(-90deg); }
-  .ring-bg { fill: none; stroke: var(--border); stroke-width: 10; }
-  .ring-fill { fill: none; stroke-width: 10; stroke-linecap: round;
-    stroke: url(#ringGrad);
-    transition: stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1);
+  .ctrl-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-dim);
   }
-  .ring-label {
-    position: absolute; inset: 0; display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-  }
-  .ring-pct {
-    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 2rem;
-    background: linear-gradient(120deg, var(--accent2), var(--accent));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  }
-  .ring-pts { font-size: .7rem; color: var(--muted); }
-
-  .stats-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: 1px; background: var(--border); border-radius: 14px; overflow: hidden;
-    margin-bottom: 2rem;
-  }
-  .stat-cell {
-    background: var(--surface); padding: 1.2rem .5rem; text-align: center;
-  }
-  .stat-cell .num { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.5rem; display: block; }
-  .stat-cell .lbl { font-size: .65rem; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
-  .stat-cell .num.green { color: var(--correct); }
-  .stat-cell .num.red   { color: var(--wrong); }
-  .stat-cell .num.blue  { color: var(--accent); }
-
-  .grade-badge {
-    display: inline-block; padding: .5rem 1.5rem; border-radius: 99px;
-    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem;
-    margin-bottom: 2rem; letter-spacing: .05em;
+  .ctrl-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
 
-  .result-actions { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; }
+  /* Search */
+  .search-wrap {
+    position: relative;
+    max-width: 400px;
+    margin: 0 auto 28px;
+    animation: fadeUp 0.8s ease 0.06s both;
+  }
+  .search-wrap i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--fg2);
+    font-size: 13px;
+    pointer-events: none;
+  }
+  .search-wrap input {
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px 10px 38px;
+    color: var(--fg);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-wrap input::placeholder { color: var(--fg2); opacity: 0.5; }
+  .search-wrap input:focus { border-color: var(--accent); }
 
-  /* ── Scroll anchor ── */
-  .anchor { scroll-margin-top: 80px; }
+  .no-results {
+    text-align: center;
+    color: var(--fg2);
+    font-size: 14px;
+    padding: 40px 0;
+    display: none;
+  }
 
-  /* ── Responsive ── */
-  @media (max-width: 520px) {
-    .top-bar { padding: .65rem 1rem; }
-    .questions-wrap { padding: 0 .85rem 2rem; }
-    .section-header { padding: 1.5rem .85rem .75rem; }
-    .jump-panel { padding: .75rem .85rem; }
-    .nav-bar { padding: .75rem .85rem; }
-    .meta-grid { grid-template-columns: repeat(3,1fr); }
+  /* Scroll-to-top */
+  .scroll-top {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--fg2);
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s;
+    pointer-events: none;
+  }
+  .scroll-top.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .scroll-top:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 32px 0 0;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--fg2);
+    opacity: 0.6;
+  }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .container { padding: 36px 16px 80px; }
+    .qa-question { padding: 14px 14px; gap: 10px; }
+    .qa-answer-inner { padding: 0 14px 14px; }
+    .stats-bar { gap: 8px; }
+    .stat { padding: 8px 14px; }
+    .header .meta { flex-direction: column; gap: 6px; }
   }
 </style>
 </head>
 <body>
 
-<!-- ══════════ SPLASH ══════════ -->
-<div id="splash" class="screen active">
-  <div class="splash-inner">
-    <div class="logo-mark">ip</div>
-    <p class="splash-tag">Integrated Personality Development Course</p>
-    <h1 class="splash-title">IPDC–2<br>Question Bank</h1>
-    <p class="splash-sub">Lectures 16 to 30 · Three sections · 130 questions<br>Answer every question; review your results at the end.</p>
-    <div class="meta-grid">
-      <div class="meta-cell"><span class="num">130</span><span class="label">Questions</span></div>
-      <div class="meta-cell"><span class="num">130</span><span class="label">Total Marks</span></div>
-      <div class="meta-cell"><span class="num">3</span><span class="label">Sections</span></div>
+<div class="glow-tl"></div>
+<div class="glow-br"></div>
+
+<div class="container">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="tag">3160716</div>
+    <h1>IoT and Applications<br>Question Bank</h1>
+    <p>Complete unit-wise questions with answers for GTU BE Semester VI — prepared for quick revision.</p>
+    <div class="meta">
+      <span><i class="fas fa-university"></i>SVBIT</span>
+      <span><i class="fas fa-user"></i>Prof. Pragati Parmar</span>
+      <span><i class="fas fa-layer-group"></i>Units 1 &amp; 2</span>
     </div>
-    <button class="start-btn" onclick="startExam()">Begin Exam →</button>
+  </header>
+
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stat"><span class="num">28</span><span class="label">Questions</span></div>
+    <div class="stat"><span class="num">13</span><span class="label">3-Mark</span></div>
+    <div class="stat"><span class="num">8</span><span class="label">4-Mark</span></div>
+    <div class="stat"><span class="num">7</span><span class="label">7-Mark</span></div>
   </div>
+
+  <!-- Search -->
+  <div class="search-wrap">
+    <i class="fas fa-search"></i>
+    <input type="text" id="searchInput" placeholder="Search questions or answers..." aria-label="Search questions">
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <button class="ctrl-btn" onclick="expandAll()" aria-label="Expand all answers"><i class="fas fa-expand-alt"></i>&ensp;Expand All</button>
+    <button class="ctrl-btn" onclick="collapseAll()" aria-label="Collapse all answers"><i class="fas fa-compress-alt"></i>&ensp;Collapse All</button>
+    <button class="ctrl-btn" onclick="filterMarks(3)">3 Marks</button>
+    <button class="ctrl-btn" onclick="filterMarks(4)">4 Marks</button>
+    <button class="ctrl-btn" onclick="filterMarks(7)">7 Marks</button>
+    <button class="ctrl-btn" onclick="filterMarks(0)">Show All</button>
+  </div>
+
+  <div class="no-results" id="noResults">No matching questions found.</div>
+
+  <!-- Main content injected by JS -->
+  <main id="qaContainer"></main>
+
+  <footer class="footer">GTU BE Sem-VI &middot; IoT and Applications &middot; 3160716</footer>
 </div>
 
-<!-- ══════════ EXAM ══════════ -->
-<div id="exam" class="screen">
-  <div class="top-bar">
-    <span class="course-id">IPDC·2</span>
-    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-    <span class="score-badge">Q <span id="answeredCount">0</span>/<span id="totalQCount">130</span></span>
-  </div>
-
-  <div id="examContent"></div>
-
-  <div class="nav-bar">
-    <button class="btn btn-ghost" id="prevBtn" onclick="prevSection()" style="display:none">← Back</button>
-    <button class="btn btn-primary" id="nextBtn" onclick="nextSection()">Next Section →</button>
-    <button class="btn btn-danger" id="submitBtn" onclick="submitExam()" style="display:none">Submit Exam</button>
-  </div>
-</div>
-
-<!-- ══════════ RESULTS ══════════ -->
-<div id="results" class="screen">
-  <div class="results-inner">
-    <span class="result-icon" id="resultIcon">🎓</span>
-    <h1 class="result-title" id="resultTitle">Exam Complete</h1>
-    <p class="result-sub" id="resultSub">Here's how you did</p>
-
-    <div class="score-ring">
-      <svg width="160" height="160" viewBox="0 0 160 160">
-        <defs>
-          <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#7c6bff"/>
-            <stop offset="100%" stop-color="#00d4ff"/>
-          </linearGradient>
-        </defs>
-        <circle class="ring-bg" cx="80" cy="80" r="70"/>
-        <circle class="ring-fill" id="ringFill" cx="80" cy="80" r="70"
-          stroke-dasharray="439.82" stroke-dashoffset="439.82"/>
-      </svg>
-      <div class="ring-label">
-        <span class="ring-pct" id="ringPct">0%</span>
-        <span class="ring-pts" id="ringPts">0/130</span>
-      </div>
-    </div>
-
-    <div class="stats-grid">
-      <div class="stat-cell"><span class="num green" id="rCorrect">0</span><span class="lbl">Correct</span></div>
-      <div class="stat-cell"><span class="num red"   id="rWrong">0</span><span class="lbl">Wrong</span></div>
-      <div class="stat-cell"><span class="num blue"  id="rSkipped">0</span><span class="lbl">Skipped</span></div>
-    </div>
-
-    <div class="grade-badge" id="gradeBadge">—</div>
-
-    <div class="result-actions">
-      <button class="btn btn-ghost" onclick="reviewExam()">Review Answers</button>
-      <button class="btn btn-primary" onclick="restartExam()">Try Again</button>
-    </div>
-  </div>
-</div>
+<button class="scroll-top" id="scrollTopBtn" onclick="window.scrollTo({top:0})" aria-label="Scroll to top">
+  <i class="fas fa-arrow-up"></i>
+</button>
 
 <script>
-/* ═══════════════════════════════════════════════
-   QUESTION DATA  (130 questions)
-   Sections: A (1–50 T/F), B (51–100 MCQ), C (101–130 MCQ)
-═══════════════════════════════════════════════ */
-const QUESTIONS = [
-  // ── SECTION A ──────────────────────────────
-  // correct: index of correct option (0=a, 1=b)
-  {sec:'A', lec:16, text:'When you live a life without any direction, you will not move far in any one direction.',
-   opts:['True','False'], ans:0},
-  {sec:'A', lec:16, text:'To achieve your long-term goals, you need to create smaller short-term goals to guide your life in the right direction.',
-   opts:['True','False'], ans:0},
-  {sec:'A', lec:16, text:'The more you visualize your long-term goals, the fewer chances there are of achieving them.',
-   opts:['True','False'], ans:1},
-  {sec:'A', lec:16, text:'Short term goals should be time-bound.',
-   opts:['True','False'], ans:0},
-  {sec:'A', lec:16, text:'Clear goals will give our lives a clear direction.',
-   opts:['True','False'], ans:0},
-  {sec:'A', lec:17, text:'There is no risk of addiction when smoking cigarettes occasionally to please one\'s friends.',
-   opts:['True','False'], ans:1},
-  {sec:'A', lec:17, text:'Drinking alcohol is only harmful to the health of the elderly but not to the youth.',
-   opts:['True','False'], ans:1},
-  {sec:'A', lec:17, text:'It is our duty to kindly encourage our family members to give up their bad addictions.',
-   opts:['True','False'], ans:0},
-  {sec:'A', lec:18, text:'Seva should be performed with compassion.',
-   opts:['True','False'], ans:0},
-  {sec:'A', lec:18, text:'Being generous can make us happier.',
-   opts:['True','False'], ans:0},
-  {sec:'A', lec:18, text:'Seva should be performed with the expectation of a reward.',
-   opts:['True','False'], ans:1},
-  {sec:'A', lec:19, text:'Working in a team helps you gain new perspectives.',
-   opts:['True','False'], ans:0},
-  {sec:'A', lec:19, text:'We should learn to be adaptable when working in a team.',
-   opts:['True','False'], ans:0},
-  {sec:'A', lec:19, text:'The biggest role of a team member is to take credit for the team\'s success.',
-   opts:['True','False'], ans:1},
-  {sec:'A', lec:19, text:'A good team member is willing to sacrifice something for the team.',
-   opts:['True','False'], ans:0},
-  {sec:'A', lec:21, text:'Legends create everlasting impressions.',
-   opts:['True','False'], ans:0},
-  {sec:'A', lec:21, text:'It is possible to lead with humility.',
-   opts:['True','False'], ans:0},
-  {sec:'A', lec:21, text:'The most effective way to lead is by making workers feel inferior.',
-   opts:['True','False'], ans:1},
-  {sec:'A', lec:21, text:'An aggressive leadership style is generally the most effective.',
-   opts:['True','False'], ans:1},
-  {sec:'A', lec:22, text:'A country without value-based citizens can create an environment of crime and corruption.',
-   opts:['True','False'], ans:0},
-  {sec:'A', lec:22, text:'To become value-based citizens, we must learn asset valuation techniques.',
-   opts:['True','False'], ans:1},
-  {sec:'A', lec:22, text:'Moral values are a universal necessity.',
-   opts:['True','False'], ans:0},
-  {sec:'A', lec:22, text:'Unfair treatment promotes a productive environment.',
-   opts:['True','False'], ans:1},
-  {sec:'A', lec:22, text:'We should always be accountable for our actions and be honest with the people who are depending on us.',
-   opts:['True','False'], ans:0},
-  {sec:'A', lec:23, text:'By completing the small things sincerely, it encourages you to do the big things better.',
-   opts:['True','False'], ans:0},
-  {sec:'A', lec:23, text:'Focus on perfecting only the big things. The small things are not as important.',
-   opts:['True','False'], ans:1},
-  {sec:'A', lec:23, text:'Good character is essential in our personal lives, but not in the workplace.',
-   opts:['True','False'], ans:1},
-  {sec:'A', lec:23, text:'It is possible for a person to bring change in his/her attitude.',
-   opts:['True','False'], ans:0},
-  {sec:'A', lec:23, text:'Being punctual in the workplace is unimportant.',
-   opts:['True','False'], ans:1},
-  {sec:'A', lec:24, text:'Death can teach us about life.',
-   opts:['True','False'], ans:0},
-  {sec:'A', lec:24, text:'Whatever happens, happens for the worst.',
-   opts:['True','False'], ans:1},
-  {sec:'A', lec:24, text:'Realizing our lifespan as finite can allow us to become more productive.',
-   opts:['True','False'], ans:0},
-  {sec:'A', lec:25, text:'Forgiveness can release us from the burden of regret and guilt. It can bring peace to our minds.',
-   opts:['True','False'], ans:0},
-  {sec:'A', lec:25, text:'Asking for forgiveness is an act of a coward.',
-   opts:['True','False'], ans:1},
-  {sec:'A', lec:25, text:'Ask for forgiveness because relationships are more important than our ego.',
-   opts:['True','False'], ans:0},
-  {sec:'A', lec:25, text:'Failure makes a person become worthless.',
-   opts:['True','False'], ans:1},
-  {sec:'A', lec:26, text:'Stress is a physical reaction to a mental state.',
-   opts:['True','False'], ans:0},
-  {sec:'A', lec:26, text:'Children are not affected by stress.',
-   opts:['True','False'], ans:1},
-  {sec:'A', lec:26, text:'Stress affects our health.',
-   opts:['True','False'], ans:0},
-  {sec:'A', lec:26, text:'Our eating habits can affect stress levels.',
-   opts:['True','False'], ans:0},
-  {sec:'A', lec:27, text:'We should limit the number of sugary drinks we drink.',
-   opts:['True','False'], ans:0},
-  {sec:'A', lec:27, text:'Physical exercise can reduce stress levels.',
-   opts:['True','False'], ans:0},
-  {sec:'A', lec:27, text:'The recommended amount of moderate physical exercise is 100 minutes per week.',
-   opts:['True','False'], ans:1},
-  {sec:'A', lec:27, text:'Most health professionals say that is ideal to get 6 hours of sleep every night.',
-   opts:['True','False'], ans:1},
-  {sec:'A', lec:27, text:'Physical exercise impacts our mental wellbeing.',
-   opts:['True','False'], ans:0},
-  {sec:'A', lec:29, text:'Financial planning can help one move abroad or buy a house.',
-   opts:['True','False'], ans:0},
-  {sec:'A', lec:29, text:'A mid-term financial goal cannot be achieved straight away but should only take a few years to achieve.',
-   opts:['True','False'], ans:0},
-  {sec:'A', lec:29, text:'Compounding is a process of growing.',
-   opts:['True','False'], ans:0},
-  {sec:'A', lec:30, text:'The company we keep has little influence on our development and decisions.',
-   opts:['True','False'], ans:1},
-  {sec:'A', lec:30, text:'The company you keep has the potential can make you or break you.',
-   opts:['True','False'], ans:0},
+// ─── Question Bank Data ───
+const data = [
+  {
+    unit: 1,
+    unitTitle: "Introduction to Internet of Things",
+    topics: "Application areas, Characteristics, Things in IoT, IoT Stack, Enabling Technologies, Challenges, Levels, CPS, WSN",
+    groups: [
+      {
+        marks: 3,
+        label: "Short Answer",
+        questions: [
+          {
+            q: "Define IoT. Write the merits and demerits of IoT.",
+            year: "W23",
+            a: `<strong>IoT (Internet of Things)</strong> is a network of physical devices embedded with sensors, software, and connectivity that enables them to collect and exchange data over the internet without human-to-human or human-to-computer interaction.
+            <span class="sub-heading">Merits</span>
+            <ul>
+              <li>Improved efficiency and automation of processes</li>
+              <li>Data-driven decision making</li>
+              <li>Cost savings through predictive maintenance</li>
+              <li>Enhanced quality of life (smart homes, health)</li>
+              <li>Real-time monitoring and control</li>
+            </ul>
+            <span class="sub-heading">Demerits</span>
+            <ul>
+              <li>Security vulnerabilities and cyberattacks</li>
+              <li>Privacy concerns due to massive data collection</li>
+              <li>High initial deployment cost</li>
+              <li>Dependency on internet connectivity</li>
+              <li>Complexity in integration of heterogeneous devices</li>
+            </ul>`
+          },
+          {
+            q: "What is IoT? List any five IoT applications.",
+            year: "W24",
+            a: `<strong>IoT</strong> refers to the interconnection of everyday physical objects via the internet, allowing them to send, receive, and act on data autonomously.
+            <span class="sub-heading">Five Applications</span>
+            <ol>
+              <li><strong>Smart Home</strong> — Automated lighting, HVAC, security</li>
+              <li><strong>Smart Healthcare</strong> — Remote patient monitoring, wearables</li>
+              <li><strong>Smart Agriculture</strong> — Soil moisture sensing, precision farming</li>
+              <li><strong>Industrial IoT (IIoT)</strong> — Predictive maintenance, quality control</li>
+              <li><strong>Smart Cities</strong> — Traffic management, waste management, smart grids</li>
+            </ol>`
+          },
+          {
+            q: "Describe Internet of Things.",
+            year: "S25",
+            a: `<strong>Internet of Things</strong> is a paradigm where physical objects — ranging from everyday household items to sophisticated industrial tools — are connected to the internet, enabling them to communicate, share data, and make intelligent decisions. It integrates four key components: <strong>sensors</strong> (to perceive the environment), <strong>connectivity</strong> (to transmit data), <strong>processing</strong> (to analyze data), and <strong>user interface</strong> (to present insights and enable control). The goal of IoT is to create smart environments that reduce human intervention, improve efficiency, and enhance quality of life.`
+          },
+          {
+            q: "List out enabling technologies in IoT. Explain any one in detail.",
+            year: "S23",
+            a: `<strong>Enabling Technologies:</strong> RFID, Wireless Sensor Networks (WSN), Cloud Computing, Big Data Analytics, Embedded Systems, Communication Protocols (MQTT, CoAP), Edge/Fog Computing, IPv6, NFC.
+            <span class="sub-heading">RFID (Radio Frequency Identification)</span>
+            RFID uses electromagnetic fields to automatically identify and track tags attached to objects. It consists of two components: a <strong>tag</strong> (with a microchip and antenna, either passive or active) and a <strong>reader</strong> (which emits radio waves and reads tag data). When a tag enters the reader's field, it transmits its stored data without line-of-sight. RFID is widely used in supply chain management, access control, inventory tracking, and toll collection (e.g., FASTag). It is a foundational technology for IoT because it provides low-cost, automatic object identification.`
+          },
+          {
+            q: "Explain IoT and Cyber Physical System.",
+            year: "S24",
+            a: `A <strong>Cyber Physical System (CPS)</strong> is a system where physical and software components are deeply integrated, interacting with each other through feedback loops in real time. Examples include autonomous vehicles, smart grids, and medical monitoring systems.
+            <br><br>
+            <strong>Relationship with IoT:</strong> IoT is the connectivity layer that enables CPS. While <strong>IoT</strong> focuses on connecting things and collecting/exchanging data, <strong>CPS</strong> focuses on the tight interaction between computational elements and physical processes. In essence, IoT provides the infrastructure (sensors, networks, cloud) that CPS leverages to monitor and control physical processes. CPS adds the dimension of real-time control and safety-critical operation on top of IoT's data communication capabilities.`
+          },
+          {
+            q: "Explain the role of 'things' in IoT.",
+            year: "W25",
+            a: `In IoT, <strong>'things'</strong> are the physical entities that form the foundation of the entire ecosystem. They are objects embedded with sensors, actuators, processing capability, and connectivity modules. Their roles include:
+            <ul>
+              <li><strong>Sensing</strong> — Detecting physical parameters (temperature, motion, light, etc.)</li>
+              <li><strong>Data Collection</strong> — Gathering raw data from the environment continuously</li>
+              <li><strong>Communication</strong> — Transmitting collected data to gateways, cloud, or other devices</li>
+              <li><strong>Actuation</strong> — Performing physical actions based on received commands (turning on a motor, opening a valve)</li>
+              <li><strong>Edge Processing</strong> — Some things perform preliminary data processing locally</li>
+            </ul>
+            Without things, there is no data to process, no environment to monitor, and no actions to execute — making them the most critical element of IoT.`
+          },
+          {
+            q: "List enabling technologies for IoT.",
+            year: "S25 OR",
+            a: `<ul>
+              <li><strong>RFID</strong> — Automatic object identification and tracking</li>
+              <li><strong>Wireless Sensor Networks (WSN)</strong> — Distributed environmental sensing</li>
+              <li><strong>Cloud Computing</strong> — Scalable storage and processing</li>
+              <li><strong>Big Data Analytics</strong> — Extracting insights from large datasets</li>
+              <li><strong>Embedded Systems</strong> — Dedicated computing within devices</li>
+              <li><strong>IPv6</strong> — Expanded address space for billions of devices</li>
+              <li><strong>Communication Protocols</strong> — MQTT, CoAP, HTTP, AMQP</li>
+              <li><strong>Edge/Fog Computing</strong> — Processing data near the source</li>
+              <li><strong>NFC</strong> — Short-range contactless communication</li>
+              <li><strong>Low-Power Wide-Area Networks</strong> — LoRa, Sigfox, NB-IoT</li>
+            </ul>`
+          }
+        ]
+      },
+      {
+        marks: 4,
+        label: "Medium Answer",
+        questions: [
+          {
+            q: "Explain characteristics of the IoT.",
+            year: "S23",
+            a: `<ol>
+              <li><strong>Connectivity</strong> — Devices must be networked to communicate (WiFi, BLE, Zigbee, LoRa)</li>
+              <li><strong>Intelligence</strong> — Devices have processing capability for local decision-making</li>
+              <li><strong>Scalability</strong> — System must handle growing numbers of devices seamlessly</li>
+              <li><strong>Dynamic & Self-adapting</strong> — Devices adapt to changing contexts and environments</li>
+              <li><strong>Self-configuring</strong> — Devices can automatically configure themselves when added to a network</li>
+              <li><strong>Interoperability</strong> — Different devices, protocols, and platforms must work together</li>
+              <li><strong>Security</strong> — End-to-end data and device security is essential</li>
+              <li><strong>Sensing</strong> — Ability to perceive physical parameters through sensors</li>
+              <li><strong>Heterogeneity</strong> — Supports diverse hardware, software, and network technologies</li>
+            </ol>`
+          },
+          {
+            q: "Explain the Characteristics of IoT.",
+            year: "S24",
+            a: `Same as above — the key characteristics of IoT include connectivity, intelligence, scalability, dynamic self-adaptation, self-configuration, interoperability, security, sensing ability, and heterogeneity. These characteristics distinguish IoT from traditional internet applications by enabling seamless interaction between the physical and digital worlds.`
+          },
+          {
+            q: "Explain enabling technologies in IoT.",
+            year: "W24",
+            a: `<ul>
+              <li><strong>RFID</strong> — Low-cost identification and tracking of physical objects using radio waves</li>
+              <li><strong>WSN</strong> — Networks of spatially distributed sensors that monitor environmental conditions</li>
+              <li><strong>Cloud Computing</strong> — Provides on-demand storage, computing power, and services for IoT data</li>
+              <li><strong>Big Data Analytics</strong> — Processes massive volumes of IoT data to uncover patterns and insights</li>
+              <li><strong>Embedded Systems</strong> — Dedicated computing systems built into devices for specific functions</li>
+              <li><strong>Communication Protocols</strong> — MQTT (lightweight pub/sub), CoAP (RESTful for constrained devices), HTTP</li>
+              <li><strong>Edge Computing</strong> — Processes data near the source to reduce latency and bandwidth usage</li>
+              <li><strong>AI/ML</strong> — Enables predictive analytics, anomaly detection, and autonomous decision-making</li>
+            </ul>`
+          },
+          {
+            q: "Explain the significance of AI/ML in IoT.",
+            year: "W25",
+            a: `AI and ML transform IoT from simple data collection to <strong>intelligent decision-making</strong>:
+            <ul>
+              <li><strong>Predictive Maintenance</strong> — ML models analyze sensor data to predict equipment failures before they occur, reducing downtime</li>
+              <li><strong>Anomaly Detection</strong> — AI identifies unusual patterns in data streams, enabling real-time security threat detection</li>
+              <li><strong>Data Analytics</strong> — ML extracts meaningful insights from large, complex IoT datasets that manual analysis cannot handle</li>
+              <li><strong>Automation</strong> — AI enables IoT devices to make autonomous decisions without human intervention (e.g., smart thermostats adjusting temperature)</li>
+              <li><strong>Energy Optimization</strong> — ML algorithms optimize power consumption in IoT networks by scheduling transmissions and sleep modes</li>
+              <li><strong>Personalization</strong> — AI learns user behavior patterns to customize IoT services (e.g., smart home adapting lighting to preferences)</li>
+              <li><strong>Natural Language Processing</strong> — Voice assistants (Alexa, Google Home) use NLP to interface with IoT devices</li>
+            </ul>`
+          },
+          {
+            q: "Discuss smart health using IoT.",
+            year: "W23",
+            a: `<strong>Smart Health (IoMT — Internet of Medical Things)</strong> applies IoT to healthcare:
+            <ul>
+              <li><strong>Remote Patient Monitoring</strong> — Wearable sensors track vitals (heart rate, blood pressure, SpO2, ECG) and transmit data to doctors in real time</li>
+              <li><strong>Smart Pills</strong> — Ingestible sensors monitor medication adherence and internal body parameters</li>
+              <li><strong>Automated Drug Dispensers</strong> — Ensure correct dosage at the right time, reducing human error</li>
+              <li><strong>Hospital Asset Tracking</strong> — RFID tags on medical equipment for real-time location and utilization tracking</li>
+              <li><strong>Telemedicine</strong> — IoT devices enable remote consultations with live health data sharing</li>
+              <li><strong>Fall Detection</strong> — Wearable accelerometers detect elderly falls and automatically alert caregivers</li>
+              <li><strong>Health Analytics</strong> — Cloud-based analysis of patient data for early diagnosis and personalized treatment plans</li>
+              <li><strong>Smart ICU</strong> — Connected ventilators, infusion pumps, and monitors provide continuous data for critical care</li>
+            </ul>`
+          }
+        ]
+      },
+      {
+        marks: 7,
+        label: "Long Answer",
+        questions: [
+          {
+            q: "Explain the architecture of IoT.",
+            year: "W23",
+            a: `<span class="sub-heading">Three-Layer Architecture</span>
+            <ol>
+              <li><strong>Perception/Sensing Layer</strong> — The physical layer consisting of sensors (temperature, humidity, motion), actuators, RFID tags, and cameras. It collects data from the environment and converts physical parameters into electrical signals.</li>
+              <li><strong>Network/Connectivity Layer</strong> — Responsible for transmitting data from the perception layer to processing systems. Uses technologies like WiFi, Bluetooth, Zigbee, LoRa, 4G/5G, and protocols like MQTT, CoAP, HTTP.</li>
+              <li><strong>Application Layer</strong> — The topmost layer that delivers services to end users. Examples: smart home dashboards, healthcare monitoring apps, industrial control systems, smart agriculture platforms.</li>
+            </ol>
+            <span class="sub-heading">Five-Layer Architecture (Extended)</span>
+            <ol start="4">
+              <li><strong>Processing/Middleware Layer</strong> — Handles data storage, processing, and analytics. Includes cloud platforms, databases, and edge computing nodes that filter, aggregate, and analyze data before it reaches applications.</li>
+              <li><strong>Business Layer</strong> — Manages the overall IoT system, handles business logic, generates reports, and makes strategic decisions based on analyzed data. Focuses on ROI, business models, and service monetization.</li>
+            </ol>`
+          },
+          {
+            q: "Draw and explain IoT architecture.",
+            year: "W24",
+            a: `IoT architecture can be represented as a layered model:
+            <br><br>
+            <strong>Top → Application Layer</strong> (Smart Home, Health, Agriculture, Industry)
+            <br>↓
+            <strong>Business Layer</strong> (Business logic, decisions, reports, monetization)
+            <br>↓
+            <strong>Processing Layer</strong> (Cloud, databases, analytics, ML models)
+            <br>↓
+            <strong>Network Layer</strong> (WiFi, Zigbee, LoRa, MQTT, CoAP, 5G)
+            <br>↓
+            <strong>Bottom → Perception Layer</strong> (Sensors, actuators, RFID, cameras)
+            <br><br>
+            Data flows upward from sensors through each layer, while commands flow downward from applications to actuators. Each layer abstracts functionality, enabling independent development and upgrades.`
+          },
+          {
+            q: "Explain various levels of IoT.",
+            year: "S25",
+            a: `<ol>
+              <li><strong>Level 0 — No Connectivity</strong>: A single IoT device with sensing capability only. No network connection. Example: A standalone temperature sensor displaying readings on a local screen.</li>
+              <li><strong>Level 1 — Basic Connectivity</strong>: IoT devices can communicate with a gateway or cloud. Data is transmitted but no local processing. Example: A WiFi temperature sensor sending data to a cloud dashboard.</li>
+              <li><strong>Level 2 — Edge Computing</strong>: Devices connect through a gateway that performs local data processing, filtering, and aggregation before sending to cloud. Reduces bandwidth. Example: Smart building system with local edge gateway.</li>
+              <li><strong>Level 3 — Cloud Computing</strong>: Data is sent to the cloud for storage, processing, and analytics. Applications run on cloud platforms. Example: AWS IoT-based industrial monitoring system.</li>
+              <li><strong>Level 4 — Cloud + Analytics</strong>: Adds data analytics and visualization on top of cloud computing. Generates insights, trends, and predictions from data. Example: Predictive maintenance platform for manufacturing.</li>
+              <li><strong>Level 5 — Full Autonomy</strong>: Complete integration of cloud, analytics, and autonomous control. System makes decisions and acts independently without human intervention. Example: Autonomous vehicle system or fully automated smart factory.</li>
+            </ol>`
+          },
+          {
+            q: "Explain IoT Technology Stack.",
+            year: "S23",
+            a: `<ol>
+              <li><strong>Device/Hardware Layer</strong> — Sensors (DHT11, MQ-2), actuators (servo, relay), microcontrollers (ESP32, Arduino, STM32), development boards (Raspberry Pi)</li>
+              <li><strong>Edge/Fog Layer</strong> — Local gateways that perform preliminary data processing, filtering, and aggregation near the data source to reduce latency and bandwidth</li>
+              <li><strong>Connectivity Layer</strong> — Communication protocols (MQTT for lightweight pub/sub, CoAP for constrained devices, HTTP/REST) and technologies (WiFi, BLE, Zigbee, LoRaWAN, NB-IoT, 5G)</li>
+              <li><strong>Cloud Platform Layer</strong> — Managed IoT platforms (AWS IoT Core, Azure IoT Hub, Google Cloud IoT) providing device management, data ingestion, storage, and orchestration</li>
+              <li><strong>Data Processing & Analytics Layer</strong> — Stream processing (Apache Kafka), batch processing, database systems (Time-series: InfluxDB, NoSQL: MongoDB), and ML models for pattern recognition and prediction</li>
+              <li><strong>Application Layer</strong> — User-facing applications: web dashboards (Grafana), mobile apps, REST APIs, notification systems</li>
+              <li><strong>Security Layer</strong> — Cross-cutting layer: device authentication (X.509 certificates), data encryption (TLS/SSL), access control (OAuth 2.0), firmware OTA updates, anomaly detection</li>
+            </ol>`
+          },
+          {
+            q: "Explain challenges of IoT.",
+            year: "S24",
+            a: `<ol>
+              <li><strong>Security</strong> — IoT devices are vulnerable to botnets (Mirai), data breaches, firmware tampering, and man-in-the-middle attacks due to limited computing resources for encryption</li>
+              <li><strong>Privacy</strong> — Massive data collection (location, behavior, health) creates risks of unauthorized surveillance and profiling</li>
+              <li><strong>Scalability</strong> — Managing billions of devices, each generating data, requires enormous infrastructure and efficient management protocols</li>
+              <li><strong>Interoperability</strong> — Different vendors use different protocols, data formats, and standards, creating fragmentation and integration challenges</li>
+              <li><strong>Power Management</strong> — Many IoT devices are battery-operated and need energy-efficient designs, low-power modes, and energy harvesting solutions</li>
+              <li><strong>Data Management</strong> — Handling the volume, velocity, and variety (3Vs) of IoT data demands specialized storage and processing solutions</li>
+              <li><strong>Network Reliability</strong> — Continuous connectivity is essential; network failures can disrupt critical IoT operations (healthcare, industrial)</li>
+              <li><strong>Standardization</strong> — Lack of universal standards leads to vendor lock-in and compatibility issues across ecosystems</li>
+              <li><strong>Cost</strong> — High initial deployment costs for hardware, connectivity, cloud infrastructure, and maintenance</li>
+              <li><strong>Complexity</strong> — Integrating heterogeneous hardware, software, networks, and services increases system complexity</li>
+            </ol>`
+          },
+          {
+            q: "With neat diagrammatic representation, explain IoT Stack with appropriate examples for each layer.",
+            year: "W25",
+            a: `<span class="sub-heading">IoT Stack — Layer by Layer with Examples</span>
+            <ol>
+              <li><strong>Device Layer</strong> — Physical hardware: <em>DHT22 temperature/humidity sensor, HC-SR04 ultrasonic sensor, ESP32 microcontroller, servo motor</em></li>
+              <li><strong>Edge Layer</strong> — Local processing: <em>Raspberry Pi gateway running Node-RED, filtering sensor data before cloud upload</em></li>
+              <li><strong>Connectivity Layer</strong> — Protocols & networks: <em>MQTT over WiFi (home), LoRaWAN (agriculture field), BLE (wearable)</em></li>
+              <li><strong>Cloud Layer</strong> — Managed platforms: <em>AWS IoT Core receiving MQTT messages, storing in S3/DynamoDB</em></li>
+              <li><strong>Analytics Layer</strong> — Intelligence: <em>Apache Kafka stream processing, TensorFlow ML model detecting anomalies in sensor data</em></li>
+              <li><strong>Application Layer</strong> — User interface: <em>Grafana dashboard showing real-time temperature trends, mobile app sending alerts</em></li>
+              <li><strong>Security Layer</strong> — Protection: <em>TLS encryption for MQTT, IAM roles in AWS, X.509 device certificates</em></li>
+            </ol>
+            Example flow: A DHT22 sensor (Device) → ESP32 reads data → Raspberry Pi filters noise (Edge) → MQTT sends via WiFi (Connectivity) → AWS IoT Core receives (Cloud) → Lambda function runs anomaly detection (Analytics) → Grafana displays alert (Application), all secured by TLS (Security).`
+          },
+          {
+            q: "For building an architecture of IoT, explain main design principles and needed capabilities.",
+            year: "W23",
+            a: `<span class="sub-heading">Design Principles</span>
+            <ol>
+              <li><strong>Modularity</strong> — Components should be independent, replaceable, and upgradeable without affecting the entire system</li>
+              <li><strong>Scalability</strong> — Architecture must gracefully handle growth in devices, data volume, and user load</li>
+              <li><strong>Interoperability</strong> — Support multiple protocols, standards, and vendor ecosystems for seamless integration</li>
+              <li><strong>Security by Design</strong> — Security must be integrated from the ground up, not bolted on afterward</li>
+              <li><strong>Low Power Design</strong> — Energy-efficient architecture for battery-operated devices (sleep modes, duty cycling)</li>
+              <li><strong>Reliability & Fault Tolerance</strong> — System must continue functioning despite component failures</li>
+              <li><strong>Latency Awareness</strong> — Design must account for real-time requirements (edge processing for low-latency use cases)</li>
+              <li><strong>Data Minimization</strong> — Collect and transmit only necessary data to reduce bandwidth and storage costs</li>
+            </ol>
+            <span class="sub-heading">Needed Capabilities</span>
+            <ul>
+              <li>Sensing and actuation (hardware interface)</li>
+              <li>Communication and connectivity (multi-protocol support)</li>
+              <li>Data storage and processing (cloud + edge)</li>
+              <li>Analytics and machine learning</li>
+              <li>User interface and visualization</li>
+              <li>Security (authentication, encryption, access control)</li>
+              <li>Device management (provisioning, OTA updates, monitoring)</li>
+              <li>API management for third-party integration</li>
+            </ul>`
+          },
+          {
+            q: "Which are hardware and software components of IoT? How do these components get synchronised in an IoT based application?",
+            year: "W23 OR",
+            a: `<span class="sub-heading">Hardware Components</span>
+            <ul>
+              <li><strong>Sensors</strong> — DHT11 (temp/humidity), PIR (motion), LDR (light), MQ-2 (gas)</li>
+              <li><strong>Actuators</strong> — Servo motors, relays, LEDs, buzzers, solenoid valves</li>
+              <li><strong>Microcontrollers</strong> — ESP32, Arduino (ATmega328P), STM32, 8051</li>
+              <li><strong>Communication Modules</strong> — WiFi (ESP8266), Bluetooth (HC-05), LoRa (SX1278), GSM (SIM800)</li>
+              <li><strong>Power Supply</strong> — Batteries, solar panels, USB power, voltage regulators</li>
+            </ul>
+            <span class="sub-heading">Software Components</span>
+            <ul>
+              <li><strong>Firmware</strong> — Embedded C/Python code running on MCU (Arduino IDE, PlatformIO)</li>
+              <li><strong>Communication Protocols</strong> — MQTT, CoAP, HTTP for data exchange</li>
+              <li><strong>Cloud Platform</strong> — AWS IoT, Azure IoT Hub, ThingSpeak</li>
+              <li><strong>Database</strong> — InfluxDB (time-series), MongoDB (NoSQL), MySQL</li>
+              <li><strong>Analytics/ML</strong> — Python (Pandas, Scikit-learn), TensorFlow</li>
+              <li><strong>Application Software</strong> — Web dashboard (React), Mobile app (Flutter)</li>
+            </ul>
+            <span class="sub-heading">Synchronization Flow</span>
+            Sensors collect data → MCU reads via GPIO/ADC pins → Firmware processes and formats data → Communication module transmits via MQTT → Cloud receives and stores in database → Analytics engine processes data → Application displays results → If action needed, command flows back: App → Cloud → MQTT → MCU → Actuator executes. This forms a <strong>closed-loop feedback system</strong> where all components are synchronized through the communication layer.`
+          },
+          {
+            q: "Explain various levels of IoT.",
+            year: "W24",
+            a: `Same as the S25 answer above — IoT is organized into six levels from Level 0 (no connectivity, standalone sensor) through Level 5 (full autonomy with cloud, analytics, and autonomous control). Each level adds capabilities: connectivity → edge processing → cloud computing → analytics → autonomous decision-making.`
+          }
+        ]
+      }
+    ]
+  },
+  {
+    unit: 2,
+    unitTitle: "Sensors, Microcontrollers, and Their Interfacing",
+    topics: "Sensor interfacing, Types of sensors, Controlling sensors, Microcontrollers, ARM",
+    groups: [
+      {
+        marks: 3,
+        label: "Short Answer",
+        questions: [
+          {
+            q: "List the sensors that may be useful for Smart Home.",
+            year: "S25",
+            a: `<ul>
+              <li><strong>DHT11/DHT22</strong> — Temperature and humidity sensing</li>
+              <li><strong>PIR Sensor (HC-SR501)</strong> — Motion/presence detection</li>
+              <li><strong>LDR (Light Dependent Resistor)</strong> — Ambient light detection</li>
+              <li><strong>MQ-2 Gas Sensor</strong> — Smoke and LPG leak detection</li>
+              <li><strong>HC-SR04 Ultrasonic</strong> — Distance measurement (water tank level)</li>
+              <li><strong>Reed Switch</strong> — Door/window open/close detection</li>
+              <li><strong>IR Sensor</strong> — Obstacle detection, appliance control</li>
+              <li><strong>Soil Moisture Sensor</strong> — Smart garden/plant watering</li>
+              <li><strong>Current Sensor (ACS712)</strong> — Appliance power monitoring</li>
+            </ul>`
+          },
+          {
+            q: "What is a Sensor? List different types of Sensors used to develop IoT.",
+            year: "W24",
+            a: `A <strong>sensor</strong> is a device that detects and responds to changes in the physical environment (temperature, light, pressure, motion) and converts them into electrical signals that can be read by a microcontroller.
+            <span class="sub-heading">Types of Sensors</span>
+            <ul>
+              <li><strong>Temperature</strong> — LM35, DHT11, DS18B20, Thermocouple</li>
+              <li><strong>Humidity</strong> — DHT22, HIH-4000</li>
+              <li><strong>Pressure</strong> — BMP180, MPX5100</li>
+              <li><strong>Motion/Proximity</strong> — PIR (HC-SR501), IR sensor</li>
+              <li><strong>Distance</strong> — Ultrasonic (HC-SR04), LiDAR</li>
+              <li><strong>Light</strong> — LDR, BH1750</li>
+              <li><strong>Gas</strong> — MQ-2, MQ-135, MQ-7</li>
+              <li><strong>Accelerometer/Gyroscope</strong> — MPU6050, ADXL345</li>
+              <li><strong>GPS</strong> — NEO-6M module</li>
+              <li><strong>RFID</strong> — RC522 module</li>
+            </ul>`
+          },
+          {
+            q: "What are the different categories of Sensors?",
+            year: "W25",
+            a: `<span class="sub-heading">By Power Requirement</span>
+            <ul>
+              <li><strong>Active Sensors</strong> — Require external power source (ultrasonic sensor, LiDAR, radar)</li>
+              <li><strong>Passive Sensors</strong> — Generate signal from the measured phenomenon itself (thermocouple, LDR, piezoelectric sensor)</li>
+            </ul>
+            <span class="sub-heading">By Output Signal</span>
+            <ul>
+              <li><strong>Analog Sensors</strong> — Output continuous voltage (LM35, LDR, potentiometer)</li>
+              <li><strong>Digital Sensors</strong> — Output discrete digital data (DHT11, DS18B20)</li>
+            </ul>
+            <span class="sub-heading">By Application</span>
+            <ul>
+              <li>Temperature, Pressure, Proximity, Optical, Chemical, Biological, Magnetic, Acoustic sensors</li>
+            </ul>`
+          },
+          {
+            q: "Explain Sensor interfacing.",
+            year: "S24",
+            a: `<strong>Sensor interfacing</strong> is the process of connecting a sensor to a microcontroller so that the MCU can read the sensor's output. The steps involved are:
+            <ol>
+              <li><strong>Identify sensor type</strong> — Determine if the sensor outputs analog or digital signals</li>
+              <li><strong>Signal Conditioning</strong> — Amplify weak signals (op-amp), filter noise (capacitors), or level-shift voltages</li>
+              <li><strong>Pin Connection</strong> — Connect analog sensors to ADC pins, digital sensors to GPIO pins</li>
+              <li><strong>Driver Code</strong> — Write firmware to initialize the pin, read data (analogRead/digitalRead), and convert to physical units</li>
+              <li><strong>Calibration</strong> — Map raw sensor values to real-world units using known reference points</li>
+            </ol>`
+          },
+          {
+            q: "Explain Ultrasonic sound sensor.",
+            year: "S23 OR",
+            a: `An <strong>ultrasonic sensor (HC-SR04)</strong> measures distance using sound waves. It has two transducers: a <strong>transmitter</strong> that emits a 40 kHz ultrasonic pulse and a <strong>receiver</strong> that listens for the echo.
+            <br><br>
+            <strong>Working:</strong> The trigger pin sends a 10μs HIGH pulse. The sensor emits 8 cycles of 40kHz ultrasound. The sound wave travels outward, reflects off an object, and returns. The echo pin goes HIGH for the duration the sound takes to return.
+            <br><br>
+            <strong>Distance Calculation:</strong> <code>Distance (cm) = (Time in μs × 0.034) / 2</code>
+            <br><br>
+            <strong>Specifications:</strong> Range: 2cm – 400cm, Accuracy: ~3mm, Operating Voltage: 5V, Trigger Input: 10μs TTL pulse.`
+          },
+          {
+            q: "Explain IoT Domain Model.",
+            year: "W23",
+            a: `The <strong>IoT Domain Model</strong> defines the structure and relationships of entities in an IoT system:
+            <ul>
+              <li><strong>Physical Entities</strong> — Real-world objects (room, vehicle, patient) that are monitored or controlled</li>
+              <li><strong>Virtual Entities</strong> — Digital representations (digital twins) of physical entities in the software domain</li>
+              <li><strong>Devices</strong> — Hardware with processing capability (sensors, actuators, gateways) that bridge physical and virtual worlds</li>
+              <li><strong>Users</strong> — Human stakeholders who interact with the system (administrators, end-users, operators)</li>
+              <li><strong>Services</strong> — Functional capabilities offered by the IoT system (monitoring, alerts, analytics)</li>
+            </ul>
+            The model shows how physical objects are mapped to digital counterparts and how services are delivered to users through devices.`
+          },
+          {
+            q: "List sensors which can be used for Driver Assistance.",
+            year: "S25 OR",
+            a: `<ul>
+              <li><strong>LiDAR</strong> — 3D mapping of surroundings, obstacle detection</li>
+              <li><strong>Ultrasonic Sensors</strong> — Parking assist, close-range obstacle detection</li>
+              <li><strong>Radar (mmWave)</strong> — Adaptive cruise control, collision avoidance, blind spot detection</li>
+              <li><strong>Cameras (RGB/IR)</strong> — Lane detection, traffic sign recognition, pedestrian detection</li>
+              <li><strong>GPS/GNSS</strong> — Vehicle positioning, navigation, geofencing</li>
+              <li><strong>Accelerometer & Gyroscope (IMU)</strong> — Vehicle dynamics, stability control</li>
+              <li><strong>Steering Angle Sensor</strong> — Lane keeping assist</li>
+              <li><strong>Tire Pressure Sensor (TPMS)</strong> — Tire pressure monitoring</li>
+              <li><strong>Rain Sensor</strong> — Automatic wiper activation</li>
+            </ul>`
+          },
+          {
+            q: "What type of IoT devices are commonly used in driver assistance systems?",
+            year: "W25 OR",
+            a: `<strong>ADAS (Advanced Driver Assistance Systems)</strong> commonly uses:
+            <ul>
+              <li><strong>Camera Modules</strong> — Front/rear cameras for lane departure warning, traffic sign recognition, pedestrian detection, automatic emergency braking</li>
+              <li><strong>Ultrasonic Sensor Arrays</strong> — 6–12 sensors around the bumper for parking assist and low-speed obstacle detection</li>
+              <li><strong>Radar Modules</strong> — 77GHz mmWave radar for adaptive cruise control, forward collision warning, blind spot monitoring</li>
+              <li><strong>LiDAR Scanners</strong> — Rotating or solid-state LiDAR for 360° 3D environment mapping (used in autonomous vehicles)</li>
+              <li><strong>GPS/IMU Modules</strong> — For precise positioning, navigation, and vehicle state estimation</li>
+              <li><strong>V2X Communication Modules</strong> — Vehicle-to-Everything (V2V, V2I) for sharing speed, position, and hazard info with other vehicles and infrastructure</li>
+              <li><strong>ECU (Electronic Control Unit)</strong> — Onboard processing unit that fuses sensor data and makes driving decisions</li>
+            </ul>`
+          }
+        ]
+      },
+      {
+        marks: 4,
+        label: "Medium Answer",
+        questions: [
+          {
+            q: "What do you mean by actuators? Give examples of commonly used actuators in IoT.",
+            year: "S25",
+            a: `<strong>Actuators</strong> are output devices that convert electrical signals into physical action — movement, sound, light, or other physical changes. They are the "hands" of an IoT system, executing decisions made by the processing unit.
+            <span class="sub-heading">Common Examples in IoT</span>
+            <ul>
+              <li><strong>Servo Motor</strong> — Precise angular positioning (robotics, smart door locks)</li>
+              <li><strong>DC Motor</strong> — Continuous rotation (conveyors, smart blinds, fans)</li>
+              <li><strong>Relay</strong> — Switching high-power appliances (lights, pumps, heaters in smart home)</li>
+              <li><strong>Solenoid Valve</strong> — Controlling fluid/gas flow (smart irrigation, water dispensing)</li>
+              <li><strong>LED</strong> — Status indication, smart lighting</li>
+              <li><strong>Buzzer</strong> — Alarm and notification sounds</li>
+              <li><strong>Stepper Motor</strong> — Precise step-wise movement (3D printers, CNC machines)</li>
+              <li><strong>Pneumatic/Hydraulic Cylinder</strong> — Industrial automation, heavy-duty actuation</li>
+            </ul>`
+          },
+          {
+            q: "Explain the brain in an IoT device.",
+            year: "S24",
+            a: `The <strong>"brain" of an IoT device</strong> is its <strong>microcontroller (MCU)</strong> or <strong>microprocessor (MPU)</strong>. It performs all critical functions:
+            <ul>
+              <li><strong>Reads sensor data</strong> via GPIO, ADC, I2C, SPI interfaces</li>
+              <li><strong>Processes data</strong> — applies filtering, calibration, and control logic</li>
+              <li><strong>Manages communication</strong> — runs protocol stacks (WiFi, BLE, MQTT)</li>
+              <li><strong>Controls actuators</strong> — sends signals to relays, motors, LEDs</li>
+              <li><strong>Handles interrupts</strong> — responds to time-critical events</li>
+              <li><strong>Manages power</strong> — implements sleep modes for battery efficiency</li>
+            </ul>
+            <strong>Common examples:</strong> ESP32 (dual-core, WiFi+BLE, widely used in IoT), ATmega328P (Arduino Uno), STM32 (ARM Cortex-M series), Raspberry Pi (full Linux-based MPU for complex IoT). The choice depends on processing needs, power constraints, connectivity requirements, and cost.`
+          },
+          {
+            q: "Mention clearly the procedure to interface the Ultrasonic sensor with any microcontroller of your choice.",
+            year: "W25",
+            a: `<strong>Interfacing HC-SR04 with Arduino Uno:</strong>
+            <span class="sub-heading">Hardware Connections</span>
+            <ul>
+              <li>VCC → 5V pin of Arduino</li>
+              <li>GND → GND pin of Arduino</li>
+              <li>TRIG → Digital Pin 9</li>
+              <li>ECHO → Digital Pin 10</li>
+            </ul>
+            <span class="sub-heading">Software Procedure</span>
+            <ol>
+              <li>Define trigger and echo pins: <code>#define TRIG 9</code>, <code>#define ECHO 10</code></li>
+              <li>In <code>setup()</code>: Set TRIG as OUTPUT, ECHO as INPUT using <code>pinMode()</code>; Initialize Serial monitor</li>
+              <li>In <code>loop()</code>:
+                <ul>
+                  <li>Clear trigger: <code>digitalWrite(TRIG, LOW)</code>, <code>delayMicroseconds(2)</code></li>
+                  <li>Send pulse: <code>digitalWrite(TRIG, HIGH)</code>, <code>delayMicroseconds(10)</code>, <code>digitalWrite(TRIG, LOW)</code></li>
+                  <li>Read echo duration: <code>duration = pulseIn(ECHO, HIGH)</code></li>
+                  <li>Calculate distance: <code>distance = (duration × 0.034) / 2</code></li>
+                  <li>Print: <code>Serial.print(distance)</code></li>
+                </ul>
+              </li>
+            </ol>`
+          },
+          {
+            q: "Difference between Microcontroller and Microprocessor.",
+            year: "S23",
+            a: `<ul>
+              <li><strong>Integration</strong> — MCU has CPU, RAM, ROM, I/O on a single chip; MPU has only CPU, needs external components</li>
+              <li><strong>Cost</strong> — MCU is cheaper ($1–$10); MPU is expensive ($20–$500+)</li>
+              <li><strong>Power</strong> — MCU consumes milliwatts, ideal for battery devices; MPU consumes watts, needs active cooling</li>
+              <li><strong>Speed</strong> — MCU: 8–200 MHz; MPU: 1–5 GHz</li>
+              <li><strong>Use Case</strong> — MCU: Dedicated, embedded tasks (IoT sensors, appliances); MPU: General-purpose computing (laptops, servers)</li>
+              <li><strong>External Components</strong> — MCU: Minimal (crystal, decoupling caps); MPU: RAM, ROM, GPU, chipset, cooling</li>
+              <li><strong>Examples</strong> — MCU: ATmega328P, ESP32, STM32, 8051; MPU: Intel i5, ARM Cortex-A72, AMD Ryzen</li>
+              <li><strong>OS Support</strong> — MCU: Bare-metal or RTOS (FreeRTOS); MPU: Full OS (Linux, Windows)</li>
+            </ul>`
+          },
+          {
+            q: "Explain IoT value chains.",
+            year: "W23",
+            a: `The <strong>IoT value chain</strong> describes the stages from device creation to service delivery:
+            <ol>
+              <li><strong>Sensor/Device Manufacturing</strong> — Designing and building hardware (sensors, MCUs, boards)</li>
+              <li><strong>Connectivity Provision</strong> — Enabling communication through network infrastructure (WiFi, LPWAN, 5G)</li>
+              <li><strong>Data Acquisition</strong> — Collecting raw data from sensors at the edge</li>
+              <li><strong>Data Processing</strong> — Cleaning, transforming, filtering, and aggregating data</li>
+              <li><strong>Analytics</strong> — Applying ML/AI to extract insights, patterns, and predictions</li>
+              <li><strong>Application/Service Delivery</strong> — Creating user-facing applications (dashboards, alerts, automations)</li>
+              <li><strong>Business Model</strong> — Monetization through subscriptions, pay-per-use, data-as-a-service, or product-plus-service models</li>
+            </ol>
+            Each stage adds value to the raw sensor data, transforming it into actionable business outcomes.`
+          }
+        ]
+      },
+      {
+        marks: 7,
+        label: "Long Answer",
+        questions: [
+          {
+            q: "Explain the key features of the ARM Cortex-M architecture that make it suitable for IoT.",
+            year: "S25",
+            a: `<ol>
+              <li><strong>Thumb-2 Instruction Set</strong> — Combines 16-bit and 32-bit instructions in a single set, providing both high code density (less flash memory) and high performance — critical for cost-sensitive IoT devices</li>
+              <li><strong>Low Power Design</strong> — Multiple sleep modes (Sleep, Deep Sleep, Deep Sleep with retention), low-power peripherals with independent clock gating, Wake-up Interrupt Controller (WIC) that allows the CPU to wake from deep sleep without clock restoration delay</li>
+              <li><strong>NVIC (Nested Vectored Interrupt Controller)</strong> — Supports up to 240 interrupts with deterministic, prioritized handling. Critical for real-time IoT applications where sensor data must be processed within strict deadlines</li>
+              <li><strong>MPU (Memory Protection Unit)</strong> — Prevents unauthorized memory access, enables safe execution of untrusted code — essential for IoT security</li>
+              <li><strong>Single-cycle I/O</strong> — Fast GPIO access for time-critical sensor operations (e.g., ultrasonic sensor pulse timing, I2C bit-banging)</li>
+              <li><strong>Bit-banding</strong> — Allows atomic read-modify-write of individual bits in SRAM and peripheral registers without race conditions</li>
+              <li><strong>Deterministic Execution</strong> — Fixed interrupt latency (12 cycles for Cortex-M3/M4) ensures predictable real-time behavior</li>
+              <li><strong>Small Silicon Footprint</strong> — Low gate count (~33K gates for Cortex-M0) reduces silicon area and cost per unit</li>
+              <li><strong>Wide Ecosystem</strong> — CMSIS (Cortex Microcontroller Software Interface Standard) provides portable drivers, RTOS support (FreeRTOS, Zephyr), and extensive toolchain (Keil, GCC, IAR)</li>
+              <li><strong>DSP and FPU (Cortex-M4F)</strong> — Hardware floating-point and DSP instructions for sensor fusion, FFT, and signal processing in advanced IoT nodes</li>
+            </ol>`
+          },
+          {
+            q: "Define: (i) Accuracy (ii) Precision (iii) Drift (iv) Resolution as properties of sensors.",
+            year: "S25 OR",
+            a: `<ol>
+              <li><strong>Accuracy</strong> — How close the sensor's measured value is to the true/actual value. It indicates the correctness of measurement.
+              <br>Example: If the actual temperature is 25.0°C and the sensor reads 25.2°C, the accuracy is ±0.2°C. Accuracy is affected by calibration, manufacturing tolerances, and environmental conditions.</li>
 
-  // ── SECTION B ──────────────────────────────
-  {sec:'B', lec:16, text:'What is the meaning of "begin with the end in mind"?',
-   opts:['You should end the task while remembering the start point',
-         'You should envision where you want to be in future and structure your life now to give direction to reach your goal',
-         'You should begin the task and later plan to end it depending on your initial progress',
-         'You should imagine how you want to begin the task before starting'], ans:1},
-  {sec:'B', lec:16, text:'"One should analyses oneself continually, introspect and think that ..."',
-   opts:['How can I get people to like me more?',
-         'I have enough time to do this task later.',
-         'This is still to be done, and what have I come to do, and what is happening?',
-         'What is the point of doing anything when one must die one day?'], ans:2},
-  {sec:'B', lec:16, text:'What is the first step to begin with the end in mind?',
-   opts:['Create good daily routines','Prepare short-term goals','Calculate your risk-outcome ratio','Visualize your long-term goal'], ans:3},
-  {sec:'B', lec:16, text:'Short term goals should be...?',
-   opts:['vague','not be time-bound','relevant to your long-term goal','hard to achieve'], ans:2},
-  {sec:'B', lec:16, text:'What does "S" stand for in the "SMART" method (used to define short-term goals)?',
-   opts:['Specific','Standard','Superb','Simple'], ans:0},
-  {sec:'B', lec:16, text:'Complete this sentence: To achieve your short-term goal...',
-   opts:['You should not work in time-limits',
-         'Your daily routine should include activities that help to achieve it',
-         'Do the same thing that your friends do',
-         'You should avoid focussing on your daily habits'], ans:1},
-  {sec:'B', lec:17, text:'Drug addictions can negatively impact which of the following?',
-   opts:['Health','Wealth','Family','All the above'], ans:3},
-  {sec:'B', lec:17, text:'Which of the following is the least likely reason for the formation of drug addiction?',
-   opts:['Peer pressure','The search for an escape from stress','Curiosity','The desire to form an addiction'], ans:3},
-  {sec:'B', lec:17, text:'Which of these methods can help an addict overcome their addictions?',
-   opts:['Firmly decide to give up','Reject assistance','Deny accountability','All the above'], ans:0},
-  {sec:'B', lec:17, text:'According to the statistics presented in the IPDC workbook, how many adult smokers began before the age of 18?',
-   opts:['3/10','5/10','7/10','9/10'], ans:3},
-  {sec:'B', lec:17, text:'What was the fate of the shining star Devashish Ghosh?',
-   opts:['He is currently working at NASA, even though he had initially declined their offer',
-         'He is working for ISRO since he declined NASA\'s offer to serve his country',
-         'He is working on aerospace research for Lockheed Martin',
-         'He is working at a clothing processing factory in Ahmedabad'], ans:3},
-  {sec:'B', lec:17, text:'How does the \'cool factor\' play a role in recreational drugs (e.g. cigarettes, alcohol)?',
-   opts:['One will borrow money from their family to buy recreational drugs',
-         'One will use recreational drugs out of curiosity',
-         'One will start to use recreational drugs to improve concentration levels',
-         'One will use recreational drugs because of the belief that it improves one\'s social status'], ans:3},
-  {sec:'B', lec:18, text:'Which one of the following services were NOT provided to the victims of the Gujarat earthquake in Bhuj?',
-   opts:['Postcards','Mobile phones','Psychological Trauma Centre','Last rites for the deceased'], ans:1},
-  {sec:'B', lec:18, text:'How did Carl Joss, a reporter from the Swiss magazine Sonntagsblick, describe his experience after performing seva in the Gujarat Earthquake relief camp?',
-   opts:['"The best birthday gift that anyone could have given me"',
-         '"It was a very memorable experience for me"',
-         '"Tiring but definitely worthwhile"',
-         '"It was hard to see the people suffering"'], ans:0},
-  {sec:'B', lec:18, text:'Which of the following seva did the journalist, Carl Joss, NOT perform during the relief work of the Gujarat earthquake?',
-   opts:['Cutting vegetables','Serving food','Donating money','Driving the ambulance'], ans:3},
-  {sec:'B', lec:19, text:'Norgay and Hillary were able to successfully climb Mount Everest. What factor allowed them to do this while their predecessors could not?',
-   opts:['They took permission of the government',
-         'They were experienced in mountaineering',
-         'They were part of a team that worked selflessly',
-         'There was no disappointment in their team'], ans:2},
-  {sec:'B', lec:19, text:'Which of the following is NOT a characteristic of a good team player?',
-   opts:['Selflessness','Respect','Half-heartedness','Adaptability'], ans:2},
-  {sec:'B', lec:19, text:'How did Tenzing Norgay climb Mount Everest?',
-   opts:['With unselfish teamwork','With agility and recklessness','By trying to get ahead on his own','With persistent fast speed'], ans:0},
-  {sec:'B', lec:19, text:'Which of the following does NOT contribute to being a good team player?',
-   opts:['Sacrifice','Value each team member','Make sure to claim your credit','Learn to change, change to learn'], ans:2},
-  {sec:'B', lec:21, text:'What standard did Pramukh Swami Maharaj study until?',
-   opts:['6th standard','12th standard','10th standard','Bachelor\'s degree'], ans:0},
-  {sec:'B', lec:21, text:'What was the first thing that Pramukh Swami Maharaj did, after being appointed as the president of BAPS, in 1950?',
-   opts:['Take a selfie','Delegate work to people','Wash dishes and utensils','Travel overseas'], ans:2},
-  {sec:'B', lec:21, text:'What did Anjali Ahuja do every Wednesday?',
-   opts:['Take a nap','Meet with her mentor to review her progress','Serve the employees lunch','Evaluate everyone\'s wages'], ans:2},
-  {sec:'B', lec:21, text:'Pramukh Swami Maharaj reacted to the workers\' refusal to continue the construction by doing what?',
-   opts:['Lifting tiles','Serving tea','Giving a discourse','Scolding them'], ans:0},
-  {sec:'B', lec:23, text:'Who supported Mahatma Gandhi as his personal secretary for 25 years?',
-   opts:['Vallabhbhai Patel','Vithalbhai Patel','Mahadev Desai','V. P. Menon'], ans:2},
-  {sec:'B', lec:23, text:'As per the IPDC workbook, what is NOT one of the ways to bring a positive change in your perception?',
-   opts:['Make others feel your importance',
-         'Don\'t Understand Small Things to be Small',
-         'Look at the Bigger Picture',
-         'None of the above'], ans:0},
-  {sec:'B', lec:23, text:'______ is to complete a required task or fulfil an obligation, before or at a previously decided time.',
-   opts:['Loyalty','Sincerity','Punctuality','Honesty'], ans:2},
-  {sec:'B', lec:23, text:'How did Mahadev Desai win the complete trust of Mahatma Gandhi?',
-   opts:['By being loyal','By being sincere in his work','By being punctual in all his duties','All of the above'], ans:3},
-  {sec:'B', lec:23, text:'How did Walt Disney bring a change in the attitude of his employees at Disneyland?',
-   opts:['He doubled the salary of all the employees.',
-         'He gave them a new perspective in which to view their role.',
-         'He hired motivational speakers to inspire his employees',
-         'He increased paid leaves for the employees.'], ans:1},
-  {sec:'B', lec:23, text:'What was the reply from the sweeper at NASA when President John F. Kennedy asked him about his job?',
-   opts:['"I\'m helping put a man on the moon."',
-         '"I keep the NASA premises clean."',
-         '"There is no significant contribution from me in NASA\'s success."',
-         '"I clean the instruments to be used for NASA\'s moon mission."'], ans:0},
-  {sec:'B', lec:24, text:'Reminding ourselves that \'life is finite\' can benefit us in many ways. Which of the following are NOT one of those ways?',
-   opts:['It can make our life more meaningful',
-         'It can make us more productive',
-         'It can increase our lifespan',
-         'It can give us clarity'], ans:2},
-  {sec:'B', lec:24, text:'Which of the following are NOT one of the powerful thoughts explored in the lecture "Timeless Wisdom for Daily Life"?',
-   opts:['Live every day as if it were your last',
-         'Look beyond the body',
-         'Whatever happens, happens for the best',
-         'When the going gets tough, the tough get going'], ans:3},
-  {sec:'B', lec:24, text:'Which one of the following famous personalities received a cancer diagnosis from which they learnt to understand life as finite and encouraged them to create the most iconic technological advantages in the 21st century?',
-   opts:['Bill Gates','Steve Jobs','Sundar Pichai','Mark Zuckerberg'], ans:1},
-  {sec:'B', lec:25, text:'How did Raj react to his father when he gave him a Bhagwat Gita instead of the car he asked for?',
-   opts:['He never spoke to his father again',
-         'He told his friend to buy him the car instead',
-         'He asked for an explanation',
-         'He moved to Japan and lived there'], ans:0},
-  {sec:'B', lec:25, text:'According to the workbook, which of the following is NOT one of the 6 important tips when asking for forgiveness?',
-   opts:['Apologize','Make excuses','Show empathy','Trying to make things right'], ans:1},
-  {sec:'B', lec:25, text:'According to the workbook, which of the following is NOT part of the process of forgiving?',
-   opts:['Consider why you want to forgive this person',
-         'Choose to forgive',
-         'Think of the person\'s flaws and share them with others',
-         'When in doubt, take your time'], ans:2},
-  {sec:'B', lec:25, text:'Asking for forgiveness is an act of the ______.',
-   opts:['Courageous','Weak','Foolish','Shy'], ans:0},
-  {sec:'B', lec:25, text:'After forgiving someone, what should we do next? Answer according to the lecture.',
-   opts:['Remind them of their mistake',
-         'Tell others about their mistake',
-         'Forget their mistake and move on',
-         'Tell them to write a letter of apology'], ans:2},
-  {sec:'B', lec:26, text:'Which of the below is NOT an effective method for relieving stress?',
-   opts:['Meditation','Sufficient rest','Smoking cigarettes','Exercise'], ans:2},
-  {sec:'B', lec:26, text:'\'Performing exercise\' best fits into which one of the below categories?',
-   opts:['Important & Urgent','Important but Not Urgent','Not Important but Urgent','Not Important & Not Urgent'], ans:1},
-  {sec:'B', lec:26, text:'\'Mindless web-browsing\' best fits into which one of the below categories?',
-   opts:['Important & Urgent','Important but Not Urgent','Not Important but Urgent','Not Important & Not Urgent'], ans:3},
-  {sec:'B', lec:27, text:'Which one of the following statements is false?',
-   opts:['Physical exercise can increase creativity',
-         'Physical exercise can sharpen memory',
-         'Physical exercise can improve brain power',
-         'Physical exercise can change the color of the brain'], ans:3},
-  {sec:'B', lec:27, text:'According to the Harvard School of Public Health, how much of a portioned plate should be filled with fruits and vegetables?',
-   opts:['15%','25%','40%','50%'], ans:3},
-  {sec:'B', lec:27, text:'According to the Harvard School of Public Health, how much of a portioned plate should be filled with healthy proteins?',
-   opts:['15%','25%','40%','50%'], ans:1},
-  {sec:'B', lec:29, text:'Which of the following does NOT directly benefit from financial planning?',
-   opts:['Retirement','Purchasing a house','Exam technique','Emergencies'], ans:2},
-  {sec:'B', lec:29, text:'Purchasing a smartphone is most likely to be which type of financial goal?',
-   opts:['Short-term','Mid-term','Maximization','Strategic'], ans:0},
-  {sec:'B', lec:29, text:'Which of the following is a fixed-voluntary cost?',
-   opts:['Rent','Gym membership','Medicine','Food'], ans:1},
-  {sec:'B', lec:29, text:'For a person with secure employment, how many months of basic expenses should be saved in an emergency fund?',
-   opts:['At least 1 months\' worth','At least 2 months\' worth','At least 3 months\' worth','At least 12 months\' worth'], ans:2},
-  {sec:'B', lec:29, text:'Which of the following is NOT an important component of financial planning?',
-   opts:['Using compound interest','Investing in an orient fund','Calculating your budget','Creating an emergency fund'], ans:1},
-  {sec:'B', lec:30, text:'Mangesh Mhaskar scored 97% on the 10th standard board exams. But what caused his downfall?',
-   opts:['Lack of finance','Illness','A lack of support from his parents','Bad company'], ans:3},
-  {sec:'B', lec:30, text:'How can we create a good environment for ourselves?',
-   opts:['Read good books','Watch popular shows','Keep negative thoughts','Eat more food'], ans:0},
+              <li><strong>Precision</strong> — The consistency or repeatability of measurements when the same input is measured multiple times under the same conditions. A precise sensor gives very similar readings each time, even if those readings are not close to the true value.
+              <br>Example: A sensor reading 24.8, 24.9, 24.8, 24.9°C for a true 25.0°C is precise but not accurate. Precision depends on noise, resolution, and mechanical stability.</li>
 
-  // ── SECTION C ──────────────────────────────
-  // best: ans index for 2 marks; secondary is the other (1 mark)
-  {sec:'C', lec:16, text:'Rajesh has cleared his 12th standard exam with good grades. He is confused about the selection of his degree course. What should Rajesh do?',
-   opts:['He should seek some advice in choosing a course that is relevant to his prospective career choice.',
-         'He should select the course that is most popular with his friends and other students.'], ans:0},
-  {sec:'C', lec:16, text:'Amit is a very bright student. He wants to be an engineer and get entry to the best company in his field. He has just got admission into the engineering institute that he desired, now what should Amit follow?',
-   opts:['Amit should try to settle down into the new atmosphere, observe what others are doing and should follow in their footsteps.',
-         'Amit should define some short-term goals that will help get entry into the company of his choice.'], ans:1},
-  {sec:'C', lec:16, text:'Anjali is an average Student. She has set a clear long-term goal to join the Civil Services. With the help from experts, she has set some short-term goals too, but she is struggling to achieve them. What should she do?',
-   opts:['Anjali should change her long-term goal to something easier.',
-         'Anjali should create a daily routine that will help her achieve her short-term targets.'], ans:1},
-  {sec:'C', lec:16, text:'What can we learn from the Alexander-The-Great quote: "Bury my body, do not build any monument, keep my hands outside so that the world knows the person who won the world had nothing in his hands when dying"?',
-   opts:['Great people often die unhappy.',
-         'Material gain and reputation are not the most important thing in life.'], ans:1},
-  {sec:'C', lec:17, text:'Neel\'s friend encourages him to smoke some cigarettes because he believes that \'there is no harm in trying it once\'. Why should Neel decline his friend\'s offer to smoke?',
-   opts:['Smoking is harmful and can become addictive.',
-         'Smoking can be an unpleasant experience for beginners.'], ans:0},
-  {sec:'C', lec:17, text:'Devashish Ghosh, an intelligent youth, had great career prospects. But he became addicted to various drugs. The Defense Ministry found him in possession of drugs and blacklisted him. This ruined his career. How do you think Devashish Ghosh could have avoided this situation?',
-   opts:['Devashish should have only used drugs occasionally during his vacation time.',
-         'Devashish should not have taken the risk. He should have avoided the use of drugs completely.'], ans:1},
-  {sec:'C', lec:17, text:'Sejal often gets stressed because she has financial difficulties. She is also addicted to cigarettes, smoking 15 cigarettes daily. She refuses to stop smoking because she says that it helps control her stress. Do you think it is beneficial for her to stop smoking?',
-   opts:['Yes. Spending money on cigarettes is wasting her money. If she can be strong and give up her addiction, then this will be more beneficial in the long term.',
-         'No. By trying to stop smoking she will get more stressed. Which will only make her situation worse.'], ans:0},
-  {sec:'C', lec:18, text:'A charitable NGO is planning on building a school for the local orphans. During the discussion, one volunteer suggests installing air coolers into the school so that the students feel comfortable during the summer. Some other members disagree as it would mean increasing the fundraising target by 5%. What would you suggest?',
-   opts:['"It will be worth the extra effort of fundraising so that the students feel more comfortable."',
-         '"We should only focus on the basic necessities needed to build the school."'], ans:0},
-  {sec:'C', lec:18, text:'The local community has organised a one-day cleanup event. The organisers have invited the local minister alongside sixty members of the community to clean all the trash in the village river. The local media has not confirmed their attendance. Upon hearing this, the minister is considering whether to attend the event or not, what would you advise him?',
-   opts:['You should request the organisers to postpone the event until the media guarantees their attendance.',
-         'You should attend the event even if the media does not attend because it is a good cause.'], ans:1},
-  {sec:'C', lec:19, text:'Sanjay is part of a district football team. So far, he has played a crucial role in getting his team to the finals. Today, Sanjay has been scheduled to play in the final match, but Sanjay\'s back has started hurting in a way that affects his performance. Help him decide what advice he should take.',
-   opts:['Do not tell anyone and play the match even with the chance that your performance might get impacted.',
-         'Alert your coach about it, even if that means he may not let you play in the match. It is better to do what is best for the team.'], ans:1},
-  {sec:'C', lec:19, text:'Anmol has been given the responsibility to lead a new project for an IT company. One of his responsibilities is to hire new people into his team. Which approach do you think is the best to take?',
-   opts:['Make a team with less diversity to help avoid conflicts and confusion.',
-         'Make a team with more diversity to increase innovation, different perspectives, and greater acceptance.'], ans:1},
-  {sec:'C', lec:19, text:'Which attribute of a good team player is emphasised in the quote, "Teamwork: simply stated, it is less me and more we."?',
-   opts:['A good team player should be able to sacrifice his personal gains for the success of the team.',
-         'A good team player should be able to change his personality to fit in with the team.'], ans:0},
-  {sec:'C', lec:21, text:'What is the best way to describe the leadership concept \'Leading without Leading\'?',
-   opts:['Great leaders should delegate as much work as possible to free up their time for the most important things.',
-         'Great leaders can lead through a good example instead of a more commanding nature.'], ans:1},
-  {sec:'C', lec:21, text:'What leadership style best describes the following quotation: "As we look ahead into the next century, leaders will be those who empower others." [Bill Gates]',
-   opts:['Delegative Leadership','Servant Leadership'], ans:1},
-  {sec:'C', lec:21, text:'Jeff Garcia showed up every day to do the work — first one to practice, first one out the tunnel — and in the way he carried himself he demanded that you do the same. Which leadership style best represents this?',
-   opts:['Lead by example','First in, is the first to win'], ans:0},
-  {sec:'C', lec:23, text:'Manan is an intelligent college student. But he often gets late to class, and he rarely submits the assignments on time. His professor is new at his role and has not noticed Manan\'s absences. What should Manan do?',
-   opts:['Manan can maintain his lifestyle but should also stay aware such that his grades do not suffer.',
-         'He should become more punctual in his attendance and submissions.'], ans:1},
-  {sec:'C', lec:23, text:'What is the closest interpretation of the following quote: "\'Small things make perfection, but perfection is not a small thing\'"?',
-   opts:['Try to bring perfection into the small tasks of your day-to-day life. Perfection in small tasks drives our life to perfection.',
-         'Perfection is very important for your career. Bring perfection into your important tasks as a student or as a professional.'], ans:0},
-  {sec:'C', lec:23, text:'Archana is a software engineer. She likes to work on program designing and coding. But she does not like to do the supporting documentation work. She finds it unimportant. What should Archana do?',
-   opts:['Complete the documentation work by noting down only the biggest details.',
-         'Complete the documentation work sincerely. Follow the organization guidelines to specify the details. Even if it seems unimportant, she should be sincere in completing her work.'], ans:1},
-  {sec:'C', lec:24, text:'Every morning Steve Jobs asked himself: "If today was the last day of my life, would I want to do what I am about to do today?" From the following two statements, pick that which you think best explains Jobs\' quote.',
-   opts:['Jobs wanted to remind himself of what is most important in his life and to continue working in that direction.',
-         'Jobs wanted to focus more on achieving short term benefits instead of making long term investments.'], ans:0},
-  {sec:'C', lec:24, text:'"Death teaches about life." Which of the following statements best explains the importance of this quotation?',
-   opts:['We should accept that everything has an ending point.',
-         'Realizing our life as finite can improve our productivity, clarity, and stability.'], ans:1},
-  {sec:'C', lec:25, text:'Anamika and Aditi are friends. But Aditi forgot to invite Anamika to her birthday celebration. Anamika felt upset. A few weeks later, Anamika\'s birthday is approaching, and she is planning her birthday celebration. What should Anamika do?',
-   opts:['Invite Aditi to her birthday celebration. This will make Aditi realize her mistake and more likely to apologize.',
-         'Invite Aditi to her birthday celebration and bridge the gap in their friendship.'], ans:1},
-  {sec:'C', lec:25, text:'Due to poor exam results, Rahul\'s father scolded him in front of his friends. Rahul had an argument with his father in the evening because of this reason. After the argument, Rahul felt even more disturbed. What advice would you give to Rahul?',
-   opts:['Meet your father and say sorry to him. A gentle talk may inspire your father to realize that he should not have scolded you in front of your friends.',
-         'Meet your father and say sorry to him. Accept your fault and apologize for your improper behavior. Promise him that you will work harder for your studies from now onward.'], ans:1},
-  {sec:'C', lec:25, text:'Avinash stays in a hostel. Raj is his roommate. Raj is very notorious and has a habit of mocking everyone. After a few months, Raj stopped teasing Avinash. But Avinash has started to hate Raj because of his nature. What should Avinash do to feel more positive?',
-   opts:['Change rooms and avoid speaking to Raj. That way he cannot ruin his mood.',
-         'Try and forgive Raj for his mocking nature. Focus on his positive qualities instead.'], ans:1},
-  {sec:'C', lec:25, text:'"Resentment is like drinking poison and then hoping it will kill your enemies." — Nelson Mandela. What is the most useful lesson to learn from this quote?',
-   opts:['Keeping bitter emotions for those who have hurt us will only prove to be self-destructive. So, we should learn to forgive others for our own peace of mind.',
-         'Keeping bitter emotions for your enemies is unlikely to inflict harm on them. It is better to act upon it instead.'], ans:0},
-  {sec:'C', lec:26, text:'Which of the following do you think is the most effective method to become more productive?',
-   opts:['Create and follow a schedule while neglecting everything else.',
-         'Find your biggest priorities and ensure they are scheduled and completed.'], ans:1},
-  {sec:'C', lec:26, text:'Jatin has important exams approaching in three weeks. He is aware that he will need to commit a decent amount of time to study, but he would also like to give some time for exercise. How would you suggest that he balances his time?',
-   opts:['Jatin should schedule at least 30 minutes of exercising every morning before studying.',
-         'Jatin should commit to exercising only on the days when he finds spare time after completing his studies and other responsibilities.'], ans:0},
-  {sec:'C', lec:26, text:'Anil is currently learning to code while also working part-time as an IT consultant. Every morning after studying at home, he will drive to meet his client at 11 AM. The journey normally takes around 44 minutes. Anil is trying to decide how to fit this journey into his schedule.',
-   opts:['Anil should leave home at 10:15 AM, so as not to potentially waste any time waiting around.',
-         'Anil should leave home at 10:05 AM, so to include buffer time into his schedule.'], ans:1},
-  {sec:'C', lec:27, text:'Anjali sleeps for 7 hours a night and wakes up a few hours later on Sunday. However, on Monday mornings, Anjali often feels more tired than usual and finds it harder to concentrate. How do you think Anjali should adjust her sleep pattern?',
-   opts:['Anjali should try to sleep extra early on Sunday night so that she feels well-rested on Monday morning.',
-         'Anjali should try to keep the same sleep schedule on weekdays and weekends so as not to disturb her body clock.'], ans:1},
-  {sec:'C', lec:29, text:'The monsoon season saw some serious flooding. The structure of your house has been significantly damaged because of excessive water exposure. The repair work will cost you ₹5 lakh. How should you go about financing the repair?',
-   opts:['Check if your insurance covers water damage, make the necessary insurance claim and withdraw the balance from your emergency fund.',
-         'Check if your insurance covers water damage, make the necessary insurance claim and borrow the balance of the money from a bank.'], ans:0},
-  {sec:'C', lec:29, text:'After graduating, Shivani started working as a data scientist for the last 4 years. She has been earning ₹7 lakh rupees every year. Now that her 25th birthday is approaching, she is wondering about the best time to start a retirement fund. What financial plan will allow her to benefit the most?',
-   opts:['Start investing into a retirement fund straight away to earn more money through compound interest.',
-         'For the next 5-7 years, she should keep her money free so she can spend it. She can then start a retirement fund afterwards.'], ans:0},
+              <li><strong>Drift</strong> — The gradual, unintended change in a sensor's output over time when the input remains constant. It degrades measurement quality over the sensor's lifetime.
+              <br>Types: <strong>Zero drift</strong> (output shifts at zero input) and <strong>Sensitivity drift</strong> (slope of input-output curve changes). Caused by component aging, temperature cycling, humidity, and mechanical stress.</li>
+
+              <li><strong>Resolution</strong> — The smallest detectable change in the input that the sensor can reliably measure and output. It defines the granularity of measurement.
+              <br>Example: A 12-bit ADC with 5V reference has resolution of 5V/4096 = 1.22mV — it cannot detect changes smaller than 1.22mV. Higher resolution means finer measurement detail.</li>
+            </ol>`
+          },
+          {
+            q: "What is ARM? Explain special features of ARM processor.",
+            year: "W23",
+            a: `<strong>ARM (Advanced RISC Machines)</strong> is a family of RISC-based processor architectures licensed to chip manufacturers (NXP, STMicroelectronics, Qualcomm). ARM processors dominate embedded systems and mobile devices due to their power efficiency.
+            <span class="sub-heading">Special Features</span>
+            <ol>
+              <li><strong>RISC Architecture</strong> — Simple, fixed-length instructions (32-bit), single-cycle execution for most instructions, large register file reduces memory access</li>
+              <li><strong>Thumb Instruction Set</strong> — 16-bit compressed subset of ARM instructions, achieves ~65% code density with ~90% performance of 32-bit ARM mode</li>
+              <li><strong>Barrel Shifter</strong> — Integrated shifter that performs shift/rotate operations within the same instruction cycle as the ALU operation, eliminating extra cycles</li>
+              <li><strong>Multiply-Accumulate (MAC)</strong> — Single-cycle hardware multiply and multiply-accumulate operations, essential for DSP and filter algorithms</li>
+              <li><strong>Conditional Execution</strong> — Every instruction can be conditionally executed based on APSR flags (EQ, NE, GT, LT, etc.), reducing branch instructions and pipeline stalls</li>
+              <li><strong>Load/Store Architecture</strong> — Data processing operates only on registers; only load/store instructions access memory, simplifying pipeline design</li>
+              <li><strong>Register Bank</strong> — 16 general-purpose registers (R0-R15), with R13 (SP), R14 (LR), R15 (PC) having special roles; Fast interrupt mode has shadow registers for zero-latency context switching</li>
+              <li><strong>Low Power Consumption</strong> — Multiple power modes, clock gating, and efficient instruction decoding make ARM ideal for battery-powered IoT devices</li>
+              <li><strong>Co-processor Interface</strong> — Supports up to 16 co-processors for extending functionality (FPU, MMU, DSP instructions)</li>
+            </ol>`
+          },
+          {
+            q: "What is ARM? Explain special features of ARM processor.",
+            year: "S23",
+            a: `Same as the W23 answer above — ARM is a RISC processor family with features including Thumb instruction set, barrel shifter, MAC unit, conditional execution, load/store architecture, register bank, and low power design.`
+          },
+          {
+            q: "Explain CSPR in ARM.",
+            year: "S24",
+            a: `The <strong>CPSR (Current Program Status Register)</strong> is a 32-bit register in ARM that stores condition code flags and control bits. It is crucial for conditional execution and mode management.
+            <span class="sub-heading">Flag Bits (Condition Flags)</span>
+            <ul>
+              <li><strong>N (Bit 31) — Negative</strong>: Set to 1 if the result of an ALU operation is negative (bit 31 of result is 1)</li>
+              <li><strong>Z (Bit 30) — Zero</strong>: Set to 1 if the ALU result is zero</li>
+              <li><strong>C (Bit 29) — Carry</strong>: Set to 1 if a carry-out occurs from the ALU (in addition) or a borrow does not occur (in subtraction)</li>
+              <li><strong>V (Bit 28) — Overflow</strong>: Set to 1 if signed overflow occurs (result exceeds signed range)</li>
+            </ul>
+            <span class="sub-heading">Control Bits</span>
+            <ul>
+              <li><strong>T (Bit 5) — Thumb State</strong>: 1 = Thumb mode, 0 = ARM mode</li>
+              <li><strong>I (Bit 7) — IRQ Disable</strong>: When 1, IRQ interrupts are disabled</li>
+              <li><strong>F (Bit 6) — FIQ Disable</strong>: When 1, Fast Interrupt requests are disabled</li>
+              <li><strong>M[4:0] (Bits 0-4) — Mode Bits</strong>: Select processor mode:
+                <ul>
+                  <li>10000 — User mode (unprivileged)</li>
+                  <li>10001 — FIQ mode (Fast Interrupt)</li>
+                  <li>10010 — IRQ mode (Interrupt)</li>
+                  <li>10011 — Supervisor mode (SVC, after reset)</li>
+                  <li>10111 — Abort mode</li>
+                  <li>11011 — Undefined mode</li>
+                  <li>11111 — System mode (privileged, uses User registers)</li>
+                </ul>
+              </li>
+            </ul>`
+          },
+          {
+            q: "Explain pinMode(), digitalRead() and digitalWrite() functions of Arduino.",
+            year: "W24 OR",
+            a: `<span class="sub-heading">pinMode(pin, mode)</span>
+            Configures a GPIO pin as INPUT, OUTPUT, or INPUT_PULLUP. Must be called in <code>setup()</code> before using the pin.
+            <br><strong>Parameters:</strong> <code>pin</code> — pin number (0-13 on Uno), <code>mode</code> — INPUT, OUTPUT, or INPUT_PULLUP
+            <br><strong>Example:</strong> <code>pinMode(13, OUTPUT);</code> — Sets pin 13 as output
+            <br><strong>Internal behavior:</strong> Configures the corresponding DDRx (Data Direction Register) bits and PORTx register for pull-up.
+
+            <span class="sub-heading">digitalRead(pin)</span>
+            Reads the digital value (HIGH or LOW) from a pin configured as INPUT.
+            <br><strong>Returns:</strong> HIGH (1, ~5V) or LOW (0, ~0V)
+            <br><strong>Example:</strong> <code>int val = digitalRead(7);</code> — Reads pin 7 state into variable val
+            <br><strong>Internal behavior:</strong> Reads the PINx register bit corresponding to the pin.
+
+            <span class="sub-heading">digitalWrite(pin, value)</span>
+            Writes a HIGH or LOW value to a pin configured as OUTPUT.
+            <br><strong>Parameters:</strong> <code>pin</code> — pin number, <code>value</code> — HIGH or LOW
+            <br><strong>Example:</strong> <code>digitalWrite(13, HIGH);</code> — Sets pin 13 to 5V (turns on built-in LED)
+            <br><strong>Internal behavior:</strong> Sets or clears the corresponding bit in PORTx register.
+
+            <span class="sub-heading">Complete Example</span>
+            <code>
+            void setup() {<br>
+            &nbsp;&nbsp;pinMode(7, INPUT);<br>
+            &nbsp;&nbsp;pinMode(13, OUTPUT);<br>
+            }<br>
+            void loop() {<br>
+            &nbsp;&nbsp;int btn = digitalRead(7);<br>
+            &nbsp;&nbsp;digitalWrite(13, btn);<br>
+            }
+            </code>`
+          },
+          {
+            q: "Draw and Explain ATMEGA328P Microcontroller Pin diagram.",
+            year: "S23",
+            a: `The <strong>ATMEGA328P</strong> is an 8-bit AVR RISC microcontroller in a 28-pin DIP package, the heart of Arduino Uno.
+            <span class="sub-heading">Pin Configuration</span>
+            <ul>
+              <li><strong>Power:</strong> VCC (Pin 7) — 5V supply, GND (Pin 8, Pin 22) — Ground, AVCC (Pin 20) — Analog reference supply, AREF (Pin 21) — Analog reference voltage</li>
+              <li><strong>Digital I/O (14 pins):</strong> Pins 0-13. Pin 0 (RXD) and Pin 1 (TXD) serve as UART receive/transmit</li>
+              <li><strong>Analog Input (6 pins):</strong> Pins A0-A5 (PC0-PC5), connected to 10-bit ADC with 0-5V range</li>
+              <li><strong>PWM Output (6 pins):</strong> Pins 3, 5, 6, 9, 10, 11 (Timer0, Timer1, Timer2 outputs)</li>
+              <li><strong>SPI (4 pins):</strong> Pin 10 (SS), Pin 11 (MOSI), Pin 12 (MISO), Pin 13 (SCK)</li>
+              <li><strong>I2C (2 pins):</strong> Pin A4 (SDA), Pin A5 (SCL)</li>
+              <li><strong>Reset:</strong> Pin 1 (active LOW, with internal pull-up)</li>
+              <li><strong>Crystal Oscillator:</strong> Pins 9 and 10 (XTAL1, XTAL2) for external 16MHz crystal</li>
+            </ul>
+            <span class="sub-heading">Key Specifications</span>
+            <ul>
+              <li>32KB Flash memory (program storage), 2KB SRAM, 1KB EEPROM</li>
+              <li>16 MHz maximum clock speed</li>
+              <li>23 programmable I/O lines</li>
+              <li>2 8-bit Timers (Timer0, Timer2) + 1 16-bit Timer (Timer1)</li>
+              <li>6-channel 10-bit ADC</li>
+              <li>USART, SPI, I2C interfaces</li>
+            </ul>`
+          },
+          {
+            q: "Discuss various register set of 8051.",
+            year: "W23",
+            a: `The <strong>8051</strong> microcontroller has the following key registers:
+            <span class="sub-heading">Core Registers</span>
+            <ul>
+              <li><strong>Accumulator (A, 8-bit)</strong> — The most important register; used for all arithmetic and logical operations (ADD, SUB, AND, OR, etc.). One operand is always in A.</li>
+              <li><strong>B Register (8-bit)</strong> — Used with A for MUL (multiply A×B, result in A:B) and DIV (divide A by B, quotient in A, remainder in B). Otherwise usable as general-purpose register.</li>
+              <li><strong>Program Counter (PC, 16-bit)</strong> — Points to the address of the next instruction to be fetched from program memory. Automatically incremented after each fetch.</li>
+              <li><strong>Data Pointer (DPTR, 16-bit)</strong> — Used for accessing external ROM/RAM. Composed of DPH (high byte) and DPL (low byte). Used with MOVC and MOVX instructions.</li>
+              <li><strong>Stack Pointer (SP, 8-bit)</strong> — Points to the top of the stack in internal RAM (locations 08H-1FH by default). Pre-incremented before PUSH, post-decremented after POP.</li>
+            </ul>
+            <span class="sub-heading">Status Register</span>
+            <ul>
+              <li><strong>PSW (Program Status Word, 8-bit)</strong> — Stores flags and register bank selection:
+                <ul>
+                  <li>CY (PSW.7) — Carry flag</li>
+                  <li>AC (PSW.6) — Auxiliary carry flag (for BCD operations)</li>
+                  <li>F0 (PSW.5) — General-purpose flag</li>
+                  <li>RS1, RS0 (PSW.4, PSW.3) — Register bank select (00=Bank0, 01=Bank1, 10=Bank2, 11=Bank3)</li>
+                  <li>OV (PSW.2) — Overflow flag</li>
+                  <li>P (PSW.0) — Parity flag (auto-set for even parity in A)</li>
+                </ul>
+              </li>
+            </ul>
+            <span class="sub-heading">General Purpose Registers</span>
+            <ul>
+              <li><strong>4 Register Banks</strong> (Bank 0-3), each with 8 registers (R0-R7), occupying internal RAM addresses 00H-1FH. Active bank selected by RS1:RS0 bits in PSW.</li>
+            </ul>
+            <span class="sub-heading">Special Function Registers (SFRs)</span>
+            <ul>
+              <li><strong>P0, P1, P2, P3</strong> — Port latches for I/O ports</li>
+              <li><strong>TMOD</strong> — Timer mode control register</li>
+              <li><strong>TCON</strong> — Timer control register (timer flags, interrupt flags)</li>
+              <li><strong>SCON</strong> — Serial port control register</li>
+              <li><strong>IE</strong> — Interrupt enable register</li>
+              <li><strong>IP</strong> — Interrupt priority register</li>
+              <li><strong>TH0, TL0, TH1, TL1</strong> — Timer 0 and Timer 1 byte registers</li>
+              <li><strong>SBUF</strong> — Serial data buffer</li>
+            </ul>`
+          }
+        ]
+      }
+    ]
+  }
 ];
 
-/* ── State ── */
-let answers = new Array(130).fill(null);
-let currentSection = 0; // 0=A, 1=B, 2=C
-let reviewMode = false;
-const SECTIONS = [
-  { id:'A', name:'Section A — True or False', desc:'Choose True or False for each statement. Each correct answer = 1 mark.', range:[0,49] },
-  { id:'B', name:'Section B — Multiple Choice', desc:'Select the single best answer for each question. Each correct answer = 1 mark.', range:[50,99] },
-  { id:'C', name:'Section C — Applied Thinking', desc:'Choose the best answer from two options. Each correct answer = 1 mark.', range:[100,129] },
-];
+// ─── Render Logic ───
+const container = document.getElementById('qaContainer');
+const searchInput = document.getElementById('searchInput');
+const noResults = document.getElementById('noResults');
+let allCards = [];
 
-function startExam() {
-  document.getElementById('splash').classList.remove('active');
-  document.getElementById('exam').classList.add('active');
-  document.getElementById('totalQCount').textContent = '130';
-  renderSection(0);
-}
+function renderAll() {
+  container.innerHTML = '';
+  allCards = [];
 
-function renderSection(secIdx) {
-  currentSection = secIdx;
-  const sec = SECTIONS[secIdx];
-  const [s, e] = sec.range;
-  const content = document.getElementById('examContent');
-  content.innerHTML = '';
+  data.forEach(unit => {
+    const section = document.createElement('section');
+    section.className = 'unit';
+    section.dataset.unit = unit.unit;
 
-  // Section header
-  const hdr = document.createElement('div');
-  hdr.className = 'section-header';
-  hdr.innerHTML = `
-    <div class="section-pill">
-      <span>Section ${sec.id}</span>
-      <span style="color:var(--muted)">·</span>
-      <span>Q${s+1}–${e+1}</span>
-    </div>
-    <div class="section-name">${sec.name}</div>
-    <div class="section-desc">${sec.desc}</div>
-  `;
-  content.appendChild(hdr);
-
-  // Jump panel
-  const jp = document.createElement('div');
-  jp.className = 'jump-panel';
-  jp.id = 'jumpPanel';
-  content.appendChild(jp);
-
-  // Questions
-  const wrap = document.createElement('div');
-  wrap.className = 'questions-wrap';
-
-  for (let i = s; i <= e; i++) {
-    const q = QUESTIONS[i];
-    const qNum = i + 1;
-    const card = document.createElement('div');
-    card.className = 'q-card anchor';
-    card.id = `q${qNum}`;
-    card.style.animationDelay = `${(i - s) * 0.03}s`;
-
-    const chosen = answers[i];
-    const isCorrect = chosen === q.ans;
-    if (reviewMode && chosen !== null) {
-      card.classList.add(isCorrect ? 'answered-correct' : 'answered-wrong');
-    }
-
-    const optLetters = ['a','b','c','d'];
-    let optsHtml = q.opts.map((o, oi) => {
-      let cls = 'opt-label';
-      if (chosen === oi) cls += ' selected';
-      if (reviewMode) {
-        if (oi === q.ans) cls += ' correct-ans';
-        else if (chosen === oi && oi !== q.ans) cls += ' wrong-ans';
-      }
-      let extra = '';
-      if (reviewMode && q.sec === 'C') {
-        if (oi === q.ans)   extra = '<span class="sec-c-tag best">Best · 1 mark</span>';
-        else                extra = '<span class="sec-c-tag secondary">Alt · 1 mark</span>';
-      }
-      return `<label class="${cls}">
-        <input type="radio" name="q${qNum}" value="${oi}" onchange="selectAns(${i}, ${oi})">
-        <span class="opt-dot"></span>
-        <span style="flex:1"><strong style="opacity:.5">${optLetters[oi]}.</strong> ${o}${extra}</span>
-      </label>`;
-    }).join('');
-
-    card.innerHTML = `
-      <div class="q-top">
-        <div class="q-num">${qNum}</div>
+    // Unit header
+    section.innerHTML = `
+      <div class="unit-header">
+        <div class="unit-num">${unit.unit}</div>
         <div>
-          <div class="q-text">${q.text}</div>
-          <div class="q-lec">Lecture ${q.lec}</div>
+          <h2>${unit.unitTitle}</h2>
+          <div class="topics">${unit.topics}</div>
         </div>
       </div>
-      <div class="options">${optsHtml}</div>
     `;
-    wrap.appendChild(card);
-  }
-  content.appendChild(wrap);
 
-  // Nav buttons
-  document.getElementById('prevBtn').style.display = secIdx > 0 ? 'inline-flex' : 'none';
-  if (secIdx < 2) {
-    document.getElementById('nextBtn').style.display = 'inline-flex';
-    document.getElementById('submitBtn').style.display = 'none';
-  } else {
-    document.getElementById('nextBtn').style.display = 'none';
-    document.getElementById('submitBtn').style.display = 'inline-flex';
-  }
+    unit.groups.forEach(group => {
+      const groupDiv = document.createElement('div');
+      groupDiv.className = 'marks-group';
+      groupDiv.dataset.marks = group.marks;
 
-  updateJump();
-  updateProgress();
-  window.scrollTo({top:0, behavior:'smooth'});
-}
+      groupDiv.innerHTML = `<div class="marks-label"><span class="dot"></span>${group.marks} Marks — ${group.label}</div>`;
 
-function selectAns(qIdx, optIdx) {
-  answers[qIdx] = optIdx;
-  const q = QUESTIONS[qIdx];
-  const qNum = qIdx + 1;
-  const card = document.getElementById(`q${qNum}`);
-  // Update visual
-  card.querySelectorAll('.opt-label').forEach((lbl, i) => {
-    lbl.classList.toggle('selected', i === optIdx);
+      group.questions.forEach((item, idx) => {
+        const card = document.createElement('div');
+        card.className = 'qa-card';
+        card.dataset.marks = group.marks;
+        card.dataset.searchText = (item.q + ' ' + item.a).toLowerCase().replace(/<[^>]*>/g, '');
+
+        card.innerHTML = `
+          <div class="qa-question" role="button" tabindex="0" aria-expanded="false">
+            <div class="q-info">
+              <div class="q-meta">
+                <span class="mark-badge">${group.marks}M</span>
+                <span class="year-badge">${item.year}</span>
+              </div>
+              <div class="q-text">${item.q}</div>
+            </div>
+            <button class="q-toggle" aria-label="Toggle answer"><i class="fas fa-chevron-down"></i></button>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-inner">${item.a}</div>
+          </div>
+        `;
+
+        // Toggle
+        const btn = card.querySelector('.qa-question');
+        btn.addEventListener('click', () => toggleCard(card));
+        btn.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleCard(card); } });
+
+        groupDiv.appendChild(card);
+        allCards.push(card);
+      });
+
+      section.appendChild(groupDiv);
+    });
+
+    container.appendChild(section);
   });
-  updateProgress();
-  updateJump();
 }
 
-function updateProgress() {
-  const answered = answers.filter(a => a !== null).length;
-  document.getElementById('answeredCount').textContent = answered;
-  document.getElementById('progressFill').style.width = `${(answered/130)*100}%`;
+function toggleCard(card) {
+  const isOpen = card.classList.contains('open');
+  card.classList.toggle('open');
+  card.querySelector('.qa-question').setAttribute('aria-expanded', !isOpen);
 }
 
-function updateJump() {
-  const sec = SECTIONS[currentSection];
-  const [s, e] = sec.range;
-  const jp = document.getElementById('jumpPanel');
-  if (!jp) return;
-  jp.innerHTML = '<span class="jump-label">Jump to</span>';
-  for (let i = s; i <= e; i++) {
-    const btn = document.createElement('button');
-    btn.className = 'jump-btn';
-    btn.textContent = i + 1;
-    if (answers[i] !== null) {
-      if (reviewMode) {
-        btn.classList.add(answers[i] === QUESTIONS[i].ans ? 'j-correct' : 'j-wrong');
-      } else {
-        btn.classList.add('j-answered');
-      }
+function expandAll() {
+  allCards.forEach(c => {
+    c.classList.add('open');
+    c.querySelector('.qa-question').setAttribute('aria-expanded', 'true');
+  });
+}
+
+function collapseAll() {
+  allCards.forEach(c => {
+    c.classList.remove('open');
+    c.querySelector('.qa-question').setAttribute('aria-expanded', 'false');
+  });
+}
+
+function filterMarks(m) {
+  allCards.forEach(c => {
+    if (m === 0) {
+      c.style.display = '';
+    } else {
+      c.style.display = parseInt(c.dataset.marks) === m ? '' : 'none';
     }
-    btn.onclick = () => {
-      document.getElementById(`q${i+1}`).scrollIntoView({behavior:'smooth', block:'start'});
-    };
-    jp.appendChild(btn);
-  }
+  });
+  // Hide empty groups
+  document.querySelectorAll('.marks-group').forEach(g => {
+    const visibleCards = g.querySelectorAll('.qa-card:not([style*="display: none"])');
+    g.style.display = visibleCards.length ? '' : 'none';
+  });
+  // Hide empty units
+  document.querySelectorAll('.unit').forEach(u => {
+    const visibleGroups = u.querySelectorAll('.marks-group:not([style*="display: none"])');
+    u.style.display = visibleGroups.length ? '' : 'none';
+  });
 }
 
-function nextSection() {
-  if (currentSection < 2) renderSection(currentSection + 1);
-}
-function prevSection() {
-  if (currentSection > 0) renderSection(currentSection - 1);
-}
+// Search
+searchInput.addEventListener('input', () => {
+  const query = searchInput.value.toLowerCase().trim();
+  let anyVisible = false;
 
-function submitExam() {
-  if (!confirm('Submit the exam? You can review answers after.')) return;
-  showResults();
-}
-
-function showResults() {
-  document.getElementById('exam').classList.remove('active');
-  document.getElementById('results').classList.add('active');
-
-  let correct = 0, wrong = 0, skipped = 0;
-  answers.forEach((a, i) => {
-    if (a === null) skipped++;
-    else if (a === QUESTIONS[i].ans) correct++;
-    else wrong++;
+  allCards.forEach(c => {
+    if (!query) {
+      c.style.display = '';
+      anyVisible = true;
+    } else {
+      const match = c.dataset.searchText.includes(query);
+      c.style.display = match ? '' : 'none';
+      if (match) anyVisible = true;
+    }
   });
 
-  const total = 130;
-  const pct = Math.round((correct / total) * 100);
+  noResults.style.display = anyVisible ? 'none' : 'block';
 
-  document.getElementById('ringPct').textContent = pct + '%';
-  document.getElementById('ringPts').textContent = `${correct}/${total}`;
-  document.getElementById('rCorrect').textContent = correct;
-  document.getElementById('rWrong').textContent = wrong;
-  document.getElementById('rSkipped').textContent = skipped;
+  // Auto-expand matching cards on search
+  if (query) {
+    allCards.forEach(c => {
+      if (c.style.display !== 'none') {
+        c.classList.add('open');
+        c.querySelector('.qa-question').setAttribute('aria-expanded', 'true');
+      }
+    });
+  }
 
-  // Grade
-  let grade, gradeStyle, icon;
-  if (pct >= 90)      { grade='A+ · Distinction'; gradeStyle='background:rgba(0,229,160,.15);color:var(--correct);border:1px solid rgba(0,229,160,.3)'; icon='🏆'; }
-  else if (pct >= 75) { grade='A · First Class'; gradeStyle='background:rgba(0,212,255,.15);color:var(--accent);border:1px solid rgba(0,212,255,.3)'; icon='🎓'; }
-  else if (pct >= 60) { grade='B · Second Class'; gradeStyle='background:rgba(124,107,255,.15);color:var(--accent2);border:1px solid rgba(124,107,255,.3)'; icon='👍'; }
-  else if (pct >= 40) { grade='C · Pass'; gradeStyle='background:rgba(255,183,64,.15);color:var(--warn);border:1px solid rgba(255,183,64,.3)'; icon='📚'; }
-  else                { grade='F · Needs Improvement'; gradeStyle='background:rgba(255,79,107,.15);color:var(--wrong);border:1px solid rgba(255,79,107,.3)'; icon='💪'; }
+  // Hide empty groups/units
+  document.querySelectorAll('.marks-group').forEach(g => {
+    const visibleCards = g.querySelectorAll('.qa-card:not([style*="display: none"])');
+    g.style.display = visibleCards.length ? '' : 'none';
+  });
+  document.querySelectorAll('.unit').forEach(u => {
+    const visibleGroups = u.querySelectorAll('.marks-group:not([style*="display: none"])');
+    u.style.display = visibleGroups.length ? '' : 'none';
+  });
+});
 
-  document.getElementById('resultIcon').textContent = icon;
-  document.getElementById('gradeBadge').textContent = grade;
-  document.getElementById('gradeBadge').style.cssText += ';' + gradeStyle;
+// Scroll-to-top button
+const scrollBtn = document.getElementById('scrollTopBtn');
+window.addEventListener('scroll', () => {
+  scrollBtn.classList.toggle('visible', window.scrollY > 400);
+}, { passive: true });
 
-  // Animate ring
-  const circumference = 2 * Math.PI * 70; // 439.82
-  const offset = circumference - (pct / 100) * circumference;
-  setTimeout(() => {
-    document.getElementById('ringFill').style.strokeDashoffset = offset;
-  }, 200);
-}
-
-function reviewExam() {
-  reviewMode = true;
-  document.getElementById('results').classList.remove('active');
-  document.getElementById('exam').classList.add('active');
-  document.getElementById('nextBtn').textContent = 'Next Section →';
-  document.getElementById('submitBtn').textContent = 'Back to Results';
-  document.getElementById('submitBtn').onclick = () => {
-    document.getElementById('exam').classList.remove('active');
-    document.getElementById('results').classList.add('active');
-  };
-  renderSection(0);
-}
-
-function restartExam() {
-  answers = new Array(130).fill(null);
-  reviewMode = false;
-  currentSection = 0;
-  document.getElementById('results').classList.remove('active');
-  document.getElementById('exam').classList.add('active');
-  document.getElementById('submitBtn').onclick = submitExam;
-  document.getElementById('nextBtn').textContent = 'Next Section →';
-  renderSection(0);
-}
+// Init
+renderAll();
 </script>
 </body>
 </html>
