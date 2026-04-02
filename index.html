@@ -1,1417 +1,1626 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GTU IoT & Applications – Question Bank</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=Source+Serif+4:wght@600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<style>
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reetu's Pharmacy Job Portal | Ontario, Canada</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+	
+	<style>
+	
+	/* ============================================
+   PHARMA CAREERS - Job Portal Stylesheet
+   ============================================ */
 
-  :root {
-    --bg: #0e0e0e;
-    --bg2: #151515;
-    --card: #1a1a1a;
-    --card-hover: #1f1f1f;
-    --border: #2a2a2a;
-    --fg: #e8e4df;
-    --fg2: #9e9890;
-    --accent: #d4a053;
-    --accent-dim: rgba(212,160,83,0.12);
-    --accent-glow: rgba(212,160,83,0.06);
-    --green: #6ecf8e;
-    --green-dim: rgba(110,207,142,0.1);
-    --radius: 10px;
-  }
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --primary-light: #dbeafe;
+    --accent: #10b981;
+    --accent-light: #d1fae5;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --bg: #f0f4f8;
+    --bg-card: #ffffff;
+    --text: #1e293b;
+    --text-secondary: #64748b;
+    --border: #e2e8f0;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+    --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+    --shadow-xl: 0 20px 40px rgba(0,0,0,0.12);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --radius-lg: 16px;
+    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-  html { scroll-behavior: smooth; }
+.dark-mode {
+    --bg: #0f172a;
+    --bg-card: #1e293b;
+    --text: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --border: #334155;
+    --shadow: 0 1px 3px rgba(0,0,0,0.3);
+    --shadow-lg: 0 10px 25px rgba(0,0,0,0.4);
+    --primary-light: #1e3a5f;
+    --accent-light: #064e3b;
+}
 
-  body {
-    font-family: 'DM Sans', sans-serif;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     background: var(--bg);
-    color: var(--fg);
-    line-height: 1.7;
-    -webkit-font-smoothing: antialiased;
-  }
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+    transition: background var(--transition), color var(--transition);
+}
 
-  /* Subtle grain texture overlay */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 9999;
-  }
-
-  /* Ambient glow blobs */
-  .glow-tl, .glow-br {
-    position: fixed;
-    width: 500px;
-    height: 500px;
-    border-radius: 50%;
-    filter: blur(150px);
-    pointer-events: none;
-    z-index: 0;
-  }
-  .glow-tl { top: -200px; left: -150px; background: var(--accent-glow); }
-  .glow-br { bottom: -200px; right: -150px; background: var(--green-dim); }
-
-  .container {
-    position: relative;
-    z-index: 1;
-    max-width: 820px;
+.container {
+    max-width: 1280px;
     margin: 0 auto;
-    padding: 60px 24px 100px;
-  }
+    padding: 0 20px;
+}
 
-  /* Header */
-  .header {
-    text-align: center;
-    margin-bottom: 56px;
-    animation: fadeUp 0.8s ease;
-  }
-  .header .tag {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--accent);
-    background: var(--accent-dim);
-    padding: 5px 14px;
-    border-radius: 20px;
-    margin-bottom: 20px;
-  }
-  .header h1 {
-    font-family: 'Source Serif 4', serif;
-    font-weight: 700;
-    font-size: clamp(28px, 5vw, 42px);
-    line-height: 1.2;
-    color: var(--fg);
-    margin-bottom: 12px;
-  }
-  .header p {
-    color: var(--fg2);
-    font-size: 15px;
-    max-width: 520px;
-    margin: 0 auto;
-  }
-  .header .meta {
+/* ===== PAGE LOADER ===== */
+.page-loader {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
     display: flex;
+    align-items: center;
     justify-content: center;
-    gap: 24px;
-    margin-top: 18px;
-    font-size: 12px;
-    color: var(--fg2);
-  }
-  .header .meta span i {
-    color: var(--accent);
-    margin-right: 5px;
-  }
+    z-index: 9999;
+    transition: opacity 0.5s, visibility 0.5s;
+}
+.page-loader.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+.loader-content {
+    text-align: center;
+    color: #fff;
+}
+.pill-icon {
+    font-size: 4rem;
+    animation: bounce 1s infinite;
+}
+.loader-content h2 {
+    margin: 20px 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+.loader-bar {
+    width: 240px;
+    height: 6px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 3px;
+    overflow: hidden;
+    margin: 0 auto;
+}
+.loader-progress {
+    width: 0;
+    height: 100%;
+    background: #fff;
+    border-radius: 3px;
+    animation: load 2s ease-in-out forwards;
+}
 
-  /* Unit section */
-  .unit {
-    margin-bottom: 48px;
-    animation: fadeUp 0.8s ease both;
-  }
-  .unit:nth-child(2) { animation-delay: 0.1s; }
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+@keyframes load {
+    0% { width: 0; }
+    100% { width: 100%; }
+}
 
-  .unit-header {
+/* ===== HEADER ===== */
+.header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+    transition: background var(--transition);
+}
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.logo {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-bottom: 24px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid var(--border);
-  }
-  .unit-num {
+}
+.logo-icon {
+    font-size: 2rem;
+}
+.logo h1 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.tagline {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+.header-actions {
     display: flex;
+    gap: 10px;
     align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    background: var(--accent-dim);
-    color: var(--accent);
-    font-weight: 700;
-    font-size: 14px;
-    flex-shrink: 0;
-  }
-  .unit-header h2 {
-    font-family: 'Source Serif 4', serif;
-    font-weight: 600;
-    font-size: 20px;
-    color: var(--fg);
-  }
-  .unit-header .topics {
-    font-size: 12px;
-    color: var(--fg2);
-    margin-top: 2px;
-  }
+}
 
-  /* Marks group */
-  .marks-group {
-    margin-bottom: 24px;
-  }
-  .marks-label {
+/* ===== BUTTONS ===== */
+.btn {
+    padding: 8px 18px;
+    border-radius: var(--radius-sm);
+    border: none;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all var(--transition);
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--fg2);
-    margin-bottom: 12px;
-    padding-left: 2px;
-  }
-  .marks-label .dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
+}
+.btn-primary {
+    background: var(--primary);
+    color: #fff;
+}
+.btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+.btn-accent {
     background: var(--accent);
-  }
-
-  /* Q&A Card */
-  .qa-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    margin-bottom: 8px;
-    overflow: hidden;
-    transition: border-color 0.3s, background 0.3s;
-  }
-  .qa-card:hover {
-    border-color: #333;
-  }
-  .qa-card.open {
-    border-color: rgba(212,160,83,0.25);
-    background: var(--card-hover);
-  }
-
-  .qa-question {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 16px 18px;
-    cursor: pointer;
-    user-select: none;
-    transition: background 0.2s;
-  }
-  .qa-question:hover {
-    background: rgba(255,255,255,0.015);
-  }
-  .qa-question:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: -2px;
-    border-radius: var(--radius);
-  }
-
-  .q-info {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    flex: 1;
-    min-width: 0;
-  }
-  .q-meta {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 11px;
-    color: var(--fg2);
-  }
-  .q-meta .mark-badge {
-    background: var(--accent-dim);
-    color: var(--accent);
-    padding: 1px 7px;
-    border-radius: 4px;
-    font-weight: 500;
-  }
-  .q-meta .year-badge {
-    color: var(--fg2);
-    opacity: 0.7;
-  }
-  .q-text {
-    font-size: 14.5px;
-    font-weight: 400;
-    color: var(--fg);
-    line-height: 1.6;
-  }
-
-  .q-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    border-radius: 6px;
+    color: #fff;
+}
+.btn-accent:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+.btn-outline {
     background: transparent;
-    border: none;
-    color: var(--fg2);
-    font-size: 12px;
-    flex-shrink: 0;
-    margin-top: 2px;
-    transition: transform 0.3s, color 0.3s, background 0.3s;
-    cursor: pointer;
-  }
-  .qa-card.open .q-toggle {
-    transform: rotate(180deg);
-    color: var(--accent);
-    background: var(--accent-dim);
-  }
-
-  .qa-answer {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .qa-card.open .qa-answer {
-    max-height: 2000px;
-  }
-  .qa-answer-inner {
-    padding: 0 18px 18px 18px;
-    border-top: 1px solid var(--border);
-    margin-top: 0;
-    padding-top: 14px;
-  }
-  .qa-answer-inner p,
-  .qa-answer-inner li {
-    font-size: 13.5px;
-    color: var(--fg2);
-    line-height: 1.75;
-  }
-  .qa-answer-inner strong {
-    color: var(--fg);
-    font-weight: 500;
-  }
-  .qa-answer-inner ul, .qa-answer-inner ol {
-    padding-left: 18px;
-    margin: 6px 0;
-  }
-  .qa-answer-inner li {
-    margin-bottom: 3px;
-  }
-  .qa-answer-inner .sub-heading {
-    color: var(--accent);
-    font-size: 13px;
-    font-weight: 600;
-    margin: 12px 0 4px;
-    display: block;
-  }
-  .qa-answer-inner code {
-    background: rgba(255,255,255,0.06);
-    padding: 1px 6px;
-    border-radius: 4px;
-    font-size: 12.5px;
-    color: var(--green);
-  }
-
-  /* Stats bar */
-  .stats-bar {
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 40px;
-    animation: fadeUp 0.8s ease 0.05s both;
-  }
-  .stat {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 10px 18px;
-    font-size: 13px;
-  }
-  .stat .num {
-    font-weight: 700;
-    font-size: 18px;
-    color: var(--accent);
-  }
-  .stat .label {
-    color: var(--fg2);
-    font-size: 12px;
-  }
-
-  /* Controls */
-  .controls {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 32px;
-    justify-content: center;
-    flex-wrap: wrap;
-    animation: fadeUp 0.8s ease 0.08s both;
-  }
-  .ctrl-btn {
-    background: var(--card);
-    border: 1px solid var(--border);
-    color: var(--fg2);
-    font-size: 12px;
-    font-family: 'DM Sans', sans-serif;
-    padding: 8px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .ctrl-btn:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-    background: var(--accent-dim);
-  }
-  .ctrl-btn:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
-
-  /* Search */
-  .search-wrap {
-    position: relative;
-    max-width: 400px;
-    margin: 0 auto 28px;
-    animation: fadeUp 0.8s ease 0.06s both;
-  }
-  .search-wrap i {
-    position: absolute;
-    left: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--fg2);
-    font-size: 13px;
-    pointer-events: none;
-  }
-  .search-wrap input {
-    width: 100%;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 10px 14px 10px 38px;
-    color: var(--fg);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  .search-wrap input::placeholder { color: var(--fg2); opacity: 0.5; }
-  .search-wrap input:focus { border-color: var(--accent); }
-
-  .no-results {
-    text-align: center;
-    color: var(--fg2);
-    font-size: 14px;
-    padding: 40px 0;
-    display: none;
-  }
-
-  /* Scroll-to-top */
-  .scroll-top {
-    position: fixed;
-    bottom: 28px;
-    right: 28px;
+    border: 2px solid var(--border);
+    color: var(--text);
+}
+.btn-outline:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+.btn-icon {
+    background: transparent;
+    border: 2px solid var(--border);
     width: 40px;
     height: 40px;
-    border-radius: 10px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    color: var(--fg2);
-    font-size: 14px;
-    cursor: pointer;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 100;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: all 0.3s;
-    pointer-events: none;
-  }
-  .scroll-top.visible {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
-  .scroll-top:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+.btn-icon:hover {
+    border-color: var(--primary);
+    transform: scale(1.1);
+}
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 0.78rem;
+}
+.btn-close {
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+    line-height: 1;
+}
 
-  /* Footer */
-  .footer {
+/* ===== PROFILE BANNER ===== */
+.profile-banner {
+    padding: 30px 0;
+    background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 50%, #10b981 100%);
+}
+.profile-card {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(20px);
+    padding: 30px;
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #fff;
+    flex-wrap: wrap;
+}
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    font-weight: 800;
+    flex-shrink: 0;
+    border: 3px solid rgba(255,255,255,0.3);
+}
+.profile-info {
+    flex: 1;
+    min-width: 250px;
+}
+.profile-info h2 {
+    font-size: 1.6rem;
+    font-weight: 800;
+}
+.profile-title {
+    opacity: 0.9;
+    margin-bottom: 8px;
+}
+.profile-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 10px 0;
+}
+.profile-tags .tag {
+    background: rgba(255,255,255,0.15);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+.profile-location {
+    font-size: 0.85rem;
+    opacity: 0.85;
+}
+.profile-stats {
+    display: flex;
+    gap: 24px;
+}
+.stat {
     text-align: center;
-    padding: 32px 0 0;
-    border-top: 1px solid var(--border);
-    font-size: 12px;
-    color: var(--fg2);
-    opacity: 0.6;
-  }
+}
+.stat-num {
+    display: block;
+    font-size: 2rem;
+    font-weight: 800;
+}
+.stat-label {
+    font-size: 0.75rem;
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
 
-  /* Animations */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(18px); }
+/* ===== FILTERS ===== */
+.filters-section {
+    padding: 20px 0;
+    position: sticky;
+    top: 64px;
+    z-index: 50;
+    background: var(--bg);
+    transition: background var(--transition);
+}
+.filters-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.search-box {
+    position: relative;
+}
+.search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.1rem;
+}
+.search-box input {
+    width: 100%;
+    padding: 14px 16px 14px 46px;
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 1rem;
+    font-family: inherit;
+    background: var(--bg-card);
+    color: var(--text);
+    transition: all var(--transition);
+}
+.search-box input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-light);
+}
+.filter-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.filter-group select {
+    padding: 10px 14px;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    font-family: inherit;
+    background: var(--bg-card);
+    color: var(--text);
+    cursor: pointer;
+    transition: all var(--transition);
+    min-width: 160px;
+}
+.filter-group select:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+/* ===== BEST JOBS CAROUSEL ===== */
+.best-jobs-section {
+    padding: 30px 0 10px;
+}
+.section-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin-bottom: 4px;
+}
+.section-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+}
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.results-count {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+.best-jobs-carousel {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 15px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+}
+.best-jobs-carousel::-webkit-scrollbar {
+    height: 6px;
+}
+.best-jobs-carousel::-webkit-scrollbar-track {
+    background: var(--border);
+    border-radius: 3px;
+}
+.best-jobs-carousel::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 3px;
+}
+.best-job-card {
+    min-width: 320px;
+    max-width: 320px;
+    scroll-snap-align: start;
+    background: var(--bg-card);
+    border: 2px solid var(--primary);
+    border-radius: var(--radius);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: all var(--transition);
+    cursor: pointer;
+}
+.best-job-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+}
+.best-job-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+}
+
+/* ===== JOB CARDS ===== */
+.jobs-section {
+    padding: 20px 0 60px;
+}
+.jobs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 16px;
+}
+.job-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    transition: all var(--transition);
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 0.5s ease forwards;
+    opacity: 0;
+}
+.job-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary);
+}
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
-  }
+}
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+.company-logo {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-sm);
+    background: var(--primary-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--primary);
+    flex-shrink: 0;
+}
+.card-badges {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.badge {
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.badge-match {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+}
+.badge-quick {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #fff;
+}
+.badge-urgent {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: #fff;
+}
+.badge-new {
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    color: #fff;
+}
+.job-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--text);
+}
+.job-company {
+    font-size: 0.9rem;
+    color: var(--primary);
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+.job-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 12px;
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+}
+.job-meta span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.match-bar-container {
+    margin: 14px 0;
+}
+.match-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+.match-score-text {
+    color: var(--accent);
+}
+.match-bar {
+    height: 8px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+}
+.match-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1s ease;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+}
+.why-match {
+    background: var(--accent-light);
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 0.82rem;
+    margin-bottom: 14px;
+    border-left: 3px solid var(--accent);
+    color: var(--text);
+}
+.card-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+}
+.save-btn {
+    background: none;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: all var(--transition);
+}
+.save-btn.saved {
+    background: #fef2f2;
+    border-color: var(--danger);
+}
+.save-btn:hover {
+    transform: scale(1.1);
+}
 
-  /* Reduced motion */
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      transition-duration: 0.01ms !important;
+/* ===== SKELETON LOADERS ===== */
+.skeleton-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    animation: pulse 1.5s infinite;
+}
+.skeleton-header {
+    width: 60%;
+    height: 20px;
+    background: var(--border);
+    border-radius: 4px;
+    margin-bottom: 12px;
+}
+.skeleton-line {
+    width: 100%;
+    height: 14px;
+    background: var(--border);
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+.skeleton-line.short {
+    width: 40%;
+}
+.skeleton-tags {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+.skeleton-tags::before, .skeleton-tags::after {
+    content: '';
+    width: 80px;
+    height: 24px;
+    background: var(--border);
+    border-radius: 12px;
+}
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* ===== MODALS ===== */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+    backdrop-filter: blur(4px);
+}
+.modal-overlay.active {
+    display: flex;
+}
+.modal {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    max-width: 560px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    animation: modalSlide 0.3s ease;
+}
+.modal-large {
+    max-width: 720px;
+}
+@keyframes modalSlide {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--bg-card);
+    z-index: 10;
+}
+.modal-header h2 {
+    font-size: 1.2rem;
+}
+.modal-body {
+    padding: 24px;
+}
+.empty-state {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 40px 20px;
+}
+
+/* ===== PAGINATION ===== */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 30px;
+}
+.page-btn {
+    width: 40px;
+    height: 40px;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-card);
+    color: var(--text);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.page-btn.active {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+}
+.page-btn:hover:not(.active) {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+/* ===== DETAIL MODAL CONTENT ===== */
+.detail-section {
+    margin-bottom: 20px;
+}
+.detail-section h3 {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+.detail-section p, .detail-section ul {
+    font-size: 0.92rem;
+    line-height: 1.7;
+}
+.detail-section ul {
+    padding-left: 20px;
+}
+.detail-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+}
+
+/* ===== FOOTER ===== */
+.footer {
+    background: var(--bg-card);
+    border-top: 1px solid var(--border);
+    padding: 24px 0;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+.footer p + p {
+    margin-top: 4px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .header-content { flex-wrap: wrap; gap: 10px; }
+    .profile-card { flex-direction: column; text-align: center; }
+    .profile-stats { justify-content: center; }
+    .profile-tags { justify-content: center; }
+    .filter-group { flex-direction: column; }
+    .filter-group select { min-width: 100%; }
+    .jobs-grid { grid-template-columns: 1fr; }
+    .best-job-card { min-width: 280px; max-width: 280px; }
+    .card-actions { flex-direction: column; }
+    .card-actions .btn { width: 100%; justify-content: center; }
+}
+
+@media (max-width: 480px) {
+    .container { padding: 0 12px; }
+    .profile-card { padding: 20px; }
+    .profile-info h2 { font-size: 1.3rem; }
+    .stat-num { font-size: 1.5rem; }
+    .job-card { padding: 18px; }
+}
+
+/* ===== SAVED JOB IN MODAL ===== */
+.saved-job-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    margin-bottom: 10px;
+    transition: background var(--transition);
+}
+.saved-job-item:hover {
+    background: var(--primary-light);
+}
+.saved-job-info h4 {
+    font-size: 0.95rem;
+    margin-bottom: 2px;
+}
+.saved-job-info p {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+}
+.remove-saved {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+.remove-saved:hover {
+    background: #fef2f2;
+}
+
+	</style>
+	
+	<script>
+	// ============================================
+// PHARMA CAREERS - Job Portal Script
+// Real Job Data for Reetu Patel
+// ============================================
+
+const jobsData = [
+    {
+        id: 1,
+        match_score: 95,
+        title: "Pharmacy Assistant (Pharmacy Software/Kroll Data Entry)",
+        company: "CareRx Corporation",
+        location: "Cambridge, ON",
+        salary: "$19 – $23/hr",
+        type: "Full-time",
+        experience_required: "Entry Level",
+        posted_date: "3 days ago",
+        why_match: "Requires Kroll expertise which Reetu has. Blister packaging, third-party adjudication, and prescription processing all match perfectly. Entry-level friendly with training provided.",
+        description: "Assist with preparation, packaging and organization of medication deliveries. Process prescriptions using eMAR and Kroll pharmacy software, handle refills and third-party adjudications. Manage inventory, prepare deliveries to care facilities and retirement homes.",
+        requirements: "Experience as Pharmacy Assistant preferred but not required. Knowledge of Kroll and eMAR systems. Microsoft Office proficiency. Strong organizational and communication skills.",
+        apply_link: "https://ca.linkedin.com/jobs/view/pharmacy-assistant-pharmacy-software-kroll-data-entry-at-carerx-corporation-4395069371",
+        phone: "",
+        email: "",
+        company_website: "https://www.carerx.ca",
+        badges: ["high-match", "quick-apply", "new"],
+        source: "LinkedIn / Indeed"
+    },
+    {
+        id: 2,
+        match_score: 92,
+        title: "Pharmacy Assistant – Part Time Day",
+        company: "Loblaw Companies Limited",
+        location: "Kitchener, ON",
+        salary: "$17.60 – $20.25/hr",
+        type: "Part-time",
+        experience_required: "Entry Level – Experience an asset",
+        posted_date: "5 days ago",
+        why_match: "Loblaw pharmacies use systems Reetu knows. Role requires prescription data entry, dispensing, third-party adjudication, and customer service – all core strengths of Reetu.",
+        description: "Patient greeting and prescription verification, data entry of patient care information, third party adjudication, accurate dispensing of prescription medications, inventory control, handling OTC enquiries and customer prescription pick up.",
+        requirements: "Experience as Pharmacy Assistant is an asset. Excellent organizational skills. Strong communication skills. Proficient computer/data entry skills. Flexibility for varied hours. Healthwatch system knowledge is a plus.",
+        apply_link: "https://ca.linkedin.com/jobs/view/pharmacy-assistant-part-time-day-at-loblaw-companies-limited-4390016897",
+        phone: "",
+        email: "",
+        company_website: "https://careers.loblaw.ca",
+        badges: ["high-match", "quick-apply"],
+        source: "LinkedIn / Loblaw Careers"
+    },
+    {
+        id: 3,
+        match_score: 90,
+        title: "Pharmacy Assistant",
+        company: "Loblaw Companies (Zehrs/No Frills)",
+        location: "Kitchener, ON",
+        salary: "$17.60 – $20.25/hr",
+        type: "Part-time",
+        experience_required: "Entry Level",
+        posted_date: "1 week ago",
+        why_match: "Direct match for Reetu's prescription filling, dispensing, and inventory control experience. Third-party adjudication experience is highly valued. Unionized position with growth opportunities.",
+        description: "Responsible for patient greeting, prescription data entry, third party adjudication, accurate dispensing, inventory maintenance through control systems, general OTC enquiries, and handling customer prescription pick up.",
+        requirements: "Experience as a Pharmacy Assistant is an asset. Excellent organizational skills and detail orientation. Strong communication skills. Customer service experience. Data entry proficiency.",
+        apply_link: "https://careers.loblaw.ca/pharmacy-assistant/job/PAF-LCL-09BAA3E3-0CBE-4070-9767-64EBBB201D4B_14628_1774965903_0",
+        phone: "",
+        email: "",
+        company_website: "https://careers.loblaw.ca",
+        badges: ["high-match"],
+        source: "Loblaw Careers"
+    },
+    {
+        id: 4,
+        match_score: 88,
+        title: "Pharmacy Assistant",
+        company: "Shoppers Drug Mart",
+        location: "Waterloo, ON",
+        salary: "$18.60 – $23.50/hr",
+        type: "Part-time",
+        experience_required: "Entry Level",
+        posted_date: "10 days ago",
+        why_match: "Shoppers Drug Mart uses Kroll system – Reetu's primary expertise. Customer service, prescription processing, and cash handling experience are all directly relevant.",
+        description: "Greet customers, gather prescription information, perform pharmacy duties including data entry, prescription filling, labeling, inventory management, and customer service at Canada's leading pharmacy chain.",
+        requirements: "Customer service experience. Knowledge of pharmacy operations. Strong organizational skills. Ability to work flexible hours including evenings and weekends.",
+        apply_link: "https://ca.linkedin.com/jobs/view/pharmacy-assistant-at-shoppers-drug-mart-4375603843",
+        phone: "",
+        email: "",
+        company_website: "https://corporate.shoppersdrugmart.ca/en/careers-find-jobs/",
+        badges: ["high-match", "quick-apply"],
+        source: "LinkedIn / Glassdoor"
+    },
+    {
+        id: 5,
+        match_score: 87,
+        title: "Pharmacy Assistant",
+        company: "Shoppers Drug Mart",
+        location: "Kitchener, ON",
+        salary: "$19 – $24/hr",
+        type: "Part-time",
+        experience_required: "Entry Level",
+        posted_date: "Recent",
+        why_match: "Another Shoppers Drug Mart location in Reetu's target area. Kroll system experience is a major advantage. Customer-facing pharmacy role matching all of Reetu's skill set.",
+        description: "Customer service, gather prescription information, perform duties in priority according to pharmacy standards, data entry, prescription filling, cash handling, and inventory support at a Kitchener store location.",
+        requirements: "Customer service orientation. Pharmacy experience preferred. Strong attention to detail. Flexible availability.",
+        apply_link: "https://www.ziprecruiter.com/c/Shoppers-Drug-Mart-Pharmaprix/Job/Pharmacy-Assistant/-in-Kitchener,ON?jid=af1f8c695e1150b3",
+        phone: "",
+        email: "",
+        company_website: "https://corporate.shoppersdrugmart.ca/en/careers-find-jobs/",
+        badges: ["quick-apply"],
+        source: "ZipRecruiter"
+    },
+    {
+        id: 6,
+        match_score: 85,
+        title: "Pharmacy Assistant",
+        company: "Walmart Canada",
+        location: "Brantford, ON",
+        salary: "$17.60 – $23.10/hr",
+        type: "Regular/Permanent",
+        experience_required: "Entry Level",
+        posted_date: "Feb 7, 2026",
+        why_match: "Full-time permanent position! Requires prescription data entry, DIN checks, dosage calculations, inventory control, and customer service – all matching Reetu's experience. Great benefits package.",
+        description: "Assist pharmacist with prescription filling, data entry, computer functions, filling and labeling prescriptions, 7-point accuracy checks, inventory control, stock ordering, OTC operations, and general pharmacy housekeeping.",
+        requirements: "Flexible schedule. Team player. Good communication skills. Attention to detail. Prescription processing knowledge preferred. Kohl and Frisch wholesaler experience a plus.",
+        apply_link: "https://careers.walmart.ca/job/brantford/pharmacy-assistant/4853/91492010048",
+        phone: "",
+        email: "",
+        company_website: "https://careers.walmart.ca",
+        badges: ["quick-apply"],
+        source: "Walmart Careers"
+    },
+    {
+        id: 7,
+        match_score: 84,
+        title: "Pharmacy Assistant",
+        company: "Chancellors Way Pharmacy",
+        location: "Guelph, ON",
+        salary: "$17.20 – $23.83/hr",
+        type: "Part-time",
+        experience_required: "1+ year preferred",
+        posted_date: "11 days ago",
+        why_match: "Community pharmacy role matching Reetu's Brampton Community Pharmacy experience. Prescription filling, customer service, and inventory management skills are directly transferable.",
+        description: "Provide vital support in pharmacy operations ensuring efficient and accurate medication dispensing, inventory management, and excellent patient care in a community pharmacy setting.",
+        requirements: "Pharmacy experience preferred. Strong organizational skills. Excellent communication. Detail-oriented. Medical terminology knowledge.",
+        apply_link: "https://ca.indeed.com/viewjob?jk=bf09dd0a43393e31",
+        phone: "",
+        email: "",
+        company_website: "",
+        badges: [],
+        source: "Indeed"
+    },
+    {
+        id: 8,
+        match_score: 82,
+        title: "Registered Pharmacy Technician/Assistant",
+        company: "University Square Pharmacy",
+        location: "Guelph, ON",
+        salary: "$19 – $30/hr",
+        type: "Full-time / Part-time",
+        experience_required: "1 year pharmacy experience required",
+        posted_date: "9 days ago",
+        why_match: "Highest salary range! Requires prescription processing, blister pack preparation, and inventory control – all areas where Reetu has proven hands-on experience. B.Pharm degree adds value.",
+        description: "Enter and process prescriptions, make blister packs, manage inventory, maintain clean & organized pharmacy, communicate with customers and co-workers, and compound medications.",
+        requirements: "Reliable. Experienced in pharmacy work. Fluent in English. PropelRx knowledge or ability to learn quickly. 1 year pharmacy experience required.",
+        apply_link: "https://ca.indeed.com/viewjob?jk=43358c3468403ea3",
+        phone: "",
+        email: "",
+        company_website: "",
+        badges: ["urgent"],
+        source: "Indeed"
+    },
+    {
+        id: 9,
+        match_score: 80,
+        title: "Pharmacy Assistant",
+        company: "Shoppers Drug Mart",
+        location: "Etobicoke, ON",
+        salary: "Competitive",
+        type: "Part-time",
+        experience_required: "Entry Level",
+        posted_date: "2 weeks ago",
+        why_match: "Shoppers Drug Mart chain position. Reetu's Kroll expertise and customer service background are strong assets. Accessible from Brampton.",
+        description: "Customer service, prescription gathering and processing, pharmacy duties according to standards, data entry, cash handling and inventory management support.",
+        requirements: "Customer service skills. Pharmacy experience preferred. Flexible availability. Strong attention to detail.",
+        apply_link: "https://ca.linkedin.com/jobs/view/pharmacy-assistant-at-shoppers-drug-mart-4383820669",
+        phone: "",
+        email: "",
+        company_website: "https://corporate.shoppersdrugmart.ca",
+        badges: [],
+        source: "LinkedIn"
+    },
+    {
+        id: 10,
+        match_score: 78,
+        title: "PT Pharmacy Clerk",
+        company: "Food Basics (Metro Inc.)",
+        location: "Cambridge, ON",
+        salary: "Competitive",
+        type: "Part-time",
+        experience_required: "Entry Level",
+        posted_date: "2 months ago",
+        why_match: "Entry-level pharmacy support role in target area. Reetu's customer service and pharmacy knowledge would set her apart from other applicants for this position.",
+        description: "Support pharmacy operations including customer service, prescription processing assistance, inventory support, and maintaining organized pharmacy shelves.",
+        requirements: "Customer service orientation. Reliable. Strong communication skills. Flexible schedule.",
+        apply_link: "https://ca.linkedin.com/jobs/view/pt-pharmacy-clerk-at-food-basics-4363532374",
+        phone: "",
+        email: "",
+        company_website: "https://www.foodbasics.ca",
+        badges: [],
+        source: "LinkedIn"
+    },
+    {
+        id: 11,
+        match_score: 77,
+        title: "PT Pharmacy Clerk",
+        company: "Food Basics (Metro Inc.)",
+        location: "Kitchener, ON",
+        salary: "Competitive",
+        type: "Part-time",
+        experience_required: "Entry Level",
+        posted_date: "2 months ago",
+        why_match: "Located in primary target city. Entry-level role where Reetu's extensive pharmacy background would be a significant advantage over typical applicants.",
+        description: "Pharmacy clerk duties including customer service, prescription support, inventory management, and maintaining pharmacy area organization.",
+        requirements: "Customer service skills. Reliable and organized. Available for part-time shifts.",
+        apply_link: "https://ca.linkedin.com/jobs/view/pt-pharmacy-clerk-at-food-basics-4363622212",
+        phone: "",
+        email: "",
+        company_website: "https://www.foodbasics.ca",
+        badges: [],
+        source: "LinkedIn"
+    },
+    {
+        id: 12,
+        match_score: 75,
+        title: "Cleanroom Assistant",
+        company: "Bayshore HealthCare",
+        location: "Kitchener, ON",
+        salary: "Competitive",
+        type: "Full-time",
+        experience_required: "Entry Level",
+        posted_date: "Today",
+        why_match: "Healthcare support role in Kitchener. Reetu's pharmacy background, attention to detail, and sterile environment awareness (hospital training) are relevant transferable skills.",
+        description: "Support cleanroom pharmacy operations including sterile compounding assistance, inventory support, and maintaining cleanroom standards in a healthcare environment.",
+        requirements: "Entry level. Healthcare or pharmacy background preferred. Attention to detail. Ability to follow strict protocols.",
+        apply_link: "https://ca.linkedin.com/jobs/view/cleanroom-assistant-at-bayshore-healthcare-4396853021",
+        phone: "",
+        email: "",
+        company_website: "https://www.bayshore.ca",
+        badges: ["new", "urgent"],
+        source: "LinkedIn"
+    },
+    {
+        id: 13,
+        match_score: 93,
+        title: "Pharmacy Assistant (Entry Level – Training Provided)",
+        company: "CareRx",
+        location: "Mississauga, ON",
+        salary: "$18 – $20/hr",
+        type: "Full-time",
+        experience_required: "Entry Level – Training Provided",
+        posted_date: "Recent",
+        why_match: "CareRx provides training! Reetu's Kroll and blister packaging experience makes her an ideal candidate. Mississauga is accessible from Brampton. Full-time with benefits.",
+        description: "Entry-level pharmacy assistant role supporting long-term care pharmacy operations. Training provided. Assist with prescription processing, blister packaging, inventory management, and medication delivery preparation.",
+        requirements: "No experience required – training provided. Organizational skills. Communication skills. Interest in pharmacy/healthcare.",
+        apply_link: "https://ca.linkedin.com/jobs/view/pharmacy-assistant-pharmacy-software-kroll-data-entry-at-carerx-corporation-4395059792",
+        phone: "",
+        email: "",
+        company_website: "https://www.carerx.ca",
+        badges: ["high-match", "quick-apply", "new"],
+        source: "LinkedIn / SimplyHired"
     }
-  }
-
-  @media (max-width: 600px) {
-    .container { padding: 36px 16px 80px; }
-    .qa-question { padding: 14px 14px; gap: 10px; }
-    .qa-answer-inner { padding: 0 14px 14px; }
-    .stats-bar { gap: 8px; }
-    .stat { padding: 8px 14px; }
-    .header .meta { flex-direction: column; gap: 6px; }
-  }
-</style>
-</head>
-<body>
-
-<div class="glow-tl"></div>
-<div class="glow-br"></div>
-
-<div class="container">
-
-  <!-- Header -->
-  <header class="header">
-    <div class="tag">3160716</div>
-    <h1>IoT and Applications<br>Question Bank</h1>
-    <p>Complete unit-wise questions with answers for GTU BE Semester VI — prepared for quick revision.</p>
-    <div class="meta">
-      <span><i class="fas fa-university"></i>SVBIT</span>
-      <span><i class="fas fa-user"></i>Prof. Pragati Parmar</span>
-      <span><i class="fas fa-layer-group"></i>Units 1 &amp; 2</span>
-    </div>
-  </header>
-
-  <!-- Stats -->
-  <div class="stats-bar">
-    <div class="stat"><span class="num">28</span><span class="label">Questions</span></div>
-    <div class="stat"><span class="num">13</span><span class="label">3-Mark</span></div>
-    <div class="stat"><span class="num">8</span><span class="label">4-Mark</span></div>
-    <div class="stat"><span class="num">7</span><span class="label">7-Mark</span></div>
-  </div>
-
-  <!-- Search -->
-  <div class="search-wrap">
-    <i class="fas fa-search"></i>
-    <input type="text" id="searchInput" placeholder="Search questions or answers..." aria-label="Search questions">
-  </div>
-
-  <!-- Controls -->
-  <div class="controls">
-    <button class="ctrl-btn" onclick="expandAll()" aria-label="Expand all answers"><i class="fas fa-expand-alt"></i>&ensp;Expand All</button>
-    <button class="ctrl-btn" onclick="collapseAll()" aria-label="Collapse all answers"><i class="fas fa-compress-alt"></i>&ensp;Collapse All</button>
-    <button class="ctrl-btn" onclick="filterMarks(3)">3 Marks</button>
-    <button class="ctrl-btn" onclick="filterMarks(4)">4 Marks</button>
-    <button class="ctrl-btn" onclick="filterMarks(7)">7 Marks</button>
-    <button class="ctrl-btn" onclick="filterMarks(0)">Show All</button>
-  </div>
-
-  <div class="no-results" id="noResults">No matching questions found.</div>
-
-  <!-- Main content injected by JS -->
-  <main id="qaContainer"></main>
-
-  <footer class="footer">GTU BE Sem-VI &middot; IoT and Applications &middot; 3160716</footer>
-</div>
-
-<button class="scroll-top" id="scrollTopBtn" onclick="window.scrollTo({top:0})" aria-label="Scroll to top">
-  <i class="fas fa-arrow-up"></i>
-</button>
-
-<script>
-// ─── Question Bank Data ───
-const data = [
-  {
-    unit: 1,
-    unitTitle: "Introduction to Internet of Things",
-    topics: "Application areas, Characteristics, Things in IoT, IoT Stack, Enabling Technologies, Challenges, Levels, CPS, WSN",
-    groups: [
-      {
-        marks: 3,
-        label: "Short Answer",
-        questions: [
-          {
-            q: "Define IoT. Write the merits and demerits of IoT.",
-            year: "W23",
-            a: `<strong>IoT (Internet of Things)</strong> is a network of physical devices embedded with sensors, software, and connectivity that enables them to collect and exchange data over the internet without human-to-human or human-to-computer interaction.
-            <span class="sub-heading">Merits</span>
-            <ul>
-              <li>Improved efficiency and automation of processes</li>
-              <li>Data-driven decision making</li>
-              <li>Cost savings through predictive maintenance</li>
-              <li>Enhanced quality of life (smart homes, health)</li>
-              <li>Real-time monitoring and control</li>
-            </ul>
-            <span class="sub-heading">Demerits</span>
-            <ul>
-              <li>Security vulnerabilities and cyberattacks</li>
-              <li>Privacy concerns due to massive data collection</li>
-              <li>High initial deployment cost</li>
-              <li>Dependency on internet connectivity</li>
-              <li>Complexity in integration of heterogeneous devices</li>
-            </ul>`
-          },
-          {
-            q: "What is IoT? List any five IoT applications.",
-            year: "W24",
-            a: `<strong>IoT</strong> refers to the interconnection of everyday physical objects via the internet, allowing them to send, receive, and act on data autonomously.
-            <span class="sub-heading">Five Applications</span>
-            <ol>
-              <li><strong>Smart Home</strong> — Automated lighting, HVAC, security</li>
-              <li><strong>Smart Healthcare</strong> — Remote patient monitoring, wearables</li>
-              <li><strong>Smart Agriculture</strong> — Soil moisture sensing, precision farming</li>
-              <li><strong>Industrial IoT (IIoT)</strong> — Predictive maintenance, quality control</li>
-              <li><strong>Smart Cities</strong> — Traffic management, waste management, smart grids</li>
-            </ol>`
-          },
-          {
-            q: "Describe Internet of Things.",
-            year: "S25",
-            a: `<strong>Internet of Things</strong> is a paradigm where physical objects — ranging from everyday household items to sophisticated industrial tools — are connected to the internet, enabling them to communicate, share data, and make intelligent decisions. It integrates four key components: <strong>sensors</strong> (to perceive the environment), <strong>connectivity</strong> (to transmit data), <strong>processing</strong> (to analyze data), and <strong>user interface</strong> (to present insights and enable control). The goal of IoT is to create smart environments that reduce human intervention, improve efficiency, and enhance quality of life.`
-          },
-          {
-            q: "List out enabling technologies in IoT. Explain any one in detail.",
-            year: "S23",
-            a: `<strong>Enabling Technologies:</strong> RFID, Wireless Sensor Networks (WSN), Cloud Computing, Big Data Analytics, Embedded Systems, Communication Protocols (MQTT, CoAP), Edge/Fog Computing, IPv6, NFC.
-            <span class="sub-heading">RFID (Radio Frequency Identification)</span>
-            RFID uses electromagnetic fields to automatically identify and track tags attached to objects. It consists of two components: a <strong>tag</strong> (with a microchip and antenna, either passive or active) and a <strong>reader</strong> (which emits radio waves and reads tag data). When a tag enters the reader's field, it transmits its stored data without line-of-sight. RFID is widely used in supply chain management, access control, inventory tracking, and toll collection (e.g., FASTag). It is a foundational technology for IoT because it provides low-cost, automatic object identification.`
-          },
-          {
-            q: "Explain IoT and Cyber Physical System.",
-            year: "S24",
-            a: `A <strong>Cyber Physical System (CPS)</strong> is a system where physical and software components are deeply integrated, interacting with each other through feedback loops in real time. Examples include autonomous vehicles, smart grids, and medical monitoring systems.
-            <br><br>
-            <strong>Relationship with IoT:</strong> IoT is the connectivity layer that enables CPS. While <strong>IoT</strong> focuses on connecting things and collecting/exchanging data, <strong>CPS</strong> focuses on the tight interaction between computational elements and physical processes. In essence, IoT provides the infrastructure (sensors, networks, cloud) that CPS leverages to monitor and control physical processes. CPS adds the dimension of real-time control and safety-critical operation on top of IoT's data communication capabilities.`
-          },
-          {
-            q: "Explain the role of 'things' in IoT.",
-            year: "W25",
-            a: `In IoT, <strong>'things'</strong> are the physical entities that form the foundation of the entire ecosystem. They are objects embedded with sensors, actuators, processing capability, and connectivity modules. Their roles include:
-            <ul>
-              <li><strong>Sensing</strong> — Detecting physical parameters (temperature, motion, light, etc.)</li>
-              <li><strong>Data Collection</strong> — Gathering raw data from the environment continuously</li>
-              <li><strong>Communication</strong> — Transmitting collected data to gateways, cloud, or other devices</li>
-              <li><strong>Actuation</strong> — Performing physical actions based on received commands (turning on a motor, opening a valve)</li>
-              <li><strong>Edge Processing</strong> — Some things perform preliminary data processing locally</li>
-            </ul>
-            Without things, there is no data to process, no environment to monitor, and no actions to execute — making them the most critical element of IoT.`
-          },
-          {
-            q: "List enabling technologies for IoT.",
-            year: "S25 OR",
-            a: `<ul>
-              <li><strong>RFID</strong> — Automatic object identification and tracking</li>
-              <li><strong>Wireless Sensor Networks (WSN)</strong> — Distributed environmental sensing</li>
-              <li><strong>Cloud Computing</strong> — Scalable storage and processing</li>
-              <li><strong>Big Data Analytics</strong> — Extracting insights from large datasets</li>
-              <li><strong>Embedded Systems</strong> — Dedicated computing within devices</li>
-              <li><strong>IPv6</strong> — Expanded address space for billions of devices</li>
-              <li><strong>Communication Protocols</strong> — MQTT, CoAP, HTTP, AMQP</li>
-              <li><strong>Edge/Fog Computing</strong> — Processing data near the source</li>
-              <li><strong>NFC</strong> — Short-range contactless communication</li>
-              <li><strong>Low-Power Wide-Area Networks</strong> — LoRa, Sigfox, NB-IoT</li>
-            </ul>`
-          }
-        ]
-      },
-      {
-        marks: 4,
-        label: "Medium Answer",
-        questions: [
-          {
-            q: "Explain characteristics of the IoT.",
-            year: "S23",
-            a: `<ol>
-              <li><strong>Connectivity</strong> — Devices must be networked to communicate (WiFi, BLE, Zigbee, LoRa)</li>
-              <li><strong>Intelligence</strong> — Devices have processing capability for local decision-making</li>
-              <li><strong>Scalability</strong> — System must handle growing numbers of devices seamlessly</li>
-              <li><strong>Dynamic & Self-adapting</strong> — Devices adapt to changing contexts and environments</li>
-              <li><strong>Self-configuring</strong> — Devices can automatically configure themselves when added to a network</li>
-              <li><strong>Interoperability</strong> — Different devices, protocols, and platforms must work together</li>
-              <li><strong>Security</strong> — End-to-end data and device security is essential</li>
-              <li><strong>Sensing</strong> — Ability to perceive physical parameters through sensors</li>
-              <li><strong>Heterogeneity</strong> — Supports diverse hardware, software, and network technologies</li>
-            </ol>`
-          },
-          {
-            q: "Explain the Characteristics of IoT.",
-            year: "S24",
-            a: `Same as above — the key characteristics of IoT include connectivity, intelligence, scalability, dynamic self-adaptation, self-configuration, interoperability, security, sensing ability, and heterogeneity. These characteristics distinguish IoT from traditional internet applications by enabling seamless interaction between the physical and digital worlds.`
-          },
-          {
-            q: "Explain enabling technologies in IoT.",
-            year: "W24",
-            a: `<ul>
-              <li><strong>RFID</strong> — Low-cost identification and tracking of physical objects using radio waves</li>
-              <li><strong>WSN</strong> — Networks of spatially distributed sensors that monitor environmental conditions</li>
-              <li><strong>Cloud Computing</strong> — Provides on-demand storage, computing power, and services for IoT data</li>
-              <li><strong>Big Data Analytics</strong> — Processes massive volumes of IoT data to uncover patterns and insights</li>
-              <li><strong>Embedded Systems</strong> — Dedicated computing systems built into devices for specific functions</li>
-              <li><strong>Communication Protocols</strong> — MQTT (lightweight pub/sub), CoAP (RESTful for constrained devices), HTTP</li>
-              <li><strong>Edge Computing</strong> — Processes data near the source to reduce latency and bandwidth usage</li>
-              <li><strong>AI/ML</strong> — Enables predictive analytics, anomaly detection, and autonomous decision-making</li>
-            </ul>`
-          },
-          {
-            q: "Explain the significance of AI/ML in IoT.",
-            year: "W25",
-            a: `AI and ML transform IoT from simple data collection to <strong>intelligent decision-making</strong>:
-            <ul>
-              <li><strong>Predictive Maintenance</strong> — ML models analyze sensor data to predict equipment failures before they occur, reducing downtime</li>
-              <li><strong>Anomaly Detection</strong> — AI identifies unusual patterns in data streams, enabling real-time security threat detection</li>
-              <li><strong>Data Analytics</strong> — ML extracts meaningful insights from large, complex IoT datasets that manual analysis cannot handle</li>
-              <li><strong>Automation</strong> — AI enables IoT devices to make autonomous decisions without human intervention (e.g., smart thermostats adjusting temperature)</li>
-              <li><strong>Energy Optimization</strong> — ML algorithms optimize power consumption in IoT networks by scheduling transmissions and sleep modes</li>
-              <li><strong>Personalization</strong> — AI learns user behavior patterns to customize IoT services (e.g., smart home adapting lighting to preferences)</li>
-              <li><strong>Natural Language Processing</strong> — Voice assistants (Alexa, Google Home) use NLP to interface with IoT devices</li>
-            </ul>`
-          },
-          {
-            q: "Discuss smart health using IoT.",
-            year: "W23",
-            a: `<strong>Smart Health (IoMT — Internet of Medical Things)</strong> applies IoT to healthcare:
-            <ul>
-              <li><strong>Remote Patient Monitoring</strong> — Wearable sensors track vitals (heart rate, blood pressure, SpO2, ECG) and transmit data to doctors in real time</li>
-              <li><strong>Smart Pills</strong> — Ingestible sensors monitor medication adherence and internal body parameters</li>
-              <li><strong>Automated Drug Dispensers</strong> — Ensure correct dosage at the right time, reducing human error</li>
-              <li><strong>Hospital Asset Tracking</strong> — RFID tags on medical equipment for real-time location and utilization tracking</li>
-              <li><strong>Telemedicine</strong> — IoT devices enable remote consultations with live health data sharing</li>
-              <li><strong>Fall Detection</strong> — Wearable accelerometers detect elderly falls and automatically alert caregivers</li>
-              <li><strong>Health Analytics</strong> — Cloud-based analysis of patient data for early diagnosis and personalized treatment plans</li>
-              <li><strong>Smart ICU</strong> — Connected ventilators, infusion pumps, and monitors provide continuous data for critical care</li>
-            </ul>`
-          }
-        ]
-      },
-      {
-        marks: 7,
-        label: "Long Answer",
-        questions: [
-          {
-            q: "Explain the architecture of IoT.",
-            year: "W23",
-            a: `<span class="sub-heading">Three-Layer Architecture</span>
-            <ol>
-              <li><strong>Perception/Sensing Layer</strong> — The physical layer consisting of sensors (temperature, humidity, motion), actuators, RFID tags, and cameras. It collects data from the environment and converts physical parameters into electrical signals.</li>
-              <li><strong>Network/Connectivity Layer</strong> — Responsible for transmitting data from the perception layer to processing systems. Uses technologies like WiFi, Bluetooth, Zigbee, LoRa, 4G/5G, and protocols like MQTT, CoAP, HTTP.</li>
-              <li><strong>Application Layer</strong> — The topmost layer that delivers services to end users. Examples: smart home dashboards, healthcare monitoring apps, industrial control systems, smart agriculture platforms.</li>
-            </ol>
-            <span class="sub-heading">Five-Layer Architecture (Extended)</span>
-            <ol start="4">
-              <li><strong>Processing/Middleware Layer</strong> — Handles data storage, processing, and analytics. Includes cloud platforms, databases, and edge computing nodes that filter, aggregate, and analyze data before it reaches applications.</li>
-              <li><strong>Business Layer</strong> — Manages the overall IoT system, handles business logic, generates reports, and makes strategic decisions based on analyzed data. Focuses on ROI, business models, and service monetization.</li>
-            </ol>`
-          },
-          {
-            q: "Draw and explain IoT architecture.",
-            year: "W24",
-            a: `IoT architecture can be represented as a layered model:
-            <br><br>
-            <strong>Top → Application Layer</strong> (Smart Home, Health, Agriculture, Industry)
-            <br>↓
-            <strong>Business Layer</strong> (Business logic, decisions, reports, monetization)
-            <br>↓
-            <strong>Processing Layer</strong> (Cloud, databases, analytics, ML models)
-            <br>↓
-            <strong>Network Layer</strong> (WiFi, Zigbee, LoRa, MQTT, CoAP, 5G)
-            <br>↓
-            <strong>Bottom → Perception Layer</strong> (Sensors, actuators, RFID, cameras)
-            <br><br>
-            Data flows upward from sensors through each layer, while commands flow downward from applications to actuators. Each layer abstracts functionality, enabling independent development and upgrades.`
-          },
-          {
-            q: "Explain various levels of IoT.",
-            year: "S25",
-            a: `<ol>
-              <li><strong>Level 0 — No Connectivity</strong>: A single IoT device with sensing capability only. No network connection. Example: A standalone temperature sensor displaying readings on a local screen.</li>
-              <li><strong>Level 1 — Basic Connectivity</strong>: IoT devices can communicate with a gateway or cloud. Data is transmitted but no local processing. Example: A WiFi temperature sensor sending data to a cloud dashboard.</li>
-              <li><strong>Level 2 — Edge Computing</strong>: Devices connect through a gateway that performs local data processing, filtering, and aggregation before sending to cloud. Reduces bandwidth. Example: Smart building system with local edge gateway.</li>
-              <li><strong>Level 3 — Cloud Computing</strong>: Data is sent to the cloud for storage, processing, and analytics. Applications run on cloud platforms. Example: AWS IoT-based industrial monitoring system.</li>
-              <li><strong>Level 4 — Cloud + Analytics</strong>: Adds data analytics and visualization on top of cloud computing. Generates insights, trends, and predictions from data. Example: Predictive maintenance platform for manufacturing.</li>
-              <li><strong>Level 5 — Full Autonomy</strong>: Complete integration of cloud, analytics, and autonomous control. System makes decisions and acts independently without human intervention. Example: Autonomous vehicle system or fully automated smart factory.</li>
-            </ol>`
-          },
-          {
-            q: "Explain IoT Technology Stack.",
-            year: "S23",
-            a: `<ol>
-              <li><strong>Device/Hardware Layer</strong> — Sensors (DHT11, MQ-2), actuators (servo, relay), microcontrollers (ESP32, Arduino, STM32), development boards (Raspberry Pi)</li>
-              <li><strong>Edge/Fog Layer</strong> — Local gateways that perform preliminary data processing, filtering, and aggregation near the data source to reduce latency and bandwidth</li>
-              <li><strong>Connectivity Layer</strong> — Communication protocols (MQTT for lightweight pub/sub, CoAP for constrained devices, HTTP/REST) and technologies (WiFi, BLE, Zigbee, LoRaWAN, NB-IoT, 5G)</li>
-              <li><strong>Cloud Platform Layer</strong> — Managed IoT platforms (AWS IoT Core, Azure IoT Hub, Google Cloud IoT) providing device management, data ingestion, storage, and orchestration</li>
-              <li><strong>Data Processing & Analytics Layer</strong> — Stream processing (Apache Kafka), batch processing, database systems (Time-series: InfluxDB, NoSQL: MongoDB), and ML models for pattern recognition and prediction</li>
-              <li><strong>Application Layer</strong> — User-facing applications: web dashboards (Grafana), mobile apps, REST APIs, notification systems</li>
-              <li><strong>Security Layer</strong> — Cross-cutting layer: device authentication (X.509 certificates), data encryption (TLS/SSL), access control (OAuth 2.0), firmware OTA updates, anomaly detection</li>
-            </ol>`
-          },
-          {
-            q: "Explain challenges of IoT.",
-            year: "S24",
-            a: `<ol>
-              <li><strong>Security</strong> — IoT devices are vulnerable to botnets (Mirai), data breaches, firmware tampering, and man-in-the-middle attacks due to limited computing resources for encryption</li>
-              <li><strong>Privacy</strong> — Massive data collection (location, behavior, health) creates risks of unauthorized surveillance and profiling</li>
-              <li><strong>Scalability</strong> — Managing billions of devices, each generating data, requires enormous infrastructure and efficient management protocols</li>
-              <li><strong>Interoperability</strong> — Different vendors use different protocols, data formats, and standards, creating fragmentation and integration challenges</li>
-              <li><strong>Power Management</strong> — Many IoT devices are battery-operated and need energy-efficient designs, low-power modes, and energy harvesting solutions</li>
-              <li><strong>Data Management</strong> — Handling the volume, velocity, and variety (3Vs) of IoT data demands specialized storage and processing solutions</li>
-              <li><strong>Network Reliability</strong> — Continuous connectivity is essential; network failures can disrupt critical IoT operations (healthcare, industrial)</li>
-              <li><strong>Standardization</strong> — Lack of universal standards leads to vendor lock-in and compatibility issues across ecosystems</li>
-              <li><strong>Cost</strong> — High initial deployment costs for hardware, connectivity, cloud infrastructure, and maintenance</li>
-              <li><strong>Complexity</strong> — Integrating heterogeneous hardware, software, networks, and services increases system complexity</li>
-            </ol>`
-          },
-          {
-            q: "With neat diagrammatic representation, explain IoT Stack with appropriate examples for each layer.",
-            year: "W25",
-            a: `<span class="sub-heading">IoT Stack — Layer by Layer with Examples</span>
-            <ol>
-              <li><strong>Device Layer</strong> — Physical hardware: <em>DHT22 temperature/humidity sensor, HC-SR04 ultrasonic sensor, ESP32 microcontroller, servo motor</em></li>
-              <li><strong>Edge Layer</strong> — Local processing: <em>Raspberry Pi gateway running Node-RED, filtering sensor data before cloud upload</em></li>
-              <li><strong>Connectivity Layer</strong> — Protocols & networks: <em>MQTT over WiFi (home), LoRaWAN (agriculture field), BLE (wearable)</em></li>
-              <li><strong>Cloud Layer</strong> — Managed platforms: <em>AWS IoT Core receiving MQTT messages, storing in S3/DynamoDB</em></li>
-              <li><strong>Analytics Layer</strong> — Intelligence: <em>Apache Kafka stream processing, TensorFlow ML model detecting anomalies in sensor data</em></li>
-              <li><strong>Application Layer</strong> — User interface: <em>Grafana dashboard showing real-time temperature trends, mobile app sending alerts</em></li>
-              <li><strong>Security Layer</strong> — Protection: <em>TLS encryption for MQTT, IAM roles in AWS, X.509 device certificates</em></li>
-            </ol>
-            Example flow: A DHT22 sensor (Device) → ESP32 reads data → Raspberry Pi filters noise (Edge) → MQTT sends via WiFi (Connectivity) → AWS IoT Core receives (Cloud) → Lambda function runs anomaly detection (Analytics) → Grafana displays alert (Application), all secured by TLS (Security).`
-          },
-          {
-            q: "For building an architecture of IoT, explain main design principles and needed capabilities.",
-            year: "W23",
-            a: `<span class="sub-heading">Design Principles</span>
-            <ol>
-              <li><strong>Modularity</strong> — Components should be independent, replaceable, and upgradeable without affecting the entire system</li>
-              <li><strong>Scalability</strong> — Architecture must gracefully handle growth in devices, data volume, and user load</li>
-              <li><strong>Interoperability</strong> — Support multiple protocols, standards, and vendor ecosystems for seamless integration</li>
-              <li><strong>Security by Design</strong> — Security must be integrated from the ground up, not bolted on afterward</li>
-              <li><strong>Low Power Design</strong> — Energy-efficient architecture for battery-operated devices (sleep modes, duty cycling)</li>
-              <li><strong>Reliability & Fault Tolerance</strong> — System must continue functioning despite component failures</li>
-              <li><strong>Latency Awareness</strong> — Design must account for real-time requirements (edge processing for low-latency use cases)</li>
-              <li><strong>Data Minimization</strong> — Collect and transmit only necessary data to reduce bandwidth and storage costs</li>
-            </ol>
-            <span class="sub-heading">Needed Capabilities</span>
-            <ul>
-              <li>Sensing and actuation (hardware interface)</li>
-              <li>Communication and connectivity (multi-protocol support)</li>
-              <li>Data storage and processing (cloud + edge)</li>
-              <li>Analytics and machine learning</li>
-              <li>User interface and visualization</li>
-              <li>Security (authentication, encryption, access control)</li>
-              <li>Device management (provisioning, OTA updates, monitoring)</li>
-              <li>API management for third-party integration</li>
-            </ul>`
-          },
-          {
-            q: "Which are hardware and software components of IoT? How do these components get synchronised in an IoT based application?",
-            year: "W23 OR",
-            a: `<span class="sub-heading">Hardware Components</span>
-            <ul>
-              <li><strong>Sensors</strong> — DHT11 (temp/humidity), PIR (motion), LDR (light), MQ-2 (gas)</li>
-              <li><strong>Actuators</strong> — Servo motors, relays, LEDs, buzzers, solenoid valves</li>
-              <li><strong>Microcontrollers</strong> — ESP32, Arduino (ATmega328P), STM32, 8051</li>
-              <li><strong>Communication Modules</strong> — WiFi (ESP8266), Bluetooth (HC-05), LoRa (SX1278), GSM (SIM800)</li>
-              <li><strong>Power Supply</strong> — Batteries, solar panels, USB power, voltage regulators</li>
-            </ul>
-            <span class="sub-heading">Software Components</span>
-            <ul>
-              <li><strong>Firmware</strong> — Embedded C/Python code running on MCU (Arduino IDE, PlatformIO)</li>
-              <li><strong>Communication Protocols</strong> — MQTT, CoAP, HTTP for data exchange</li>
-              <li><strong>Cloud Platform</strong> — AWS IoT, Azure IoT Hub, ThingSpeak</li>
-              <li><strong>Database</strong> — InfluxDB (time-series), MongoDB (NoSQL), MySQL</li>
-              <li><strong>Analytics/ML</strong> — Python (Pandas, Scikit-learn), TensorFlow</li>
-              <li><strong>Application Software</strong> — Web dashboard (React), Mobile app (Flutter)</li>
-            </ul>
-            <span class="sub-heading">Synchronization Flow</span>
-            Sensors collect data → MCU reads via GPIO/ADC pins → Firmware processes and formats data → Communication module transmits via MQTT → Cloud receives and stores in database → Analytics engine processes data → Application displays results → If action needed, command flows back: App → Cloud → MQTT → MCU → Actuator executes. This forms a <strong>closed-loop feedback system</strong> where all components are synchronized through the communication layer.`
-          },
-          {
-            q: "Explain various levels of IoT.",
-            year: "W24",
-            a: `Same as the S25 answer above — IoT is organized into six levels from Level 0 (no connectivity, standalone sensor) through Level 5 (full autonomy with cloud, analytics, and autonomous control). Each level adds capabilities: connectivity → edge processing → cloud computing → analytics → autonomous decision-making.`
-          }
-        ]
-      }
-    ]
-  },
-  {
-    unit: 2,
-    unitTitle: "Sensors, Microcontrollers, and Their Interfacing",
-    topics: "Sensor interfacing, Types of sensors, Controlling sensors, Microcontrollers, ARM",
-    groups: [
-      {
-        marks: 3,
-        label: "Short Answer",
-        questions: [
-          {
-            q: "List the sensors that may be useful for Smart Home.",
-            year: "S25",
-            a: `<ul>
-              <li><strong>DHT11/DHT22</strong> — Temperature and humidity sensing</li>
-              <li><strong>PIR Sensor (HC-SR501)</strong> — Motion/presence detection</li>
-              <li><strong>LDR (Light Dependent Resistor)</strong> — Ambient light detection</li>
-              <li><strong>MQ-2 Gas Sensor</strong> — Smoke and LPG leak detection</li>
-              <li><strong>HC-SR04 Ultrasonic</strong> — Distance measurement (water tank level)</li>
-              <li><strong>Reed Switch</strong> — Door/window open/close detection</li>
-              <li><strong>IR Sensor</strong> — Obstacle detection, appliance control</li>
-              <li><strong>Soil Moisture Sensor</strong> — Smart garden/plant watering</li>
-              <li><strong>Current Sensor (ACS712)</strong> — Appliance power monitoring</li>
-            </ul>`
-          },
-          {
-            q: "What is a Sensor? List different types of Sensors used to develop IoT.",
-            year: "W24",
-            a: `A <strong>sensor</strong> is a device that detects and responds to changes in the physical environment (temperature, light, pressure, motion) and converts them into electrical signals that can be read by a microcontroller.
-            <span class="sub-heading">Types of Sensors</span>
-            <ul>
-              <li><strong>Temperature</strong> — LM35, DHT11, DS18B20, Thermocouple</li>
-              <li><strong>Humidity</strong> — DHT22, HIH-4000</li>
-              <li><strong>Pressure</strong> — BMP180, MPX5100</li>
-              <li><strong>Motion/Proximity</strong> — PIR (HC-SR501), IR sensor</li>
-              <li><strong>Distance</strong> — Ultrasonic (HC-SR04), LiDAR</li>
-              <li><strong>Light</strong> — LDR, BH1750</li>
-              <li><strong>Gas</strong> — MQ-2, MQ-135, MQ-7</li>
-              <li><strong>Accelerometer/Gyroscope</strong> — MPU6050, ADXL345</li>
-              <li><strong>GPS</strong> — NEO-6M module</li>
-              <li><strong>RFID</strong> — RC522 module</li>
-            </ul>`
-          },
-          {
-            q: "What are the different categories of Sensors?",
-            year: "W25",
-            a: `<span class="sub-heading">By Power Requirement</span>
-            <ul>
-              <li><strong>Active Sensors</strong> — Require external power source (ultrasonic sensor, LiDAR, radar)</li>
-              <li><strong>Passive Sensors</strong> — Generate signal from the measured phenomenon itself (thermocouple, LDR, piezoelectric sensor)</li>
-            </ul>
-            <span class="sub-heading">By Output Signal</span>
-            <ul>
-              <li><strong>Analog Sensors</strong> — Output continuous voltage (LM35, LDR, potentiometer)</li>
-              <li><strong>Digital Sensors</strong> — Output discrete digital data (DHT11, DS18B20)</li>
-            </ul>
-            <span class="sub-heading">By Application</span>
-            <ul>
-              <li>Temperature, Pressure, Proximity, Optical, Chemical, Biological, Magnetic, Acoustic sensors</li>
-            </ul>`
-          },
-          {
-            q: "Explain Sensor interfacing.",
-            year: "S24",
-            a: `<strong>Sensor interfacing</strong> is the process of connecting a sensor to a microcontroller so that the MCU can read the sensor's output. The steps involved are:
-            <ol>
-              <li><strong>Identify sensor type</strong> — Determine if the sensor outputs analog or digital signals</li>
-              <li><strong>Signal Conditioning</strong> — Amplify weak signals (op-amp), filter noise (capacitors), or level-shift voltages</li>
-              <li><strong>Pin Connection</strong> — Connect analog sensors to ADC pins, digital sensors to GPIO pins</li>
-              <li><strong>Driver Code</strong> — Write firmware to initialize the pin, read data (analogRead/digitalRead), and convert to physical units</li>
-              <li><strong>Calibration</strong> — Map raw sensor values to real-world units using known reference points</li>
-            </ol>`
-          },
-          {
-            q: "Explain Ultrasonic sound sensor.",
-            year: "S23 OR",
-            a: `An <strong>ultrasonic sensor (HC-SR04)</strong> measures distance using sound waves. It has two transducers: a <strong>transmitter</strong> that emits a 40 kHz ultrasonic pulse and a <strong>receiver</strong> that listens for the echo.
-            <br><br>
-            <strong>Working:</strong> The trigger pin sends a 10μs HIGH pulse. The sensor emits 8 cycles of 40kHz ultrasound. The sound wave travels outward, reflects off an object, and returns. The echo pin goes HIGH for the duration the sound takes to return.
-            <br><br>
-            <strong>Distance Calculation:</strong> <code>Distance (cm) = (Time in μs × 0.034) / 2</code>
-            <br><br>
-            <strong>Specifications:</strong> Range: 2cm – 400cm, Accuracy: ~3mm, Operating Voltage: 5V, Trigger Input: 10μs TTL pulse.`
-          },
-          {
-            q: "Explain IoT Domain Model.",
-            year: "W23",
-            a: `The <strong>IoT Domain Model</strong> defines the structure and relationships of entities in an IoT system:
-            <ul>
-              <li><strong>Physical Entities</strong> — Real-world objects (room, vehicle, patient) that are monitored or controlled</li>
-              <li><strong>Virtual Entities</strong> — Digital representations (digital twins) of physical entities in the software domain</li>
-              <li><strong>Devices</strong> — Hardware with processing capability (sensors, actuators, gateways) that bridge physical and virtual worlds</li>
-              <li><strong>Users</strong> — Human stakeholders who interact with the system (administrators, end-users, operators)</li>
-              <li><strong>Services</strong> — Functional capabilities offered by the IoT system (monitoring, alerts, analytics)</li>
-            </ul>
-            The model shows how physical objects are mapped to digital counterparts and how services are delivered to users through devices.`
-          },
-          {
-            q: "List sensors which can be used for Driver Assistance.",
-            year: "S25 OR",
-            a: `<ul>
-              <li><strong>LiDAR</strong> — 3D mapping of surroundings, obstacle detection</li>
-              <li><strong>Ultrasonic Sensors</strong> — Parking assist, close-range obstacle detection</li>
-              <li><strong>Radar (mmWave)</strong> — Adaptive cruise control, collision avoidance, blind spot detection</li>
-              <li><strong>Cameras (RGB/IR)</strong> — Lane detection, traffic sign recognition, pedestrian detection</li>
-              <li><strong>GPS/GNSS</strong> — Vehicle positioning, navigation, geofencing</li>
-              <li><strong>Accelerometer & Gyroscope (IMU)</strong> — Vehicle dynamics, stability control</li>
-              <li><strong>Steering Angle Sensor</strong> — Lane keeping assist</li>
-              <li><strong>Tire Pressure Sensor (TPMS)</strong> — Tire pressure monitoring</li>
-              <li><strong>Rain Sensor</strong> — Automatic wiper activation</li>
-            </ul>`
-          },
-          {
-            q: "What type of IoT devices are commonly used in driver assistance systems?",
-            year: "W25 OR",
-            a: `<strong>ADAS (Advanced Driver Assistance Systems)</strong> commonly uses:
-            <ul>
-              <li><strong>Camera Modules</strong> — Front/rear cameras for lane departure warning, traffic sign recognition, pedestrian detection, automatic emergency braking</li>
-              <li><strong>Ultrasonic Sensor Arrays</strong> — 6–12 sensors around the bumper for parking assist and low-speed obstacle detection</li>
-              <li><strong>Radar Modules</strong> — 77GHz mmWave radar for adaptive cruise control, forward collision warning, blind spot monitoring</li>
-              <li><strong>LiDAR Scanners</strong> — Rotating or solid-state LiDAR for 360° 3D environment mapping (used in autonomous vehicles)</li>
-              <li><strong>GPS/IMU Modules</strong> — For precise positioning, navigation, and vehicle state estimation</li>
-              <li><strong>V2X Communication Modules</strong> — Vehicle-to-Everything (V2V, V2I) for sharing speed, position, and hazard info with other vehicles and infrastructure</li>
-              <li><strong>ECU (Electronic Control Unit)</strong> — Onboard processing unit that fuses sensor data and makes driving decisions</li>
-            </ul>`
-          }
-        ]
-      },
-      {
-        marks: 4,
-        label: "Medium Answer",
-        questions: [
-          {
-            q: "What do you mean by actuators? Give examples of commonly used actuators in IoT.",
-            year: "S25",
-            a: `<strong>Actuators</strong> are output devices that convert electrical signals into physical action — movement, sound, light, or other physical changes. They are the "hands" of an IoT system, executing decisions made by the processing unit.
-            <span class="sub-heading">Common Examples in IoT</span>
-            <ul>
-              <li><strong>Servo Motor</strong> — Precise angular positioning (robotics, smart door locks)</li>
-              <li><strong>DC Motor</strong> — Continuous rotation (conveyors, smart blinds, fans)</li>
-              <li><strong>Relay</strong> — Switching high-power appliances (lights, pumps, heaters in smart home)</li>
-              <li><strong>Solenoid Valve</strong> — Controlling fluid/gas flow (smart irrigation, water dispensing)</li>
-              <li><strong>LED</strong> — Status indication, smart lighting</li>
-              <li><strong>Buzzer</strong> — Alarm and notification sounds</li>
-              <li><strong>Stepper Motor</strong> — Precise step-wise movement (3D printers, CNC machines)</li>
-              <li><strong>Pneumatic/Hydraulic Cylinder</strong> — Industrial automation, heavy-duty actuation</li>
-            </ul>`
-          },
-          {
-            q: "Explain the brain in an IoT device.",
-            year: "S24",
-            a: `The <strong>"brain" of an IoT device</strong> is its <strong>microcontroller (MCU)</strong> or <strong>microprocessor (MPU)</strong>. It performs all critical functions:
-            <ul>
-              <li><strong>Reads sensor data</strong> via GPIO, ADC, I2C, SPI interfaces</li>
-              <li><strong>Processes data</strong> — applies filtering, calibration, and control logic</li>
-              <li><strong>Manages communication</strong> — runs protocol stacks (WiFi, BLE, MQTT)</li>
-              <li><strong>Controls actuators</strong> — sends signals to relays, motors, LEDs</li>
-              <li><strong>Handles interrupts</strong> — responds to time-critical events</li>
-              <li><strong>Manages power</strong> — implements sleep modes for battery efficiency</li>
-            </ul>
-            <strong>Common examples:</strong> ESP32 (dual-core, WiFi+BLE, widely used in IoT), ATmega328P (Arduino Uno), STM32 (ARM Cortex-M series), Raspberry Pi (full Linux-based MPU for complex IoT). The choice depends on processing needs, power constraints, connectivity requirements, and cost.`
-          },
-          {
-            q: "Mention clearly the procedure to interface the Ultrasonic sensor with any microcontroller of your choice.",
-            year: "W25",
-            a: `<strong>Interfacing HC-SR04 with Arduino Uno:</strong>
-            <span class="sub-heading">Hardware Connections</span>
-            <ul>
-              <li>VCC → 5V pin of Arduino</li>
-              <li>GND → GND pin of Arduino</li>
-              <li>TRIG → Digital Pin 9</li>
-              <li>ECHO → Digital Pin 10</li>
-            </ul>
-            <span class="sub-heading">Software Procedure</span>
-            <ol>
-              <li>Define trigger and echo pins: <code>#define TRIG 9</code>, <code>#define ECHO 10</code></li>
-              <li>In <code>setup()</code>: Set TRIG as OUTPUT, ECHO as INPUT using <code>pinMode()</code>; Initialize Serial monitor</li>
-              <li>In <code>loop()</code>:
-                <ul>
-                  <li>Clear trigger: <code>digitalWrite(TRIG, LOW)</code>, <code>delayMicroseconds(2)</code></li>
-                  <li>Send pulse: <code>digitalWrite(TRIG, HIGH)</code>, <code>delayMicroseconds(10)</code>, <code>digitalWrite(TRIG, LOW)</code></li>
-                  <li>Read echo duration: <code>duration = pulseIn(ECHO, HIGH)</code></li>
-                  <li>Calculate distance: <code>distance = (duration × 0.034) / 2</code></li>
-                  <li>Print: <code>Serial.print(distance)</code></li>
-                </ul>
-              </li>
-            </ol>`
-          },
-          {
-            q: "Difference between Microcontroller and Microprocessor.",
-            year: "S23",
-            a: `<ul>
-              <li><strong>Integration</strong> — MCU has CPU, RAM, ROM, I/O on a single chip; MPU has only CPU, needs external components</li>
-              <li><strong>Cost</strong> — MCU is cheaper ($1–$10); MPU is expensive ($20–$500+)</li>
-              <li><strong>Power</strong> — MCU consumes milliwatts, ideal for battery devices; MPU consumes watts, needs active cooling</li>
-              <li><strong>Speed</strong> — MCU: 8–200 MHz; MPU: 1–5 GHz</li>
-              <li><strong>Use Case</strong> — MCU: Dedicated, embedded tasks (IoT sensors, appliances); MPU: General-purpose computing (laptops, servers)</li>
-              <li><strong>External Components</strong> — MCU: Minimal (crystal, decoupling caps); MPU: RAM, ROM, GPU, chipset, cooling</li>
-              <li><strong>Examples</strong> — MCU: ATmega328P, ESP32, STM32, 8051; MPU: Intel i5, ARM Cortex-A72, AMD Ryzen</li>
-              <li><strong>OS Support</strong> — MCU: Bare-metal or RTOS (FreeRTOS); MPU: Full OS (Linux, Windows)</li>
-            </ul>`
-          },
-          {
-            q: "Explain IoT value chains.",
-            year: "W23",
-            a: `The <strong>IoT value chain</strong> describes the stages from device creation to service delivery:
-            <ol>
-              <li><strong>Sensor/Device Manufacturing</strong> — Designing and building hardware (sensors, MCUs, boards)</li>
-              <li><strong>Connectivity Provision</strong> — Enabling communication through network infrastructure (WiFi, LPWAN, 5G)</li>
-              <li><strong>Data Acquisition</strong> — Collecting raw data from sensors at the edge</li>
-              <li><strong>Data Processing</strong> — Cleaning, transforming, filtering, and aggregating data</li>
-              <li><strong>Analytics</strong> — Applying ML/AI to extract insights, patterns, and predictions</li>
-              <li><strong>Application/Service Delivery</strong> — Creating user-facing applications (dashboards, alerts, automations)</li>
-              <li><strong>Business Model</strong> — Monetization through subscriptions, pay-per-use, data-as-a-service, or product-plus-service models</li>
-            </ol>
-            Each stage adds value to the raw sensor data, transforming it into actionable business outcomes.`
-          }
-        ]
-      },
-      {
-        marks: 7,
-        label: "Long Answer",
-        questions: [
-          {
-            q: "Explain the key features of the ARM Cortex-M architecture that make it suitable for IoT.",
-            year: "S25",
-            a: `<ol>
-              <li><strong>Thumb-2 Instruction Set</strong> — Combines 16-bit and 32-bit instructions in a single set, providing both high code density (less flash memory) and high performance — critical for cost-sensitive IoT devices</li>
-              <li><strong>Low Power Design</strong> — Multiple sleep modes (Sleep, Deep Sleep, Deep Sleep with retention), low-power peripherals with independent clock gating, Wake-up Interrupt Controller (WIC) that allows the CPU to wake from deep sleep without clock restoration delay</li>
-              <li><strong>NVIC (Nested Vectored Interrupt Controller)</strong> — Supports up to 240 interrupts with deterministic, prioritized handling. Critical for real-time IoT applications where sensor data must be processed within strict deadlines</li>
-              <li><strong>MPU (Memory Protection Unit)</strong> — Prevents unauthorized memory access, enables safe execution of untrusted code — essential for IoT security</li>
-              <li><strong>Single-cycle I/O</strong> — Fast GPIO access for time-critical sensor operations (e.g., ultrasonic sensor pulse timing, I2C bit-banging)</li>
-              <li><strong>Bit-banding</strong> — Allows atomic read-modify-write of individual bits in SRAM and peripheral registers without race conditions</li>
-              <li><strong>Deterministic Execution</strong> — Fixed interrupt latency (12 cycles for Cortex-M3/M4) ensures predictable real-time behavior</li>
-              <li><strong>Small Silicon Footprint</strong> — Low gate count (~33K gates for Cortex-M0) reduces silicon area and cost per unit</li>
-              <li><strong>Wide Ecosystem</strong> — CMSIS (Cortex Microcontroller Software Interface Standard) provides portable drivers, RTOS support (FreeRTOS, Zephyr), and extensive toolchain (Keil, GCC, IAR)</li>
-              <li><strong>DSP and FPU (Cortex-M4F)</strong> — Hardware floating-point and DSP instructions for sensor fusion, FFT, and signal processing in advanced IoT nodes</li>
-            </ol>`
-          },
-          {
-            q: "Define: (i) Accuracy (ii) Precision (iii) Drift (iv) Resolution as properties of sensors.",
-            year: "S25 OR",
-            a: `<ol>
-              <li><strong>Accuracy</strong> — How close the sensor's measured value is to the true/actual value. It indicates the correctness of measurement.
-              <br>Example: If the actual temperature is 25.0°C and the sensor reads 25.2°C, the accuracy is ±0.2°C. Accuracy is affected by calibration, manufacturing tolerances, and environmental conditions.</li>
-
-              <li><strong>Precision</strong> — The consistency or repeatability of measurements when the same input is measured multiple times under the same conditions. A precise sensor gives very similar readings each time, even if those readings are not close to the true value.
-              <br>Example: A sensor reading 24.8, 24.9, 24.8, 24.9°C for a true 25.0°C is precise but not accurate. Precision depends on noise, resolution, and mechanical stability.</li>
-
-              <li><strong>Drift</strong> — The gradual, unintended change in a sensor's output over time when the input remains constant. It degrades measurement quality over the sensor's lifetime.
-              <br>Types: <strong>Zero drift</strong> (output shifts at zero input) and <strong>Sensitivity drift</strong> (slope of input-output curve changes). Caused by component aging, temperature cycling, humidity, and mechanical stress.</li>
-
-              <li><strong>Resolution</strong> — The smallest detectable change in the input that the sensor can reliably measure and output. It defines the granularity of measurement.
-              <br>Example: A 12-bit ADC with 5V reference has resolution of 5V/4096 = 1.22mV — it cannot detect changes smaller than 1.22mV. Higher resolution means finer measurement detail.</li>
-            </ol>`
-          },
-          {
-            q: "What is ARM? Explain special features of ARM processor.",
-            year: "W23",
-            a: `<strong>ARM (Advanced RISC Machines)</strong> is a family of RISC-based processor architectures licensed to chip manufacturers (NXP, STMicroelectronics, Qualcomm). ARM processors dominate embedded systems and mobile devices due to their power efficiency.
-            <span class="sub-heading">Special Features</span>
-            <ol>
-              <li><strong>RISC Architecture</strong> — Simple, fixed-length instructions (32-bit), single-cycle execution for most instructions, large register file reduces memory access</li>
-              <li><strong>Thumb Instruction Set</strong> — 16-bit compressed subset of ARM instructions, achieves ~65% code density with ~90% performance of 32-bit ARM mode</li>
-              <li><strong>Barrel Shifter</strong> — Integrated shifter that performs shift/rotate operations within the same instruction cycle as the ALU operation, eliminating extra cycles</li>
-              <li><strong>Multiply-Accumulate (MAC)</strong> — Single-cycle hardware multiply and multiply-accumulate operations, essential for DSP and filter algorithms</li>
-              <li><strong>Conditional Execution</strong> — Every instruction can be conditionally executed based on APSR flags (EQ, NE, GT, LT, etc.), reducing branch instructions and pipeline stalls</li>
-              <li><strong>Load/Store Architecture</strong> — Data processing operates only on registers; only load/store instructions access memory, simplifying pipeline design</li>
-              <li><strong>Register Bank</strong> — 16 general-purpose registers (R0-R15), with R13 (SP), R14 (LR), R15 (PC) having special roles; Fast interrupt mode has shadow registers for zero-latency context switching</li>
-              <li><strong>Low Power Consumption</strong> — Multiple power modes, clock gating, and efficient instruction decoding make ARM ideal for battery-powered IoT devices</li>
-              <li><strong>Co-processor Interface</strong> — Supports up to 16 co-processors for extending functionality (FPU, MMU, DSP instructions)</li>
-            </ol>`
-          },
-          {
-            q: "What is ARM? Explain special features of ARM processor.",
-            year: "S23",
-            a: `Same as the W23 answer above — ARM is a RISC processor family with features including Thumb instruction set, barrel shifter, MAC unit, conditional execution, load/store architecture, register bank, and low power design.`
-          },
-          {
-            q: "Explain CSPR in ARM.",
-            year: "S24",
-            a: `The <strong>CPSR (Current Program Status Register)</strong> is a 32-bit register in ARM that stores condition code flags and control bits. It is crucial for conditional execution and mode management.
-            <span class="sub-heading">Flag Bits (Condition Flags)</span>
-            <ul>
-              <li><strong>N (Bit 31) — Negative</strong>: Set to 1 if the result of an ALU operation is negative (bit 31 of result is 1)</li>
-              <li><strong>Z (Bit 30) — Zero</strong>: Set to 1 if the ALU result is zero</li>
-              <li><strong>C (Bit 29) — Carry</strong>: Set to 1 if a carry-out occurs from the ALU (in addition) or a borrow does not occur (in subtraction)</li>
-              <li><strong>V (Bit 28) — Overflow</strong>: Set to 1 if signed overflow occurs (result exceeds signed range)</li>
-            </ul>
-            <span class="sub-heading">Control Bits</span>
-            <ul>
-              <li><strong>T (Bit 5) — Thumb State</strong>: 1 = Thumb mode, 0 = ARM mode</li>
-              <li><strong>I (Bit 7) — IRQ Disable</strong>: When 1, IRQ interrupts are disabled</li>
-              <li><strong>F (Bit 6) — FIQ Disable</strong>: When 1, Fast Interrupt requests are disabled</li>
-              <li><strong>M[4:0] (Bits 0-4) — Mode Bits</strong>: Select processor mode:
-                <ul>
-                  <li>10000 — User mode (unprivileged)</li>
-                  <li>10001 — FIQ mode (Fast Interrupt)</li>
-                  <li>10010 — IRQ mode (Interrupt)</li>
-                  <li>10011 — Supervisor mode (SVC, after reset)</li>
-                  <li>10111 — Abort mode</li>
-                  <li>11011 — Undefined mode</li>
-                  <li>11111 — System mode (privileged, uses User registers)</li>
-                </ul>
-              </li>
-            </ul>`
-          },
-          {
-            q: "Explain pinMode(), digitalRead() and digitalWrite() functions of Arduino.",
-            year: "W24 OR",
-            a: `<span class="sub-heading">pinMode(pin, mode)</span>
-            Configures a GPIO pin as INPUT, OUTPUT, or INPUT_PULLUP. Must be called in <code>setup()</code> before using the pin.
-            <br><strong>Parameters:</strong> <code>pin</code> — pin number (0-13 on Uno), <code>mode</code> — INPUT, OUTPUT, or INPUT_PULLUP
-            <br><strong>Example:</strong> <code>pinMode(13, OUTPUT);</code> — Sets pin 13 as output
-            <br><strong>Internal behavior:</strong> Configures the corresponding DDRx (Data Direction Register) bits and PORTx register for pull-up.
-
-            <span class="sub-heading">digitalRead(pin)</span>
-            Reads the digital value (HIGH or LOW) from a pin configured as INPUT.
-            <br><strong>Returns:</strong> HIGH (1, ~5V) or LOW (0, ~0V)
-            <br><strong>Example:</strong> <code>int val = digitalRead(7);</code> — Reads pin 7 state into variable val
-            <br><strong>Internal behavior:</strong> Reads the PINx register bit corresponding to the pin.
-
-            <span class="sub-heading">digitalWrite(pin, value)</span>
-            Writes a HIGH or LOW value to a pin configured as OUTPUT.
-            <br><strong>Parameters:</strong> <code>pin</code> — pin number, <code>value</code> — HIGH or LOW
-            <br><strong>Example:</strong> <code>digitalWrite(13, HIGH);</code> — Sets pin 13 to 5V (turns on built-in LED)
-            <br><strong>Internal behavior:</strong> Sets or clears the corresponding bit in PORTx register.
-
-            <span class="sub-heading">Complete Example</span>
-            <code>
-            void setup() {<br>
-            &nbsp;&nbsp;pinMode(7, INPUT);<br>
-            &nbsp;&nbsp;pinMode(13, OUTPUT);<br>
-            }<br>
-            void loop() {<br>
-            &nbsp;&nbsp;int btn = digitalRead(7);<br>
-            &nbsp;&nbsp;digitalWrite(13, btn);<br>
-            }
-            </code>`
-          },
-          {
-            q: "Draw and Explain ATMEGA328P Microcontroller Pin diagram.",
-            year: "S23",
-            a: `The <strong>ATMEGA328P</strong> is an 8-bit AVR RISC microcontroller in a 28-pin DIP package, the heart of Arduino Uno.
-            <span class="sub-heading">Pin Configuration</span>
-            <ul>
-              <li><strong>Power:</strong> VCC (Pin 7) — 5V supply, GND (Pin 8, Pin 22) — Ground, AVCC (Pin 20) — Analog reference supply, AREF (Pin 21) — Analog reference voltage</li>
-              <li><strong>Digital I/O (14 pins):</strong> Pins 0-13. Pin 0 (RXD) and Pin 1 (TXD) serve as UART receive/transmit</li>
-              <li><strong>Analog Input (6 pins):</strong> Pins A0-A5 (PC0-PC5), connected to 10-bit ADC with 0-5V range</li>
-              <li><strong>PWM Output (6 pins):</strong> Pins 3, 5, 6, 9, 10, 11 (Timer0, Timer1, Timer2 outputs)</li>
-              <li><strong>SPI (4 pins):</strong> Pin 10 (SS), Pin 11 (MOSI), Pin 12 (MISO), Pin 13 (SCK)</li>
-              <li><strong>I2C (2 pins):</strong> Pin A4 (SDA), Pin A5 (SCL)</li>
-              <li><strong>Reset:</strong> Pin 1 (active LOW, with internal pull-up)</li>
-              <li><strong>Crystal Oscillator:</strong> Pins 9 and 10 (XTAL1, XTAL2) for external 16MHz crystal</li>
-            </ul>
-            <span class="sub-heading">Key Specifications</span>
-            <ul>
-              <li>32KB Flash memory (program storage), 2KB SRAM, 1KB EEPROM</li>
-              <li>16 MHz maximum clock speed</li>
-              <li>23 programmable I/O lines</li>
-              <li>2 8-bit Timers (Timer0, Timer2) + 1 16-bit Timer (Timer1)</li>
-              <li>6-channel 10-bit ADC</li>
-              <li>USART, SPI, I2C interfaces</li>
-            </ul>`
-          },
-          {
-            q: "Discuss various register set of 8051.",
-            year: "W23",
-            a: `The <strong>8051</strong> microcontroller has the following key registers:
-            <span class="sub-heading">Core Registers</span>
-            <ul>
-              <li><strong>Accumulator (A, 8-bit)</strong> — The most important register; used for all arithmetic and logical operations (ADD, SUB, AND, OR, etc.). One operand is always in A.</li>
-              <li><strong>B Register (8-bit)</strong> — Used with A for MUL (multiply A×B, result in A:B) and DIV (divide A by B, quotient in A, remainder in B). Otherwise usable as general-purpose register.</li>
-              <li><strong>Program Counter (PC, 16-bit)</strong> — Points to the address of the next instruction to be fetched from program memory. Automatically incremented after each fetch.</li>
-              <li><strong>Data Pointer (DPTR, 16-bit)</strong> — Used for accessing external ROM/RAM. Composed of DPH (high byte) and DPL (low byte). Used with MOVC and MOVX instructions.</li>
-              <li><strong>Stack Pointer (SP, 8-bit)</strong> — Points to the top of the stack in internal RAM (locations 08H-1FH by default). Pre-incremented before PUSH, post-decremented after POP.</li>
-            </ul>
-            <span class="sub-heading">Status Register</span>
-            <ul>
-              <li><strong>PSW (Program Status Word, 8-bit)</strong> — Stores flags and register bank selection:
-                <ul>
-                  <li>CY (PSW.7) — Carry flag</li>
-                  <li>AC (PSW.6) — Auxiliary carry flag (for BCD operations)</li>
-                  <li>F0 (PSW.5) — General-purpose flag</li>
-                  <li>RS1, RS0 (PSW.4, PSW.3) — Register bank select (00=Bank0, 01=Bank1, 10=Bank2, 11=Bank3)</li>
-                  <li>OV (PSW.2) — Overflow flag</li>
-                  <li>P (PSW.0) — Parity flag (auto-set for even parity in A)</li>
-                </ul>
-              </li>
-            </ul>
-            <span class="sub-heading">General Purpose Registers</span>
-            <ul>
-              <li><strong>4 Register Banks</strong> (Bank 0-3), each with 8 registers (R0-R7), occupying internal RAM addresses 00H-1FH. Active bank selected by RS1:RS0 bits in PSW.</li>
-            </ul>
-            <span class="sub-heading">Special Function Registers (SFRs)</span>
-            <ul>
-              <li><strong>P0, P1, P2, P3</strong> — Port latches for I/O ports</li>
-              <li><strong>TMOD</strong> — Timer mode control register</li>
-              <li><strong>TCON</strong> — Timer control register (timer flags, interrupt flags)</li>
-              <li><strong>SCON</strong> — Serial port control register</li>
-              <li><strong>IE</strong> — Interrupt enable register</li>
-              <li><strong>IP</strong> — Interrupt priority register</li>
-              <li><strong>TH0, TL0, TH1, TL1</strong> — Timer 0 and Timer 1 byte registers</li>
-              <li><strong>SBUF</strong> — Serial data buffer</li>
-            </ul>`
-          }
-        ]
-      }
-    ]
-  }
 ];
 
-// ─── Render Logic ───
-const container = document.getElementById('qaContainer');
-const searchInput = document.getElementById('searchInput');
-const noResults = document.getElementById('noResults');
-let allCards = [];
+// ============ STATE ============
+let savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
+let currentPage = 1;
+const JOBS_PER_PAGE = 6;
+let filteredJobs = [...jobsData];
 
-function renderAll() {
-  container.innerHTML = '';
-  allCards = [];
-
-  data.forEach(unit => {
-    const section = document.createElement('section');
-    section.className = 'unit';
-    section.dataset.unit = unit.unit;
-
-    // Unit header
-    section.innerHTML = `
-      <div class="unit-header">
-        <div class="unit-num">${unit.unit}</div>
-        <div>
-          <h2>${unit.unitTitle}</h2>
-          <div class="topics">${unit.topics}</div>
-        </div>
-      </div>
-    `;
-
-    unit.groups.forEach(group => {
-      const groupDiv = document.createElement('div');
-      groupDiv.className = 'marks-group';
-      groupDiv.dataset.marks = group.marks;
-
-      groupDiv.innerHTML = `<div class="marks-label"><span class="dot"></span>${group.marks} Marks — ${group.label}</div>`;
-
-      group.questions.forEach((item, idx) => {
-        const card = document.createElement('div');
-        card.className = 'qa-card';
-        card.dataset.marks = group.marks;
-        card.dataset.searchText = (item.q + ' ' + item.a).toLowerCase().replace(/<[^>]*>/g, '');
-
-        card.innerHTML = `
-          <div class="qa-question" role="button" tabindex="0" aria-expanded="false">
-            <div class="q-info">
-              <div class="q-meta">
-                <span class="mark-badge">${group.marks}M</span>
-                <span class="year-badge">${item.year}</span>
-              </div>
-              <div class="q-text">${item.q}</div>
-            </div>
-            <button class="q-toggle" aria-label="Toggle answer"><i class="fas fa-chevron-down"></i></button>
-          </div>
-          <div class="qa-answer">
-            <div class="qa-answer-inner">${item.a}</div>
-          </div>
-        `;
-
-        // Toggle
-        const btn = card.querySelector('.qa-question');
-        btn.addEventListener('click', () => toggleCard(card));
-        btn.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleCard(card); } });
-
-        groupDiv.appendChild(card);
-        allCards.push(card);
-      });
-
-      section.appendChild(groupDiv);
-    });
-
-    container.appendChild(section);
-  });
-}
-
-function toggleCard(card) {
-  const isOpen = card.classList.contains('open');
-  card.classList.toggle('open');
-  card.querySelector('.qa-question').setAttribute('aria-expanded', !isOpen);
-}
-
-function expandAll() {
-  allCards.forEach(c => {
-    c.classList.add('open');
-    c.querySelector('.qa-question').setAttribute('aria-expanded', 'true');
-  });
-}
-
-function collapseAll() {
-  allCards.forEach(c => {
-    c.classList.remove('open');
-    c.querySelector('.qa-question').setAttribute('aria-expanded', 'false');
-  });
-}
-
-function filterMarks(m) {
-  allCards.forEach(c => {
-    if (m === 0) {
-      c.style.display = '';
-    } else {
-      c.style.display = parseInt(c.dataset.marks) === m ? '' : 'none';
-    }
-  });
-  // Hide empty groups
-  document.querySelectorAll('.marks-group').forEach(g => {
-    const visibleCards = g.querySelectorAll('.qa-card:not([style*="display: none"])');
-    g.style.display = visibleCards.length ? '' : 'none';
-  });
-  // Hide empty units
-  document.querySelectorAll('.unit').forEach(u => {
-    const visibleGroups = u.querySelectorAll('.marks-group:not([style*="display: none"])');
-    u.style.display = visibleGroups.length ? '' : 'none';
-  });
-}
-
-// Search
-searchInput.addEventListener('input', () => {
-  const query = searchInput.value.toLowerCase().trim();
-  let anyVisible = false;
-
-  allCards.forEach(c => {
-    if (!query) {
-      c.style.display = '';
-      anyVisible = true;
-    } else {
-      const match = c.dataset.searchText.includes(query);
-      c.style.display = match ? '' : 'none';
-      if (match) anyVisible = true;
-    }
-  });
-
-  noResults.style.display = anyVisible ? 'none' : 'block';
-
-  // Auto-expand matching cards on search
-  if (query) {
-    allCards.forEach(c => {
-      if (c.style.display !== 'none') {
-        c.classList.add('open');
-        c.querySelector('.qa-question').setAttribute('aria-expanded', 'true');
-      }
-    });
-  }
-
-  // Hide empty groups/units
-  document.querySelectorAll('.marks-group').forEach(g => {
-    const visibleCards = g.querySelectorAll('.qa-card:not([style*="display: none"])');
-    g.style.display = visibleCards.length ? '' : 'none';
-  });
-  document.querySelectorAll('.unit').forEach(u => {
-    const visibleGroups = u.querySelectorAll('.marks-group:not([style*="display: none"])');
-    u.style.display = visibleGroups.length ? '' : 'none';
-  });
+// ============ INITIALIZATION ============
+window.addEventListener('DOMContentLoaded', () => {
+    // Simulate loading
+    setTimeout(() => {
+        document.getElementById('page-loader').classList.add('hidden');
+        initApp();
+    }, 2200);
 });
 
-// Scroll-to-top button
-const scrollBtn = document.getElementById('scrollTopBtn');
-window.addEventListener('scroll', () => {
-  scrollBtn.classList.toggle('visible', window.scrollY > 400);
-}, { passive: true });
+function initApp() {
+    updateStats();
+    renderBestJobs();
+    filterJobs();
+    updateSavedCount();
+}
 
-// Init
-renderAll();
-</script>
+// ============ STATS ============
+function updateStats() {
+    animateNumber('total-jobs-count', jobsData.length);
+    animateNumber('high-match-count', jobsData.filter(j => j.match_score >= 85).length);
+    animateNumber('quick-apply-count', jobsData.filter(j => j.badges.includes('quick-apply')).length);
+}
+
+function animateNumber(id, target) {
+    const el = document.getElementById(id);
+    let current = 0;
+    const step = Math.ceil(target / 30);
+    const interval = setInterval(() => {
+        current += step;
+        if (current >= target) {
+            current = target;
+            clearInterval(interval);
+        }
+        el.textContent = current;
+    }, 40);
+}
+
+// ============ BEST JOBS ============
+function renderBestJobs() {
+    const bestJobs = [...jobsData].sort((a, b) => b.match_score - a.match_score).slice(0, 5);
+    const carousel = document.getElementById('best-jobs-carousel');
+    carousel.innerHTML = bestJobs.map(job => `
+        <div class="best-job-card" onclick="showJobDetail(${job.id})">
+            <div class="card-badges" style="margin-bottom:10px;">
+                <span class="badge badge-match">⭐ ${job.match_score}% Match</span>
+                ${job.badges.includes('new') ? '<span class="badge badge-new">🆕 New</span>' : ''}
+                ${job.badges.includes('urgent') ? '<span class="badge badge-urgent">🔥 Urgent</span>' : ''}
+            </div>
+            <h3 class="job-title">${job.title}</h3>
+            <p class="job-company">${job.company}</p>
+            <div class="job-meta">
+                <span>📍 ${job.location}</span>
+                <span>💰 ${job.salary}</span>
+            </div>
+            <p style="font-size:0.82rem;color:var(--text-secondary);margin-top:8px;">${job.why_match.substring(0, 100)}...</p>
+            <div style="margin-top:12px;">
+                <a href="${job.apply_link}" target="_blank" class="btn btn-primary btn-sm" onclick="event.stopPropagation()">🚀 Apply Now</a>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ============ FILTER & SEARCH ============
+function filterJobs() {
+    const search = document.getElementById('search-input').value.toLowerCase();
+    const location = document.getElementById('location-filter').value;
+    const matchMin = parseInt(document.getElementById('match-filter').value) || 0;
+    const type = document.getElementById('type-filter').value;
+    const sort = document.getElementById('sort-filter').value;
+
+    filteredJobs = jobsData.filter(job => {
+        const matchesSearch = !search ||
+            job.title.toLowerCase().includes(search) ||
+            job.company.toLowerCase().includes(search) ||
+            job.location.toLowerCase().includes(search);
+        const matchesLocation = !location || job.location.includes(location);
+        const matchesScore = job.match_score >= matchMin;
+        const matchesType = !type || job.type.includes(type);
+        return matchesSearch && matchesLocation && matchesScore && matchesType;
+    });
+
+    // Sort
+    if (sort === 'match') {
+        filteredJobs.sort((a, b) => b.match_score - a.match_score);
+    } else if (sort === 'salary') {
+        filteredJobs.sort((a, b) => {
+            const getMax = s => { const m = s.match(/\$(\d+(?:\.\d+)?)/g); return m ? parseFloat(m[m.length - 1].replace('$', '')) : 0; };
+            return getMax(b.salary) - getMax(a.salary);
+        });
+    } else if (sort === 'recent') {
+        // Approximate recency
+        const recencyScore = (d) => {
+            if (d.includes('Today') || d.includes('hour')) return 100;
+            if (d.includes('3 day')) return 90;
+            if (d.includes('5 day')) return 85;
+            if (d.includes('1 week') || d.includes('9 day')) return 75;
+            if (d.includes('10 day') || d.includes('11 day')) return 70;
+            if (d.includes('2 week') || d.includes('Recent')) return 60;
+            if (d.includes('Feb')) return 40;
+            if (d.includes('month')) return 20;
+            return 50;
+        };
+        filteredJobs.sort((a, b) => recencyScore(b.posted_date) - recencyScore(a.posted_date));
+    }
+
+    currentPage = 1;
+    renderJobs();
+}
+
+// ============ RENDER JOBS ============
+function renderJobs() {
+    const grid = document.getElementById('jobs-grid');
+    const start = (currentPage - 1) * JOBS_PER_PAGE;
+    const pageJobs = filteredJobs.slice(start, start + JOBS_PER_PAGE);
+
+    document.getElementById('results-count').textContent = `${filteredJobs.length} jobs found`;
+
+    if (filteredJobs.length === 0) {
+        grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><h3>No jobs match your filters</h3><p>Try adjusting your search or filters</p></div>';
+        document.getElementById('pagination').innerHTML = '';
+        return;
+    }
+
+    grid.innerHTML = pageJobs.map((job, i) => `
+        <div class="job-card" style="animation-delay: ${i * 0.1}s" onclick="showJobDetail(${job.id})">
+            <div class="card-header">
+                <div class="company-logo">${job.company.charAt(0)}</div>
+                <div class="card-badges">
+                    ${job.badges.includes('high-match') ? '<span class="badge badge-match">High Match</span>' : ''}
+                    ${job.badges.includes('quick-apply') ? '<span class="badge badge-quick">Quick Apply</span>' : ''}
+                    ${job.badges.includes('urgent') ? '<span class="badge badge-urgent">Urgent</span>' : ''}
+                    ${job.badges.includes('new') ? '<span class="badge badge-new">New</span>' : ''}
+                </div>
+            </div>
+            <h3 class="job-title">${job.title}</h3>
+            <p class="job-company">${job.company}</p>
+            <div class="job-meta">
+                <span>📍 ${job.location}</span>
+                <span>💰 ${job.salary}</span>
+                <span>💼 ${job.type}</span>
+                <span>🕒 ${job.posted_date}</span>
+            </div>
+            <div class="match-bar-container">
+                <div class="match-label">
+                    <span>Match Score</span>
+                    <span class="match-score-text">${job.match_score}%</span>
+                </div>
+                <div class="match-bar">
+                    <div class="match-fill" style="width: ${job.match_score}%"></div>
+                </div>
+            </div>
+            <div class="why-match">
+                💡 <strong>Why you're a good fit:</strong> ${job.why_match}
+            </div>
+            <div class="card-actions" onclick="event.stopPropagation()">
+                <a href="${job.apply_link}" target="_blank" class="btn btn-primary btn-sm">🚀 Apply Now</a>
+                ${job.company_website ? `<a href="${job.company_website}" target="_blank" class="btn btn-outline btn-sm">🌐 Company</a>` : ''}
+                <button class="save-btn ${savedJobs.includes(job.id) ? 'saved' : ''}" onclick="toggleSave(${job.id}, this)">
+                    ${savedJobs.includes(job.id) ? '❤️' : '🤍'}
+                </button>
+            </div>
+        </div>
+    `).join('');
+
+    renderPagination();
+}
+
+// ============ PAGINATION ============
+function renderPagination() {
+    const totalPages = Math.ceil(filteredJobs.length / JOBS_PER_PAGE);
+    if (totalPages <= 1) {
+        document.getElementById('pagination').innerHTML = '';
+        return;
+    }
+    let html = '';
+    for (let i = 1; i <= totalPages; i++) {
+        html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+    }
+    document.getElementById('pagination').innerHTML = html;
+}
+
+function goToPage(page) {
+    currentPage = page;
+    renderJobs();
+    document.querySelector('.jobs-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ============ SAVE JOBS ============
+function toggleSave(jobId, btn) {
+    const index = savedJobs.indexOf(jobId);
+    if (index === -1) {
+        savedJobs.push(jobId);
+        if (btn) { btn.classList.add('saved'); btn.innerHTML = '❤️'; }
+    } else {
+        savedJobs.splice(index, 1);
+        if (btn) { btn.classList.remove('saved'); btn.innerHTML = '🤍'; }
+    }
+    localStorage.setItem('savedJobs', JSON.stringify(savedJobs));
+    updateSavedCount();
+}
+
+function updateSavedCount() {
+    document.getElementById('saved-count').textContent = savedJobs.length;
+}
+
+function showSavedJobs() {
+    const modal = document.getElementById('saved-modal');
+    const list = document.getElementById('saved-jobs-list');
+
+    if (savedJobs.length === 0) {
+        list.innerHTML = '<p class="empty-state">No saved jobs yet. Click the heart icon on any job card to save it! ❤️</p>';
+    } else {
+        list.innerHTML = savedJobs.map(id => {
+            const job = jobsData.find(j => j.id === id);
+            if (!job) return '';
+            return `
+                <div class="saved-job-item">
+                    <div class="saved-job-info">
+                        <h4>${job.title}</h4>
+                        <p>${job.company} · ${job.location} · ⭐ ${job.match_score}%</p>
+                    </div>
+                    <div style="display:flex;gap:6px;align-items:center;">
+                        <a href="${job.apply_link}" target="_blank" class="btn btn-primary btn-sm">Apply</a>
+                        <button class="remove-saved" onclick="removeSaved(${job.id})">🗑️</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+    modal.classList.add('active');
+}
+
+function removeSaved(jobId) {
+    toggleSave(jobId);
+    showSavedJobs(); // Refresh the modal
+}
+
+function closeSavedModal(e) {
+    if (e && e.target !== e.currentTarget) return;
+    document.getElementById('saved-modal').classList.remove('active');
+}
+
+// ============ JOB DETAIL MODAL ============
+function showJobDetail(jobId) {
+    const job = jobsData.find(j => j.id === jobId);
+    if (!job) return;
+
+    document.getElementById('detail-title').textContent = job.title;
+    document.getElementById('detail-body').innerHTML = `
+        <div class="card-badges" style="margin-bottom:16px;">
+            <span class="badge badge-match">⭐ ${job.match_score}% Match</span>
+            ${job.badges.includes('quick-apply') ? '<span class="badge badge-quick">Quick Apply</span>' : ''}
+            ${job.badges.includes('urgent') ? '<span class="badge badge-urgent">Urgent</span>' : ''}
+            ${job.badges.includes('new') ? '<span class="badge badge-new">New</span>' : ''}
+        </div>
+
+        <div class="detail-section">
+            <h3>Company</h3>
+            <p><strong>${job.company}</strong></p>
+        </div>
+
+        <div class="detail-section">
+            <h3>Details</h3>
+            <div class="job-meta" style="margin-bottom:0;">
+                <span>📍 ${job.location}</span>
+                <span>💰 ${job.salary}</span>
+                <span>💼 ${job.type}</span>
+                <span>🕒 ${job.posted_date}</span>
+                <span>📋 ${job.experience_required}</span>
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h3>Description</h3>
+            <p>${job.description}</p>
+        </div>
+
+        <div class="detail-section">
+            <h3>Requirements</h3>
+            <p>${job.requirements}</p>
+        </div>
+
+        <div class="why-match">
+            💡 <strong>Why Reetu is a great fit:</strong> ${job.why_match}
+        </div>
+
+        <div class="detail-section">
+            <h3>Source</h3>
+            <p>${job.source}</p>
+        </div>
+
+        <div class="detail-actions">
+            <a href="${job.apply_link}" target="_blank" class="btn btn-primary">🚀 Apply Now</a>
+            ${job.company_website ? `<a href="${job.company_website}" target="_blank" class="btn btn-outline">🌐 Company Website</a>` : ''}
+            ${job.phone ? `<a href="tel:${job.phone}" class="btn btn-accent">📞 Call</a>` : ''}
+            <button class="btn btn-outline" onclick="toggleSave(${job.id}); closeDetailModal();">
+                ${savedJobs.includes(job.id) ? '❤️ Saved' : '🤍 Save Job'}
+            </button>
+        </div>
+    `;
+
+    document.getElementById('detail-modal').classList.add('active');
+}
+
+function closeDetailModal(e) {
+    if (e && e.target !== e.currentTarget) return;
+    document.getElementById('detail-modal').classList.remove('active');
+}
+
+// ============ DARK MODE ============
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    const btn = document.getElementById('dark-mode-toggle');
+    btn.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+}
+
+// Restore dark mode preference
+if (localStorage.getItem('darkMode') === 'true') {
+    document.body.classList.add('dark-mode');
+    document.getElementById('dark-mode-toggle').textContent = '☀️';
+}
+
+// ============ KEYBOARD SHORTCUTS ============
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeSavedModal();
+        closeDetailModal();
+    }
+    if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
+        e.preventDefault();
+        document.getElementById('search-input').focus();
+    }
+});
+
+	</script>
+	
+	
+</head>
+<body>
+    <!-- Loader -->
+    <div id="page-loader" class="page-loader">
+        <div class="loader-content">
+            <div class="pill-icon">💊</div>
+            <h2>Finding Best Jobs for Reetu...</h2>
+            <div class="loader-bar"><div class="loader-progress"></div></div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">💊</span>
+                    <div>
+                        <h1>PharmaCareers</h1>
+                        <p class="tagline">Smart Job Matching for Reetu Patel</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button id="saved-jobs-btn" class="btn btn-outline" onclick="showSavedJobs()">
+                        ❤️ Saved <span id="saved-count">0</span>
+                    </button>
+                    <button id="dark-mode-toggle" class="btn btn-icon" onclick="toggleDarkMode()">🌙</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Profile Banner -->
+    <section class="profile-banner">
+        <div class="container">
+            <div class="profile-card">
+                <div class="profile-avatar">RP</div>
+                <div class="profile-info">
+                    <h2>Reetu Patel</h2>
+                    <p class="profile-title">Pharmacy Assistant | B.Pharm Graduate</p>
+                    <div class="profile-tags">
+                        <span class="tag">Kroll</span>
+                        <span class="tag">Fillware</span>
+                        <span class="tag">Blister Packing</span>
+                        <span class="tag">Third-Party Billing</span>
+                        <span class="tag">Prescription Filling</span>
+                        <span class="tag">Inventory Management</span>
+                    </div>
+                    <p class="profile-location">📍 Brampton, ON | Targeting: Kitchener · Waterloo · Cambridge · Guelph</p>
+                </div>
+                <div class="profile-stats">
+                    <div class="stat">
+                        <span class="stat-num" id="total-jobs-count">0</span>
+                        <span class="stat-label">Jobs Found</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-num" id="high-match-count">0</span>
+                        <span class="stat-label">High Match</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-num" id="quick-apply-count">0</span>
+                        <span class="stat-label">Quick Apply</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filters -->
+    <section class="filters-section">
+        <div class="container">
+            <div class="filters-bar">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="search-input" placeholder="Search by title, company, or location..." oninput="filterJobs()">
+                </div>
+                <div class="filter-group">
+                    <select id="location-filter" onchange="filterJobs()">
+                        <option value="">📍 All Locations</option>
+                        <option value="Kitchener">Kitchener</option>
+                        <option value="Waterloo">Waterloo</option>
+                        <option value="Cambridge">Cambridge</option>
+                        <option value="Guelph">Guelph</option>
+                        <option value="Brampton">Brampton</option>
+                        <option value="Toronto">Toronto</option>
+                        <option value="Mississauga">Mississauga</option>
+                        <option value="Brantford">Brantford</option>
+                        <option value="Etobicoke">Etobicoke</option>
+                    </select>
+                    <select id="match-filter" onchange="filterJobs()">
+                        <option value="">⭐ All Match Scores</option>
+                        <option value="90">90%+ (Best Match)</option>
+                        <option value="80">80%+ (High Match)</option>
+                        <option value="70">70%+ (Good Match)</option>
+                    </select>
+                    <select id="type-filter" onchange="filterJobs()">
+                        <option value="">💼 All Types</option>
+                        <option value="Full-time">Full-time</option>
+                        <option value="Part-time">Part-time</option>
+                        <option value="Permanent">Permanent</option>
+                    </select>
+                    <select id="sort-filter" onchange="filterJobs()">
+                        <option value="match">Sort: Best Match</option>
+                        <option value="salary">Sort: Highest Pay</option>
+                        <option value="recent">Sort: Most Recent</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Best Jobs Section -->
+    <section class="best-jobs-section" id="best-jobs-section">
+        <div class="container">
+            <h2 class="section-title">🌟 Best Jobs For You</h2>
+            <p class="section-subtitle">Top matches based on your skills, experience, and location preference</p>
+            <div class="best-jobs-carousel" id="best-jobs-carousel"></div>
+        </div>
+    </section>
+
+    <!-- All Jobs Section -->
+    <section class="jobs-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">📋 All Matching Jobs</h2>
+                <span class="results-count" id="results-count">Loading...</span>
+            </div>
+            <div class="jobs-grid" id="jobs-grid">
+                <!-- Skeleton loaders -->
+                <div class="skeleton-card"><div class="skeleton-header"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div><div class="skeleton-tags"></div></div>
+                <div class="skeleton-card"><div class="skeleton-header"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div><div class="skeleton-tags"></div></div>
+                <div class="skeleton-card"><div class="skeleton-header"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div><div class="skeleton-tags"></div></div>
+                <div class="skeleton-card"><div class="skeleton-header"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div><div class="skeleton-tags"></div></div>
+                <div class="skeleton-card"><div class="skeleton-header"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div><div class="skeleton-tags"></div></div>
+                <div class="skeleton-card"><div class="skeleton-header"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div><div class="skeleton-tags"></div></div>
+            </div>
+            <!-- Pagination -->
+            <div class="pagination" id="pagination"></div>
+        </div>
+    </section>
+
+    <!-- Saved Jobs Modal -->
+    <div class="modal-overlay" id="saved-modal" onclick="closeSavedModal(event)">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>❤️ Saved Jobs</h2>
+                <button class="btn-close" onclick="closeSavedModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="saved-jobs-list">
+                <p class="empty-state">No saved jobs yet. Click the heart icon on any job card to save it!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Job Detail Modal -->
+    <div class="modal-overlay" id="detail-modal" onclick="closeDetailModal(event)">
+        <div class="modal modal-large">
+            <div class="modal-header">
+                <h2 id="detail-title">Job Details</h2>
+                <button class="btn-close" onclick="closeDetailModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="detail-body"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>🔒 All job listings are sourced from real job boards (Indeed, LinkedIn, Company Websites)</p>
+            <p>Built for <strong>Reetu Patel</strong> | Last Updated: April 2026</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
